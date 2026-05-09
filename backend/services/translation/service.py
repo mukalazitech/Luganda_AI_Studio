@@ -23,6 +23,7 @@ from typing import Optional
 from backend.db.chroma_client import chroma_client
 from backend.services.ingestion.embedder import get_embedding_model
 from backend.services.translation.nllb_service import nllb_translator
+from backend.services.translation.openrouter_service import openrouter_translator
 from backend.services.translation.schemas import TranslationRequest, TranslationResponse
 
 logger = logging.getLogger(__name__)
@@ -364,12 +365,32 @@ def translate(request: TranslationRequest) -> TranslationResponse:
         )
 
     # ------------------------------------------------------------------ #
-    # Pass 3 — Neural fallback (NLLB-200)
+    # Pass 3 — OpenRouter API (primary neural fallback)
+    # Skipped silently if OPENROUTER_API_KEY is not set.
+    # Falls through to NLLB-200 on timeout, HTTP error, or empty response.
     # ------------------------------------------------------------------ #
-    # Only reached when all search passes return nothing.
-    # NLLB can translate any text, so this should never fall through to
-    # not_found unless the model itself fails to load or crashes.
-    logger.info(f"[Pass 3] Attempting neural translation for '{input_text}'")
+    if openrouter_translator.is_enabled():
+        logger.info(f"[Pass 3] Attempting OpenRouter translation for '{input_text}'")
+        api_text = openrouter_translator.translate(input_text, direction)
+        if api_text:
+            logger.info(f"[OpenRouter] '{input_text}' → '{api_text}'")
+            return TranslationResponse(
+                input_text=input_text,
+                direction=direction,
+                translated_text=api_text,
+                match_type="neural_api",
+                confidence=0.75,
+                matched_collection="openrouter",
+                matched_source_file=None,
+                status="success",
+                message="AI-generated translation via OpenRouter. May need review.",
+            )
+
+    # ------------------------------------------------------------------ #
+    # Pass 4 — Neural fallback (NLLB-200 local)
+    # Only reached when OpenRouter is disabled or failed.
+    # ------------------------------------------------------------------ #
+    logger.info(f"[Pass 4] Attempting NLLB-200 translation for '{input_text}'")
 
     neural_text = nllb_translator.translate(input_text, direction)
 
@@ -379,16 +400,16 @@ def translate(request: TranslationRequest) -> TranslationResponse:
             input_text=input_text,
             direction=direction,
             translated_text=neural_text,
-            match_type="neural",
+            match_type="neural_local",
             confidence=0.70,
-            matched_collection="nllb-200",
+            matched_collection="nllb-200-local",
             matched_source_file=None,
             status="success",
-            message="AI-generated translation. May need review.",
+            message="AI-generated translation (local model). May need review.",
         )
 
     # ------------------------------------------------------------------ #
-    # Pass 4 — Nothing found (neural also failed)
+    # Pass 5 — Nothing found
     # ------------------------------------------------------------------ #
     logger.info(f"No match for '{input_text}' | direction={direction}")
 
