@@ -292,8 +292,9 @@ def translate(request: TranslationRequest) -> TranslationResponse:
     Pass order:
     1. Scan-based match across all collections (exact → normalized → partial)
     2. Semantic match across all collections (best score wins)
-    3. Neural fallback via NLLB-200-distilled-600M (lazy-loaded on first use)
-    4. Not found — only if the neural model itself fails
+    3. OpenRouter API (primary neural fallback, skipped if OPENROUTER_API_KEY not set)
+    4. NLLB-200 local (fallback when OpenRouter disabled or failed)
+    5. Not found — only if all neural options fail
     """
     input_text = request.text.strip()
     direction = request.direction
