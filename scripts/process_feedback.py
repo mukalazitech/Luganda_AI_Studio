@@ -62,6 +62,20 @@ def _safe_str(value, fallback=""):
     return s if s else fallback
 
 
+def _is_valid_pair(source: str, target: str) -> bool:
+    """Return False if the pair should be dropped from training data.
+
+    Filters:
+    - Either side under 3 characters (too short)
+    - Source and target identical after normalization (no real translation)
+    """
+    if len(source.strip()) < 3 or len(target.strip()) < 3:
+        return False
+    if source.strip().lower() == target.strip().lower():
+        return False
+    return True
+
+
 def load_feedback() -> list:
     """Load all feedback records from the JSONL file."""
     if not FEEDBACK_FILE.exists():
@@ -124,6 +138,9 @@ def ingest_correction(record: dict) -> bool:
 
     if not input_text or not expected:
         return False
+    if not _is_valid_pair(input_text, expected):
+        logger.debug(f"Skipping invalid pair: '{input_text}' / '{expected}'")
+        return False
 
     # Determine language fields based on direction
     if direction == "en_to_lg":
@@ -177,6 +194,8 @@ def append_training_pair(record: dict):
     expected = _safe_str(record.get("expected_output"))
 
     if not input_text or not expected:
+        return
+    if not _is_valid_pair(input_text, expected):
         return
 
     # Corrections file — full record for audit
