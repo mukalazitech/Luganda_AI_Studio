@@ -1152,8 +1152,11 @@
           </div>
           <!-- SUCCESS -->
           <div id="stateSuccess" style="display:none;">
-            <div class="result-text" id="resultText"></div>
-            <div class="chips-row"  id="chipsRow"></div>
+            <div class="result-text-row">
+              <div class="result-text" id="resultText"></div>
+              <button class="tts-btn" id="ttsBtnTranslate" style="display:none" title="Speak Luganda" aria-label="Speak">🔊</button>
+            </div>
+            <div class="chips-row" id="chipsRow"></div>
           </div>
           <!-- ERROR -->
           <div id="stateError" style="display:none;">
@@ -1698,6 +1701,7 @@ async function runTranslation() {
 
     currentEntry = buildEntry(inputText, data.translated_text, data);
     upsertHistory(currentEntry);
+    if (window.setTTSText) window.setTTSText(currentDirection === 'en-lg' ? data.translated_text : inputText);
 
     showSuccess(data.translated_text, {
       confidence:         data.confidence,
@@ -1924,6 +1928,69 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.warn('SW registration failed:', err));
   });
 }
+
+/* ─────────────────────────────────────────────────
+   TTS — SPEAKER BUTTON
+───────────────────────────────────────────────── */
+(function () {
+  const btn = document.getElementById('ttsBtnTranslate');
+  if (!btn) return;
+
+  let _ttsLugandaText = '';
+
+  window.setTTSText = function (text) {
+    _ttsLugandaText = text || '';
+    btn.style.display = _ttsLugandaText ? 'inline-block' : 'none';
+  };
+
+  btn.addEventListener('click', function () {
+    if (!_ttsLugandaText) return;
+    _playTTS(_ttsLugandaText, btn);
+  });
+
+  function _showFirstUseToast() {
+    if (sessionStorage.getItem('tts_toast_shown')) return;
+    sessionStorage.setItem('tts_toast_shown', '1');
+    const toast = document.createElement('div');
+    toast.className = 'tts-toast';
+    toast.textContent = "Loading Luganda voice for the first time — this takes ~10 seconds. It'll be instant after that.";
+    document.body.appendChild(toast);
+    setTimeout(function () {
+      toast.classList.add('hiding');
+      setTimeout(function () { toast.remove(); }, 350);
+    }, 6000);
+  }
+
+  function _playTTS(text, button) {
+    button.disabled = true;
+    button.textContent = '⏳';
+    _showFirstUseToast();
+    fetch('/api/v1/tts', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text, lang: 'lug' }),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error('TTS request failed: ' + res.status);
+        return res.blob();
+      })
+      .then(function (blob) {
+        const url = URL.createObjectURL(blob);
+        const audio = new Audio(url);
+        button.textContent = '🔊';
+        audio.play();
+        audio.onended = function () {
+          button.disabled = false;
+          URL.revokeObjectURL(url);
+        };
+      })
+      .catch(function (err) {
+        console.error('TTS error:', err);
+        button.textContent = '🔊';
+        button.disabled = false;
+      });
+  }
+})();
 </script>
 
 </body>
