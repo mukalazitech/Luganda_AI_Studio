@@ -318,6 +318,21 @@ a:hover { text-decoration: underline; }
 
 .btn-primary:active { transform: translateY(0); box-shadow: none; }
 
+/* ── Focus-visible (keyboard navigation) ──────────────────────────── */
+.btn-primary:focus-visible,
+.btn-secondary:focus-visible,
+.btn-ghost:focus-visible,
+.sidebar-link:focus-visible,
+.dir-btn:focus-visible,
+.feedback-btn:focus-visible,
+.bnav-item:focus-visible,
+.feature-card:focus-visible,
+.more-link:focus-visible,
+.theme-pill-btn:focus-visible {
+  outline: 2px solid var(--lime);
+  outline-offset: 2px;
+}
+
 .btn-secondary {
   background: var(--bg-card);
   color: var(--text-secondary);
@@ -575,7 +590,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  transition: all var(--transition);
+  transition: background var(--transition), border-color var(--transition), color var(--transition);
   min-height: 36px;
 }
 
