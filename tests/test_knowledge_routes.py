@@ -63,3 +63,36 @@ def test_search_invalid_collection_returns_200_empty(client):
     data = response.json()
     assert data["total"] == 0
     assert data["results"] == []
+
+
+# ── GET /api/v1/knowledge/status ──────────────────────────────────────────────
+
+def test_status_returns_200(client):
+    response = client.get("/api/v1/knowledge/status")
+    assert response.status_code == 200
+
+def test_status_has_required_keys(client):
+    response = client.get("/api/v1/knowledge/status")
+    data = response.json()
+    assert "collections" in data
+    assert "total_documents" in data
+
+def test_status_contains_all_core_collections(client):
+    response = client.get("/api/v1/knowledge/status")
+    data = response.json()
+    collections = data["collections"]
+    for name in ("vocabulary", "sentences", "grammar", "proverbs"):
+        assert name in collections, f"Missing collection: {name}"
+
+def test_status_counts_are_non_negative_integers(client):
+    response = client.get("/api/v1/knowledge/status")
+    data = response.json()
+    for name, count in data["collections"].items():
+        assert isinstance(count, int), f"{name} count is not an int"
+        assert count >= 0, f"{name} count is negative"
+
+def test_status_total_documents_matches_sum(client):
+    response = client.get("/api/v1/knowledge/status")
+    data = response.json()
+    expected_total = sum(v for v in data["collections"].values() if v >= 0)
+    assert data["total_documents"] == expected_total
