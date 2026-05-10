@@ -7,6 +7,11 @@
   <script>(function(){const t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#E8E6DE" />
+  <!-- CHANGED: PWA meta tags for iOS support -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Luganda AI" />
+  <link rel="apple-touch-icon" href="/app/icons/icon-192.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
@@ -191,7 +196,7 @@
           <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">
             Session Summary
             <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--text-muted);border:1px solid var(--border-subtle);border-radius:20px;padding:2px 8px;margin-left:8px;vertical-align:middle;">
-              <span style="width:4px;height:4px;background:var(--accent);border-radius:50;display:inline-block;"></span>
+              <span style="width:4px;height:4px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
               Saved locally
             </span>
           </span>
