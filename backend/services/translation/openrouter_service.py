@@ -14,6 +14,7 @@ Match type: "neural_api"
 """
 
 import logging
+from datetime import datetime, timezone
 from typing import Optional
 
 import httpx
@@ -33,6 +34,15 @@ _LANG_NAMES = {
 # Sufficient for personal/small-team use.
 _daily_spend_usd: float = 0.0
 
+# CHANGED: In-memory timestamp of last successful OpenRouter call. None until first call.
+_last_call_at: Optional[str] = None
+
+
+# CHANGED: New function to retrieve the last call timestamp
+def get_last_call_at() -> Optional[str]:
+    """Return ISO 8601 timestamp of last successful OpenRouter call, or None."""
+    return _last_call_at
+
 
 class OpenRouterTranslator:
     """Thin wrapper around the OpenRouter chat completions API."""
@@ -45,7 +55,7 @@ class OpenRouterTranslator:
         Translate `text` using OpenRouter.
         Returns the translated string, or None if unavailable/failed.
         """
-        global _daily_spend_usd
+        global _daily_spend_usd, _last_call_at
 
         if not self.is_enabled():
             return None
@@ -121,6 +131,8 @@ class OpenRouterTranslator:
                     return None
 
                 logger.info(f"[OpenRouter] '{text}' → '{translated}'")
+                # CHANGED: Record the timestamp of this successful call
+                _last_call_at = datetime.now(timezone.utc).isoformat()
                 return translated
 
         except httpx.TimeoutException:
