@@ -303,7 +303,7 @@ Luganda data is limited. Always treat it carefully.
 
 ## 10. What Is Coming Next
 
-> Last updated: 2026-04-19
+> Last updated: 2026-05-10
 
 | Feature | Priority | Notes |
 |---|---|---|
@@ -317,27 +317,41 @@ Luganda data is limited. Always treat it carefully.
 | ~~Teaching mode~~ | ~~NOW~~ | ✅ Done — `teach.html` full flash card + quiz mode. 5 endpoints. Confirmed 2026-04-19 |
 | ~~CSV ingestor~~ | ~~High~~ | ✅ Done — `scripts/ingest_csv.py`. Auto-detect separator, column aliases. Built 2026-04-19 |
 | ~~PDF parser~~ | ~~High~~ | ✅ Done — `scripts/ingest_pdf.py`. Table + line pattern modes, direction auto-detect. Built 2026-04-19 |
+| ~~OpenRouter API integration~~ | ~~High~~ | ✅ Done — `openrouter_service.py` + pipeline Pass 4.5. Default: gemma-2-9b-it:free. Built 2026-05-10 |
+| ~~Luganda TTS (Meta MMS)~~ | ~~High~~ | ✅ Done — `mms_tts_service.py` + `/api/v1/tts`. 🔊 on translate + teach pages. Built 2026-05-10 |
+| ~~Dataset export pipeline~~ | ~~High~~ | ✅ Done — `scripts/export_dataset.py`. HuggingFace-compatible, cleaned, versioned. Built 2026-05-10 |
+| Set OPENROUTER_API_KEY in .env | **NOW** | Required to activate OpenRouter. Free key at openrouter.ai |
+| Install TTS deps | **NOW** | `pip install transformers scipy` then test 🔊 button |
+| ~~Admin dashboard~~ | ~~Next~~ | ✅ Done — `admin.html` + `GET /api/v1/admin/status`. 5 cards. Built 2026-05-10 |
+| ~~Test infrastructure~~ | ~~High~~ | ✅ Done — pytest + 11 tests (admin + openrouter tracking). Built 2026-05-10 |
 | Multilingual embeddings upgrade | Medium | Switch MiniLM → paraphrase-multilingual-MiniLM-L12-v2. Requires full re-embed |
-| Admin dashboard | **NOW** | Stats page, collection browser, ingestion trigger, system health |
+| TTS audio caching | Low | Cache common words so teach.html plays instantly after first load |
+| Test suite expansion | Low | Add degradation tests for admin; translate pipeline tests |
 | LoRA fine-tuning | Low | Only when 500+ correction pairs. Script not yet built |
-| Voice input/output | Low | No Luganda audio model confirmed. Deferred |
+| Publish dataset to HuggingFace | Low | Run export_dataset.py, create HF dataset repo, upload |
 
 ## 11. Current State Snapshot
 
-> Updated: 2026-04-19
+> Updated: 2026-05-10 (session B)
 
 **What works right now:**
-- Translation pipeline: exact → normalized → partial → semantic → NLLB-200 neural
+- Translation pipeline: exact → normalized → partial → semantic → OpenRouter API → NLLB-200 neural
+- Luganda TTS: 🔊 speaker button on translate + teach pages (Meta MMS, real Luganda voice)
 - Search across vocabulary, sentences, grammar, proverbs collections
 - Feedback collection: users rate translations, corrections auto-ingest into ChromaDB
+- Dataset export: `scripts/export_dataset.py` produces clean HuggingFace-compatible JSONL
 - Reviews page: admin view of all submitted feedback with stats and filters
 - Session quality metrics: live summary on translate page
+- Admin dashboard: `/app/admin.html` — system health, collection counts, feedback stats, pipeline status
+- Test suite: 11 tests passing (`pytest tests/ -v`)
 
 **What does NOT exist yet:**
-- Phase 5: Admin tools (stats page, collection browser, ingestion trigger, system health)
-- Phase 6: Evaluation/test suite
+- OPENROUTER_API_KEY not yet added to .env — OpenRouter silently skipped until this is done
+- TTS dependencies not yet installed — `pip install transformers scipy` required
+- Multilingual embeddings (MiniLM → paraphrase-multilingual-MiniLM-L12-v2)
 
 **Data:**
 - ChromaDB: ~2,500+ pairs (vocabulary + sentences + grammar + proverbs + corrections)
 - Feedback log: `data/feedback/feedback_log.jsonl` (grows with each user correction)
 - Training pairs: `data/training/training_pairs.jsonl` (for future LoRA fine-tuning)
+- Dataset export: `data/training/dataset_export_YYYY-MM-DD.jsonl` (run export_dataset.py to generate)
