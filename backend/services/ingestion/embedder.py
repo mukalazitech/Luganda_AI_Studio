@@ -4,17 +4,18 @@
 Embedder
 =========
 
-Wraps the MiniLM sentence-transformers model to generate text embeddings.
+Wraps the sentence-transformers model to generate text embeddings.
 
 Model used:
-  all-MiniLM-L6-v2
+  paraphrase-multilingual-MiniLM-L12-v2
 
 Why this model?
-  - Small: ~90 MB
-  - Fast: runs well on CPU (your machine has a good CPU + 16GB RAM)
-  - Produces 384-dimensional embeddings
-  - Good at short text similarity (perfect for vocabulary + sentences)
-  - ChromaDB supports it natively via its default embedding function
+  - Multilingual: trained on 50+ languages, handles Luganda far better than
+    the English-only all-MiniLM-L6-v2 it replaced
+  - Same 384-dimensional output — drop-in replacement
+  - ~470 MB (vs ~90 MB for the old model) — acceptable for this hardware
+  - Runs on CPU (no VRAM required)
+  - ChromaDB supports it via SentenceTransformerEmbeddingFunction
 
 IMPORTANT — two public names for the same model loader:
 
@@ -30,18 +31,33 @@ from typing import Optional
 
 logger = logging.getLogger(__name__)
 
+_model_name = "paraphrase-multilingual-MiniLM-L12-v2"
+
 # The model is loaded lazily (only when first needed)
 # This avoids slow startup if ingestion isn't being used
 _model = None
-_model_name = "all-MiniLM-L6-v2"
+
+
+def get_chroma_embedding_fn():
+    """
+    Return a ChromaDB-compatible embedding function using the multilingual model.
+
+    Pass this to get_or_create_collection() and query() so ChromaDB uses
+    the same model for both ingestion and search — no mismatch possible.
+
+    ChromaDB caches the underlying model internally so it is only loaded
+    once per process regardless of how many times this function is called.
+    """
+    from chromadb.utils.embedding_functions import SentenceTransformerEmbeddingFunction
+    return SentenceTransformerEmbeddingFunction(model_name=_model_name)
 
 
 def get_model():
     """
-    Load and return the MiniLM model.
+    Load and return the sentence-transformers model.
     Uses lazy loading — model is only downloaded/loaded once.
 
-    First call: downloads ~90MB model (if not cached) and loads it.
+    First call: downloads ~470MB model (if not cached) and loads it.
     Subsequent calls: returns the already-loaded model instantly.
     """
     global _model
@@ -71,12 +87,6 @@ def get_embedding_model():
 
     This name is used by backend/services/translation/service.py.
     Kept here so that file does not need to be changed.
-
-    Both get_model() and get_embedding_model() return the same object.
-
-    Usage in translation/service.py:
-        model = get_embedding_model()
-        embedding = model.encode([input_text])[0].tolist()
     """
     return get_model()
 
