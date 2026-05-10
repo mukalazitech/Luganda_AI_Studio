@@ -1141,6 +1141,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   flex-wrap: wrap;
 }
 .reviews-refresh-btn { align-self: flex-start; }
+.reviews-refresh-btn.spinning .reviews-refresh-icon { animation: spin 0.8s linear infinite; display: inline-block; }
 
 /* Stats bar */
 .reviews-stats-bar {
