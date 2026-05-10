@@ -67,3 +67,46 @@ def test_lexical_score_checks_all_metadata_fields():
 
 def test_lexical_score_empty_metadata_returns_none():
     assert lexical_score("hello", {}) is None
+
+
+# ── chroma_distance_to_score() ────────────────────────────────────────────────
+
+def test_distance_zero_capped_at_semantic_max():
+    assert chroma_distance_to_score(0.0) == SCORE_SEMANTIC_MAX
+
+def test_distance_half_capped_at_semantic_max():
+    assert chroma_distance_to_score(0.5) == SCORE_SEMANTIC_MAX
+
+def test_distance_one_returns_50():
+    assert chroma_distance_to_score(1.0) == 50
+
+def test_distance_1point6_returns_20():
+    assert chroma_distance_to_score(1.6) == 20
+
+def test_distance_two_returns_zero():
+    assert chroma_distance_to_score(2.0) == 0
+
+def test_distance_below_min_score_is_not_filtered_by_function():
+    score = chroma_distance_to_score(1.6)
+    assert score < MIN_SCORE
+
+
+# ── score_label() ─────────────────────────────────────────────────────────────
+
+def test_score_label_100_is_exact():
+    assert score_label(100) == "Exact match"
+
+def test_score_label_95_is_exact():
+    assert score_label(95) == "Exact match"
+
+def test_score_label_85_is_strong():
+    assert score_label(85) == "Strong match"
+
+def test_score_label_60_is_good():
+    assert score_label(60) == "Good match"
+
+def test_score_label_40_is_related():
+    assert score_label(40) == "Related"
+
+def test_score_label_25_is_weak():
+    assert score_label(25) == "Weak match"
