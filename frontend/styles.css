@@ -670,9 +670,6 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .gap-12 { gap: 12px; }
 .gap-16 { gap: 16px; }
 
-@keyframes tts-toast-in  { from { opacity:0; transform: translateX(-50%) translateY(12px); } to { opacity:1; transform: translateX(-50%) translateY(0); } }
-@keyframes tts-toast-out { from { opacity:1; } to { opacity:0; } }
-
 .flex   { display: flex; }
 .flex-wrap { flex-wrap: wrap; }
 .items-center { align-items: center; }
