@@ -133,7 +133,7 @@
             <div class="card-face card-front">
               <div class="card-badge">Luganda</div>
               <div class="card-word" id="cardLuganda">—</div>
-              <button class="tts-btn" id="ttsBtnCard" style="display:none" title="Speak Luganda" aria-label="Speak">🔊</button>
+              <button class="tts-btn" id="ttsBtnCard" style="display:none" title="Speak Luganda" aria-label="Listen to Luganda">🔊 Listen</button>
               <div class="card-hint">Tap card to reveal the meaning</div>
               <div class="card-type-tag" id="cardType">vocabulary</div>
             </div>
@@ -149,9 +149,11 @@
           <button class="btn-answer btn-try-again" onclick="flashAnswer('wrong')">↺ Try Again</button>
           <button class="btn-answer btn-got-it"    onclick="flashAnswer('correct')">✓ Got It</button>
         </div>
-        <div class="skip-row">
+        <div class="skip-row" style="display:flex; align-items:center; justify-content:center; gap:16px;">
           <button class="btn-skip" onclick="skipCard()">Skip this card →</button>
+          <button class="btn-secondary" id="micBtnCard" style="min-height:44px; font-size:13px; white-space:nowrap;" title="Say the Luganda word">🎙 Speak</button>
         </div>
+        <div id="sttStatusCard" style="text-align:center; font-size:12px; color:var(--text-muted); min-height:18px; margin-top:6px;"></div>
       </div>
 
       <!-- ══ QUIZ SESSION ══ -->
@@ -160,7 +162,9 @@
           <div class="quiz-label">Quiz</div>
           <div class="quiz-question">What does this word mean in English?</div>
           <div class="quiz-word" id="quizWord">—</div>
-          <button class="tts-btn" id="ttsBtnQuiz" style="display:none" title="Speak Luganda" aria-label="Speak">🔊</button>
+          <button class="tts-btn" id="ttsBtnQuiz" style="display:none" title="Speak Luganda" aria-label="Listen to Luganda">🔊 Listen</button>
+          <button class="btn-secondary" id="micBtnQuiz" style="min-height:44px; font-size:13px; white-space:nowrap; margin-top:10px;" title="Say the Luganda word">🎙 Speak</button>
+          <div id="sttStatusQuiz" style="font-size:12px; color:var(--text-muted); min-height:18px; margin-top:6px;"></div>
         </div>
 
         <div class="quiz-options" id="quizOptions">
@@ -545,7 +549,7 @@ boot();
   function _playTTS(text, button) {
     if (!text || !button) return;
     button.disabled = true;
-    button.textContent = '⏳';
+    button.textContent = '⏳ Speaking…';
 
     if (!sessionStorage.getItem('tts_toast_shown')) {
       sessionStorage.setItem('tts_toast_shown', '1');
@@ -568,7 +572,7 @@ boot();
       .then(function (blob) {
         var url = URL.createObjectURL(blob);
         var audio = new Audio(url);
-        button.textContent = '🔊';
+        button.textContent = '🔊 Listen';
         function _done() { button.disabled = false; URL.revokeObjectURL(url); }
         audio.onended = _done;
         audio.onerror = _done;
@@ -579,7 +583,7 @@ boot();
         });
       })
       .catch(function () {
-        button.textContent = '🔊';
+        button.textContent = '🔊 Listen';
         button.disabled = false;
       });
   }
@@ -606,6 +610,114 @@ if ('serviceWorker' in navigator) {
       .catch(err => console.warn('SW registration failed:', err));
   });
 }
+</script>
+
+<script>
+/* ─────────────────────────────────────────────────
+   MIC / STT — teach page (card + quiz)
+───────────────────────────────────────────────── */
+(function () {
+  if (!navigator.mediaDevices || !window.MediaRecorder) {
+    var hide = ['micBtnCard', 'micBtnQuiz'];
+    hide.forEach(function (id) {
+      var el = document.getElementById(id);
+      if (el) el.style.display = 'none';
+    });
+    return;
+  }
+
+  function makeMicController(btnId, statusId, source) {
+    var btn          = document.getElementById(btnId);
+    var statusEl     = document.getElementById(statusId);
+    var mediaRecorder = null;
+    var audioChunks  = [];
+    var isRecording  = false;
+
+    if (!btn) return;
+
+    btn.addEventListener('click', function () {
+      if (isRecording) {
+        stopRecording();
+      } else {
+        startRecording();
+      }
+    });
+
+    function startRecording() {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(function (stream) {
+          audioChunks   = [];
+          mediaRecorder = new MediaRecorder(stream);
+          mediaRecorder.ondataavailable = function (e) {
+            if (e.data.size > 0) audioChunks.push(e.data);
+          };
+          mediaRecorder.onstop = function () {
+            stream.getTracks().forEach(function (t) { t.stop(); });
+            var blob = new Blob(audioChunks, { type: 'audio/wav' });
+            sendAudio(blob);
+          };
+          mediaRecorder.start();
+          isRecording = true;
+          btn.textContent = '🔴 Recording…';
+          btn.style.borderColor = 'var(--red)';
+          btn.style.color = 'var(--red)';
+          if (statusEl) statusEl.textContent = '';
+        })
+        .catch(function (err) {
+          console.error('Mic access denied:', err);
+        });
+    }
+
+    function stopRecording() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+        mediaRecorder.stop();
+      }
+      isRecording = false;
+      btn.textContent = '⏳ Transcribing…';
+      btn.style.borderColor = '';
+      btn.style.color = '';
+      btn.disabled = true;
+    }
+
+    function sendAudio(blob) {
+      var reader = new FileReader();
+      reader.onloadend = function () {
+        var base64 = reader.result.split(',')[1];
+        fetch('/api/v1/stt', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ audio: base64, source: source }),
+        })
+          .then(function (res) { return res.json(); })
+          .then(function (data) {
+            if (statusEl) {
+              statusEl.textContent = data.text
+                ? '✓ "' + data.text + '"'
+                : '✗ Could not transcribe';
+            }
+            resetBtn();
+          })
+          .catch(function (err) {
+            console.error('STT error:', err);
+            if (statusEl) statusEl.textContent = '✗ STT request failed';
+            resetBtn();
+          });
+      };
+      reader.readAsDataURL(blob);
+    }
+
+    function resetBtn() {
+      btn.textContent = '🎙 Speak';
+      btn.disabled = false;
+      btn.style.borderColor = '';
+      btn.style.color = '';
+      isRecording = false;
+    }
+  }
+
+  makeMicController('micBtnCard', 'sttStatusCard', 'teach');
+  makeMicController('micBtnQuiz', 'sttStatusQuiz', 'teach');
+})();
 </script>
 
 </body>
