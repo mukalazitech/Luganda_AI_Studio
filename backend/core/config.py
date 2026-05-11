@@ -29,6 +29,11 @@ IMPORTED_DATASETS_DIR = DATA_DIR / "datasets"
 FEEDBACK_DIR = DATA_DIR / "feedback"
 TRAINING_DIR = DATA_DIR / "training"
 
+# ─── Phase 2: Audio / STT ─────────────────────────────────────
+AUDIO_DIR        = DATA_DIR / "audio"
+AUDIO_REC_DIR    = AUDIO_DIR / "recordings"
+AUDIO_LOG_FILE   = AUDIO_DIR / "transcription_log.jsonl"
+
 # ─── Ollama ───────────────────────────────────────────────────
 OLLAMA_BASE_URL = os.getenv("OLLAMA_BASE_URL", "http://localhost:11434")  # CHANGED: env-configurable
 OLLAMA_DEFAULT_MODEL = os.getenv("OLLAMA_DEFAULT_MODEL", "qwen3:1.7b")   # CHANGED: fits in 4GB VRAM (only ~1.1GB)
@@ -54,6 +59,9 @@ settings = SimpleNamespace(
     imported_datasets_dir=IMPORTED_DATASETS_DIR,  # Phase 1: downloaded datasets
     feedback_dir=FEEDBACK_DIR,             # Phase 3: user feedback
     training_dir=TRAINING_DIR,             # Phase 3: training data accumulation
+    audio_dir=AUDIO_DIR,
+    audio_rec_dir=AUDIO_REC_DIR,
+    audio_log_file=AUDIO_LOG_FILE,
     # CHANGED: OpenRouter configuration
     openrouter_api_key=OPENROUTER_API_KEY,
     openrouter_model=OPENROUTER_MODEL,
