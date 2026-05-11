@@ -99,6 +99,7 @@
           <span id="btnLabel">Translate</span>
         </button>
         <button class="btn-secondary" onclick="clearAll()" style="min-height:48px; white-space:nowrap;">Clear all</button>
+        <button class="btn-secondary" id="micBtn" style="min-height:48px; white-space:nowrap;" title="Speak Luganda">🎙 Speak</button>
       </div>
 
       <!-- KEYBOARD HINT -->
@@ -135,7 +136,7 @@
           <div id="stateSuccess" style="display:none;">
             <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;">
               <div style="font-size:22px;font-weight:600;color:var(--text-primary);line-height:1.5;flex:1;" id="resultText"></div>
-              <button class="tts-btn" id="ttsBtnTranslate" style="display:none;" title="Speak Luganda" aria-label="Speak">🔊</button>
+              <button class="tts-btn" id="ttsBtnTranslate" style="display:none;" title="Speak Luganda" aria-label="Listen to Luganda">🔊 Listen</button>
             </div>
             <div style="display:flex;flex-wrap:wrap;gap:8px;" id="chipsRow"></div>
           </div>
@@ -963,7 +964,7 @@ if ('serviceWorker' in navigator) {
 
   function _playTTS(text, button) {
     button.disabled = true;
-    button.textContent = '⏳';
+    button.textContent = '⏳ Speaking…';
     _showFirstUseToast();
     fetch('/api/v1/tts', {
       method: 'POST',
@@ -977,7 +978,7 @@ if ('serviceWorker' in navigator) {
       .then(function (blob) {
         var url = URL.createObjectURL(blob);
         var audio = new Audio(url);
-        button.textContent = '🔊';
+        button.textContent = '🔊 Listen';
         function _done() { button.disabled = false; URL.revokeObjectURL(url); }
         audio.onended = _done;
         audio.onerror = _done;
@@ -989,7 +990,7 @@ if ('serviceWorker' in navigator) {
       })
       .catch(function (err) {
         console.error('TTS error:', err);
-        button.textContent = '🔊';
+        button.textContent = '🔊 Listen';
         button.disabled = false;
       });
   }
@@ -1016,6 +1017,99 @@ function updateThemeUI() {
   if (mobileBtn) mobileBtn.textContent = isDark ? '☀' : '🌙';
 }
 updateThemeUI();
+</script>
+
+<script>
+/* ─────────────────────────────────────────────────
+   MIC / STT — translate page
+───────────────────────────────────────────────── */
+(function () {
+  var micBtn       = document.getElementById('micBtn');
+  var mediaRecorder = null;
+  var audioChunks  = [];
+  var isRecording  = false;
+
+  if (!navigator.mediaDevices || !window.MediaRecorder) {
+    if (micBtn) micBtn.style.display = 'none';
+    return;
+  }
+
+  micBtn.addEventListener('click', function () {
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecording();
+    }
+  });
+
+  function startRecording() {
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(function (stream) {
+        audioChunks  = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function (e) {
+          if (e.data.size > 0) audioChunks.push(e.data);
+        };
+        mediaRecorder.onstop = function () {
+          stream.getTracks().forEach(function (t) { t.stop(); });
+          var blob = new Blob(audioChunks, { type: 'audio/wav' });
+          sendAudio(blob);
+        };
+        mediaRecorder.start();
+        isRecording = true;
+        micBtn.textContent = '🔴 Recording…';
+        micBtn.style.borderColor = 'var(--red)';
+        micBtn.style.color = 'var(--red)';
+      })
+      .catch(function (err) {
+        console.error('Mic access denied:', err);
+      });
+  }
+
+  function stopRecording() {
+    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+      mediaRecorder.stop();
+    }
+    isRecording = false;
+    micBtn.textContent = '⏳ Transcribing…';
+    micBtn.style.borderColor = '';
+    micBtn.style.color = '';
+    micBtn.disabled = true;
+  }
+
+  function sendAudio(blob) {
+    var reader = new FileReader();
+    reader.onloadend = function () {
+      var base64 = reader.result.split(',')[1];
+      fetch('/api/v1/stt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ audio: base64, source: 'translate' }),
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.text) {
+            document.getElementById('inputText').value = data.text;
+            onInputChange();
+          }
+          resetMicBtn();
+        })
+        .catch(function (err) {
+          console.error('STT error:', err);
+          resetMicBtn();
+        });
+    };
+    reader.readAsDataURL(blob);
+  }
+
+  function resetMicBtn() {
+    micBtn.textContent = '🎙 Speak';
+    micBtn.disabled = false;
+    micBtn.style.borderColor = '';
+    micBtn.style.color = '';
+    isRecording = false;
+  }
+})();
 </script>
 
 </body>
