@@ -303,7 +303,7 @@ Luganda data is limited. Always treat it carefully.
 
 ## 10. What Is Coming Next
 
-> Last updated: 2026-05-10
+> Last updated: 2026-05-11
 
 | Feature | Priority | Notes |
 |---|---|---|
@@ -320,10 +320,11 @@ Luganda data is limited. Always treat it carefully.
 | ~~OpenRouter API integration~~ | ~~High~~ | ✅ Done — `openrouter_service.py` + pipeline Pass 4.5. Default: gemma-2-9b-it:free. Built 2026-05-10 |
 | ~~Luganda TTS (Meta MMS)~~ | ~~High~~ | ✅ Done — `mms_tts_service.py` + `/api/v1/tts`. 🔊 on translate + teach pages. Built 2026-05-10 |
 | ~~Dataset export pipeline~~ | ~~High~~ | ✅ Done — `scripts/export_dataset.py`. HuggingFace-compatible, cleaned, versioned. Built 2026-05-10 |
-| Set OPENROUTER_API_KEY in .env | **NOW** | Required to activate OpenRouter. Free key at openrouter.ai |
-| Install TTS deps | **NOW** | `pip install transformers scipy` then test 🔊 button |
 | ~~Admin dashboard~~ | ~~Next~~ | ✅ Done — `admin.html` + `GET /api/v1/admin/status`. 5 cards. Built 2026-05-10 |
 | ~~Test infrastructure~~ | ~~High~~ | ✅ Done — pytest + 11 tests (admin + openrouter tracking). Built 2026-05-10 |
+| ~~Mobile responsive fix~~ | ~~High~~ | ✅ Done — `styles.css` full responsive overhaul. All breakpoints fixed. Built 2026-05-11 |
+| Set OPENROUTER_API_KEY in .env | **NOW** | Required to activate OpenRouter. Free key at openrouter.ai |
+| Install TTS deps | **NOW** | `pip install transformers scipy` then test 🔊 button |
 | Multilingual embeddings upgrade | Medium | Switch MiniLM → paraphrase-multilingual-MiniLM-L12-v2. Requires full re-embed |
 | TTS audio caching | Low | Cache common words so teach.html plays instantly after first load |
 | Test suite expansion | Low | Add degradation tests for admin; translate pipeline tests |
@@ -332,7 +333,7 @@ Luganda data is limited. Always treat it carefully.
 
 ## 11. Current State Snapshot
 
-> Updated: 2026-05-10 (session B)
+> Updated: 2026-05-11 (session C)
 
 **What works right now:**
 - Translation pipeline: exact → normalized → partial → semantic → OpenRouter API → NLLB-200 neural
@@ -344,6 +345,19 @@ Luganda data is limited. Always treat it carefully.
 - Session quality metrics: live summary on translate page
 - Admin dashboard: `/app/admin.html` — system health, collection counts, feedback stats, pipeline status
 - Test suite: 11 tests passing (`pytest tests/ -v`)
+- Mobile responsive layout: all pages work correctly at 360px–768px (phone), 374px (tiny phone), 480px (small phone)
+
+**Mobile responsive fixes applied (2026-05-11):**
+- Removed overly broad `.flex { flex-direction: column }` override that was breaking direction toggle, feedback buttons, and filter chips
+- Hero title uses continuous `clamp()` scaling across all breakpoints — no overflow at any width
+- Stats row stacks vertically at ≤768px; each stat becomes a horizontal value+label pair
+- Feature grid forced to `1fr` single column at ≤768px
+- Container padding: `0 16px` at 768px, `0 12px` at 480px, `0 10px` at 374px
+- `padding-bottom: calc(72px + env(safe-area-inset-bottom))` on `.main-content` — content never hidden behind bottom nav
+- All buttons and nav items meet 44–52px touch target minimums
+- `overflow-x: hidden` on `html` and `body` — no horizontal scroll
+- Admin grid forced to single column at ≤768px
+- Reviews stats bar reflows: 5-col → 3-col at 720px → 2-col at 400px with correct border cleanup
 
 **What does NOT exist yet:**
 - OPENROUTER_API_KEY not yet added to .env — OpenRouter silently skipped until this is done

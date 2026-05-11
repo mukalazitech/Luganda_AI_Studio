@@ -1,0 +1,61 @@
+THEME TOGGLE BUTTON FIX - MOBILE LAYOUT
+========================================
+
+Problem:
+On mobile phones (360px-480px), the theme toggle button (Light/Dark pill) is stretching
+to full width and displaying as a full column instead of staying inline and compact.
+
+Current Issue:
+- The .theme-pill is showing as flex-direction: column on mobile
+- It should stay as a horizontal pill with Light and Dark buttons side by side
+- Button text should not wrap
+
+Location of Problem:
+- File: frontend/styles.css
+- Class: .theme-pill and .theme-pill-btn
+- Media query: @media (max-width: 768px) and below
+
+Fix Options (choose one approach):
+
+OPTION 1 - Explicit flex-direction: row (Recommended)
+Add this to the mobile media query:
+.theme-pill { flex-direction: row !important; }
+This forces the pill to stay horizontal on all screen sizes.
+
+OPTION 2 - Reduce button padding on mobile
+Make buttons smaller so they fit naturally:
+.theme-pill-btn { padding: 5px 10px; font-size: 11px; }
+.theme-pill { gap: 1px; }
+This shrinks the pill to fit in the space available.
+
+OPTION 3 - Use white-space: nowrap on buttons
+Prevent button text from wrapping:
+.theme-pill-btn { white-space: nowrap; padding: 6px 12px; font-size: 12px; }
+This keeps text on one line and buttons compact.
+
+OPTION 4 - Make theme pill narrower with max-width
+Constrain the pill size:
+.theme-pill { max-width: 140px; }
+This prevents it from expanding full width.
+
+What to do:
+1. Open frontend/styles.css
+2. Find the @media (max-width: 768px) section
+3. Look for .theme-pill rules
+4. Add one of the fixes above
+5. Test on mobile (360px, 390px, 480px)
+6. Make sure Light/Dark buttons stay side by side
+7. Make sure it doesn't overflow
+
+Expected result:
+- Theme pill stays as a compact horizontal button group
+- Light and Dark buttons are side by side
+- No full-width stretching
+- Text doesn't wrap
+- Looks professional on all phone sizes
+
+Files to modify:
+- D:\projects\Luganda_AI_Studio\frontend\styles.css
+
+Return format:
+Show the exact CSS code added/changed with line numbers and explanation.

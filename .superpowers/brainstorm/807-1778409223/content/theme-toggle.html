@@ -1,0 +1,118 @@
+<h2>Theme Toggle Placement</h2>
+<p class="subtitle">You'll have Light (Creatorly cream) ↔ Dark (Creatorly dark). Where does the toggle live on mobile?</p>
+
+<div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap">
+  <span style="background:#e8e6de;color:#1c2b1a;border-radius:20px;font-size:11px;padding:4px 12px;font-weight:600;border:1px solid #cadf3e">☀ Light: cream #E8E6DE + lime</span>
+  <span style="background:#0d1117;color:#e6edf3;border-radius:20px;font-size:11px;padding:4px 12px;font-weight:600;border:1px solid #cadf3e40">◑ Dark: #0D1117 + lime</span>
+</div>
+
+<div class="cards">
+
+  <!-- Option A: Top bar icon -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="display:flex;gap:10px;justify-content:center">
+        <!-- Light mode phone -->
+        <div style="background:#e8e6de;border-radius:10px;padding:10px;width:120px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
+          <div style="background:#f5f4f0;border-radius:6px;padding:7px 8px;border:1px solid #d4d0c8;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:10px;font-weight:700;color:#1c2b1a">Translate</span>
+            <span style="font-size:14px;cursor:pointer" title="Toggle theme">☀️</span>
+          </div>
+          <div style="background:#fff;border-radius:6px;padding:8px;margin-bottom:6px;border:1px solid #d4d0c8">
+            <div style="font-size:9px;color:#8a9a8a;margin-bottom:4px">ENGLISH</div>
+            <div style="font-size:10px;color:#1c2b1a">Hello...</div>
+          </div>
+          <div style="background:#cadf3e;border-radius:20px;padding:6px;text-align:center">
+            <span style="font-size:10px;font-weight:700;color:#1c2b1a">⇄ Translate</span>
+          </div>
+        </div>
+        <!-- Dark mode phone -->
+        <div style="background:#0d1117;border-radius:10px;padding:10px;width:120px;box-shadow:0 2px 12px rgba(0,0,0,0.5)">
+          <div style="background:#161b22;border-radius:6px;padding:7px 8px;border:1px solid #30363d;display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+            <span style="font-size:10px;font-weight:700;color:#e6edf3">Translate</span>
+            <span style="font-size:14px;cursor:pointer" title="Toggle theme">🌙</span>
+          </div>
+          <div style="background:#161b22;border-radius:6px;padding:8px;margin-bottom:6px;border:1px solid #30363d">
+            <div style="font-size:9px;color:#6b7280;margin-bottom:4px">ENGLISH</div>
+            <div style="font-size:10px;color:#e6edf3">Hello...</div>
+          </div>
+          <div style="background:#cadf3e;border-radius:20px;padding:6px;text-align:center">
+            <span style="font-size:10px;font-weight:700;color:#0d1117">⇄ Translate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — ☀️/🌙 Icon in Top Bar</h3>
+      <p>Small sun/moon icon in the top-right of every page header. One tap switches instantly. Always visible, zero extra UI needed. Simplest to build.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Bottom nav "More" tab → Settings sheet -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="display:flex;gap:10px;justify-content:center">
+        <!-- Phone showing bottom nav + more sheet -->
+        <div style="background:#e8e6de;border-radius:10px;padding:10px;width:200px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
+          <!-- Content -->
+          <div style="background:#fff;border-radius:6px;padding:10px;margin-bottom:8px;border:1px solid #d4d0c8;min-height:60px">
+            <div style="font-size:11px;font-weight:700;color:#1c2b1a;margin-bottom:4px">Translate</div>
+            <div style="font-size:9px;color:#8a9a8a">Content area...</div>
+          </div>
+          <!-- Settings sheet (bottom) -->
+          <div style="background:#fff;border-radius:8px;padding:8px;margin-bottom:6px;border:1px solid #d4d0c8">
+            <div style="font-size:9px;color:#8a9a8a;text-transform:uppercase;letter-spacing:0.06em;margin-bottom:6px">Appearance</div>
+            <div style="display:flex;gap:4px">
+              <div style="flex:1;background:#cadf3e;border-radius:6px;padding:5px;text-align:center;font-size:9px;font-weight:700;color:#1c2b1a">☀ Light</div>
+              <div style="flex:1;background:#1f2937;border-radius:6px;padding:5px;text-align:center;font-size:9px;color:#6b7280">◑ Dark</div>
+            </div>
+          </div>
+          <!-- Bottom nav -->
+          <div style="background:#f5f4f0;border-radius:6px;border:1px solid #d4d0c8;display:flex;padding:4px 0">
+            <div style="flex:1;text-align:center"><div style="font-size:12px">⌂</div><div style="font-size:8px;color:#8a9a8a">Home</div></div>
+            <div style="flex:1;text-align:center"><div style="font-size:12px">⇄</div><div style="font-size:8px;color:#8a9a8a">Trans.</div></div>
+            <div style="flex:1;text-align:center"><div style="font-size:12px">◎</div><div style="font-size:8px;color:#8a9a8a">Search</div></div>
+            <div style="flex:1;text-align:center"><div style="font-size:12px">📖</div><div style="font-size:8px;color:#8a9a8a">Teach</div></div>
+            <div style="flex:1;text-align:center;background:#cadf3e20;border-radius:4px"><div style="font-size:12px">⋯</div><div style="font-size:8px;color:#4a7000;font-weight:700">More</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — "More" Tab → Settings Sheet</h3>
+      <p>Tap "⋯ More" in the bottom nav to open a slide-up sheet with theme toggle + links to Reviews, Admin, API Docs. Cleaner top bar, but toggle is one extra tap away.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Animated pill toggle in hero / home page only -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="display:flex;gap:10px;justify-content:center">
+        <div style="background:#e8e6de;border-radius:10px;padding:14px;width:200px;box-shadow:0 2px 12px rgba(0,0,0,0.1)">
+          <!-- Brand -->
+          <div style="text-align:center;margin-bottom:12px">
+            <div style="font-size:13px;font-weight:800;color:#1c2b1a">🌿 Luganda AI Studio</div>
+          </div>
+          <!-- Theme toggle pill — prominent -->
+          <div style="background:#1c2b1a;border-radius:50px;padding:4px;display:flex;margin-bottom:12px">
+            <div style="flex:1;background:#cadf3e;border-radius:50px;padding:6px;text-align:center;font-size:10px;font-weight:700;color:#1c2b1a">☀ Light</div>
+            <div style="flex:1;border-radius:50px;padding:6px;text-align:center;font-size:10px;color:#6b7280">🌙 Dark</div>
+          </div>
+          <!-- Nav links -->
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <div style="background:#cadf3e;border-radius:8px;padding:8px 12px;font-size:11px;font-weight:700;color:#1c2b1a">⇄ Translate</div>
+            <div style="background:#fff;border-radius:8px;padding:8px 12px;font-size:11px;color:#1c2b1a;border:1px solid #d4d0c8">◎ Search</div>
+            <div style="background:#fff;border-radius:8px;padding:8px 12px;font-size:11px;color:#1c2b1a;border:1px solid #d4d0c8">📖 Teach</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Prominent Pill Toggle (Home / Sidebar)</h3>
+      <p>Large animated pill toggle lives in the sidebar (desktop) and on the home/dashboard page (mobile). A design feature, not just a utility button. Most visually impactful.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;text-align:center">My recommendation: <strong>A</strong> for simplicity + <strong>C pill style</strong> in the sidebar on desktop. Clean on mobile, elegant on desktop.</p>

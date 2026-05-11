@@ -34,7 +34,9 @@ logger = logging.getLogger(__name__)
 # ── Constants ─────────────────────────────────────────────────────────────────
 
 # Collections that exist in ChromaDB
-ALL_COLLECTIONS = ["vocabulary", "sentences", "grammar", "proverbs", "documents"]
+# Note: "documents" (PDF collection) is excluded here — it is only added in knowledge.py
+# when explicitly requested, to avoid errors when the collection is empty or missing.
+ALL_COLLECTIONS = ["vocabulary", "sentences", "grammar", "proverbs"]
 
 # Minimum score to show a result to the user (0–100 scale)
 MIN_SCORE = 25

@@ -1,0 +1,50 @@
+MOBILE RESPONSIVENESS FIX PROMPT FOR CLAUDE
+============================================
+
+Task: Fix mobile responsiveness in Luganda AI Studio frontend
+
+Problem Statement:
+The app looks broken on phone screens (360px-480px width). Users report:
+- Hero section text is too large and doesn't fit
+- Stats row layout is crushed horizontally
+- Feature cards don't stack properly on mobile
+- Bottom navigation overlaps content
+- Overall spacing is wrong for small screens
+
+What to do:
+1. Read frontend/styles.css completely
+2. Read frontend/index.html completely
+3. Read frontend/translate.html completely
+4. Check the @media queries for mobile (max-width: 768px and below)
+5. Find and fix these specific issues:
+   - Hero title should use responsive font sizing with clamp()
+   - Stats row should stack vertically on mobile, not horizontally
+   - Feature grid should be 1 column on mobile, not 2 columns
+   - All container padding should be reduced on mobile
+   - Bottom nav height should not cause content to be hidden
+   - Button sizes should be touch-friendly (min 44px height) on mobile
+   - Font sizes should scale down proportionally on small screens
+
+How to fix:
+- Update @media (max-width: 768px) rules in styles.css
+- Add @media (max-width: 480px) rules for extra small screens
+- Add @media (max-width: 374px) rules for ultra-small phones
+- Test with viewport sizes: 360px, 390px, 480px, 768px
+
+Expected outcome:
+- Hero section text scales properly at all sizes
+- Stats display vertically on phones
+- Feature cards stack in single column
+- All text is readable
+- No horizontal scrolling
+- Bottom nav doesn't hide content
+- Touch targets are at least 44px high
+
+Files to modify:
+- D:\projects\Luganda_AI_Studio\frontend\styles.css (main fix)
+- D:\projects\Luganda_AI_Studio\frontend\index.html (if needed)
+
+Return format:
+- Show before/after changes
+- Explain what each media query fix does
+- List which screen sizes each fix targets

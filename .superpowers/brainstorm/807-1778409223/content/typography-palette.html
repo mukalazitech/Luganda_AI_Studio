@@ -1,0 +1,119 @@
+<h2>Typography & Color Palette</h2>
+<p class="subtitle">Same layout, three different type + color combinations. Which feels most like the app you want?</p>
+
+<div class="cards">
+
+  <!-- Option A: Outfit + Lime (most Creatorly) -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap');
+      </style>
+      <div style="background:#0d1117;border-radius:10px;padding:16px;font-family:'DM Sans',sans-serif;max-width:280px;margin:0 auto">
+        <!-- Hero -->
+        <div style="margin-bottom:14px">
+          <div style="font-family:'Outfit',sans-serif;font-size:22px;font-weight:800;color:#e6edf3;line-height:1.2;margin-bottom:6px">Translate.<br><span style="color:#C4FF36">Instantly.</span></div>
+          <div style="font-size:12px;color:#6b7280">Luganda ↔ English · AI-powered</div>
+        </div>
+        <!-- Input card -->
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="font-size:10px;color:#6b7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px">English</div>
+          <div style="font-size:13px;color:#e6edf3">Hello, how are you?</div>
+        </div>
+        <!-- CTA button -->
+        <div style="background:#C4FF36;border-radius:8px;padding:11px;text-align:center;margin-bottom:8px">
+          <span style="font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;color:#0d1117">⇄ Translate</span>
+        </div>
+        <!-- Result card -->
+        <div style="background:#161b22;border:1px solid #C4FF3640;border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Luganda</div>
+          <div style="font-family:'Outfit',sans-serif;font-size:18px;font-weight:700;color:#C4FF36">Oli otya?</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span style="background:#C4FF3615;color:#C4FF36;border-radius:20px;font-size:9px;padding:2px 8px;font-weight:600">exact · 100%</span>
+            <span style="background:#1f2937;color:#6b7280;border-radius:20px;font-size:9px;padding:2px 8px">vocabulary</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Outfit Bold + Pure Lime</h3>
+      <p>Outfit 800 for headings and results. Lime #C4FF36 as the only accent — buttons, results, active states. Closest to Creatorly's energy. Dark #0d1117 background.</p>
+    </div>
+  </div>
+
+  <!-- Option B: DM Sans Bold + Lime + Amber (keeps brand warmth) -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#0d1117;border-radius:10px;padding:16px;font-family:'DM Sans',sans-serif;max-width:280px;margin:0 auto">
+        <!-- Hero -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:22px;font-weight:800;color:#e6edf3;line-height:1.2;margin-bottom:6px">Translate.<br><span style="color:#C4FF36">Instantly.</span></div>
+          <div style="font-size:12px;color:#6b7280">Luganda ↔ English · AI-powered</div>
+        </div>
+        <!-- Input card -->
+        <div style="background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="font-size:10px;color:#6b7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px">English</div>
+          <div style="font-size:13px;color:#e6edf3">Hello, how are you?</div>
+        </div>
+        <!-- CTA button -->
+        <div style="background:#C4FF36;border-radius:8px;padding:11px;text-align:center;margin-bottom:8px">
+          <span style="font-size:13px;font-weight:700;color:#0d1117">⇄ Translate</span>
+        </div>
+        <!-- Result card -->
+        <div style="background:#161b22;border:1px solid #C4FF3640;border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Luganda</div>
+          <div style="font-size:20px;font-weight:700;color:#e6edf3">Oli otya?</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span style="background:#C4FF3615;color:#C4FF36;border-radius:20px;font-size:9px;padding:2px 8px;font-weight:600">exact · 100%</span>
+            <span style="background:#f0a50015;color:#f0a500;border-radius:20px;font-size:9px;padding:2px 8px">vocabulary</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — DM Sans 700 + Lime + Amber</h3>
+      <p>DM Sans you already have, pushed to 700–800 weight. Lime for the primary CTA and confidence badges. Amber retained for secondary metadata chips. Familiar, no new font needed.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Plus Jakarta Sans + Lime (editorial feel) -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap');
+      </style>
+      <div style="background:#111318;border-radius:10px;padding:16px;font-family:'Plus Jakarta Sans',sans-serif;max-width:280px;margin:0 auto">
+        <!-- Hero -->
+        <div style="margin-bottom:14px">
+          <div style="font-size:22px;font-weight:800;color:#f0f6ff;line-height:1.2;margin-bottom:6px">Translate.<br><span style="color:#C4FF36">Instantly.</span></div>
+          <div style="font-size:12px;color:#6b7280">Luganda ↔ English · AI-powered</div>
+        </div>
+        <!-- Input card -->
+        <div style="background:#1a1f2e;border:1px solid #2d3348;border-radius:8px;padding:10px;margin-bottom:8px">
+          <div style="font-size:10px;color:#6b7280;letter-spacing:0.08em;text-transform:uppercase;margin-bottom:6px">English</div>
+          <div style="font-size:13px;color:#f0f6ff">Hello, how are you?</div>
+        </div>
+        <!-- CTA button -->
+        <div style="background:#C4FF36;border-radius:8px;padding:11px;text-align:center;margin-bottom:8px">
+          <span style="font-size:13px;font-weight:700;color:#111318">⇄ Translate</span>
+        </div>
+        <!-- Result card -->
+        <div style="background:#1a1f2e;border:1px solid #C4FF3640;border-radius:8px;padding:10px">
+          <div style="font-size:10px;color:#6b7280;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:6px">Luganda</div>
+          <div style="font-size:18px;font-weight:700;color:#f0f6ff">Oli otya?</div>
+          <div style="display:flex;gap:6px;margin-top:8px">
+            <span style="background:#C4FF3615;color:#C4FF36;border-radius:20px;font-size:9px;padding:2px 8px;font-weight:600">exact · 100%</span>
+            <span style="background:#2d3348;color:#8892b0;border-radius:20px;font-size:9px;padding:2px 8px">vocabulary</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Plus Jakarta Sans + Cooler Navy</h3>
+      <p>Plus Jakarta Sans (similar energy to Outfit, slightly more editorial). Background shifts from forest-green-black to a true blue-navy (#111318). Lime only, no amber. Coldest, most "tech product" feel.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;text-align:center">My recommendation: <strong>A — Outfit + Pure Lime</strong>. Most distinct from what you have, closest to Creatorly's bold typographic energy.</p>

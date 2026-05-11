@@ -5,7 +5,31 @@
       "Bash(curl -s \"http://127.0.0.1:8000/api/v1/teach/cards?limit=10&shuffle=true\")",
       "Bash(taskkill:*)",
       "Bash(wmic process:*)",
-      "Bash(git init *)"
+      "Bash(git init *)",
+      "Bash(cat)",
+      "Bash(rm .env.test)",
+      "Bash(Get-ChildItem \"D:\\\\projects\\\\Luganda_AI_Studio\\\\backend\\\\api\\\\routes\")",
+      "Bash(Select-Object Name)",
+      "Bash(python3 -c \"from backend.api.routes.tts import router; print\\('✓ tts router import successful'\\)\")",
+      "Bash(Get-ChildItem -Path tests -ErrorAction SilentlyContinue)",
+      "Bash(Write-Host \"tests directory does not exist\")",
+      "Bash(pytest tests/ --fixtures -q)",
+      "PowerShell(Get-ChildItem \"D:\\\\projects\\\\Luganda_AI_Studio\\\\\" -File | Where-Object { $_.Name -match \"\\(pytest|setup|pyproject\\)\" } | Select-Object Name)",
+      "Bash(Get-ChildItem *)",
+      "Bash(pytest *)",
+      "Bash(curl -s http://127.0.0.1:8000/app/admin.html)",
+      "Bash(pkill -f \"uvicorn backend.main\")",
+      "Bash(curl -s http://127.0.0.1:8000/api/v1/admin/status)",
+      "PowerShell(Get-Process *)",
+      "Bash(git remote *)",
+      "Bash(git branch *)",
+      "Bash(gh repo *)",
+      "Bash(uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload)",
+      "Bash(curl -s http://127.0.0.1:8000/api/v1/health)",
+      "Bash(curl *)",
+      "Bash(pip show *)",
+      "Bash(Select-String \"Name|not found\")",
+      "Bash(bash *)"
     ]
   }
 }

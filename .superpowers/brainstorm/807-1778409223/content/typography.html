@@ -1,0 +1,84 @@
+<h2>Display Font</h2>
+<p class="subtitle">Creatorly uses a heavy geometric sans for big headings. Which feels right for Luganda AI Studio? All shown at the same size with the cream palette.</p>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@800&family=Plus+Jakarta+Sans:wght@800&family=Figtree:wght@800&family=DM+Sans:opsz,wght@9..40,800&display=swap');
+</style>
+
+<div class="cards">
+
+  <!-- Option A: Outfit 800 -->
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#e8e6de;border-radius:10px;padding:20px;text-align:center;font-family:'Outfit',sans-serif">
+        <div style="font-size:11px;color:#8a9a8a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Outfit 800</div>
+        <div style="font-size:28px;font-weight:800;color:#1c2b1a;line-height:1.15;margin-bottom:8px">Translate<br>Luganda<br><span style="text-decoration:underline;text-decoration-color:#cadf3e;text-decoration-thickness:4px">instantly.</span></div>
+        <div style="font-size:12px;color:#5a6b5a;font-family:'DM Sans',sans-serif;margin-bottom:12px">English ↔ Luganda · AI-powered</div>
+        <div style="background:#cadf3e;border-radius:50px;padding:10px 20px;display:inline-block">
+          <span style="font-size:13px;font-weight:700;color:#1c2b1a">⇄ Translate →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A — Outfit 800</h3>
+      <p>Rounded geometric letterforms. Friendly but bold. Very close to what Creatorly uses. New font to import.</p>
+    </div>
+  </div>
+
+  <!-- Option B: Plus Jakarta Sans 800 -->
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#e8e6de;border-radius:10px;padding:20px;text-align:center;font-family:'Plus Jakarta Sans',sans-serif">
+        <div style="font-size:11px;color:#8a9a8a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Plus Jakarta Sans 800</div>
+        <div style="font-size:28px;font-weight:800;color:#1c2b1a;line-height:1.15;margin-bottom:8px">Translate<br>Luganda<br><span style="text-decoration:underline;text-decoration-color:#cadf3e;text-decoration-thickness:4px">instantly.</span></div>
+        <div style="font-size:12px;color:#5a6b5a;font-family:'DM Sans',sans-serif;margin-bottom:12px">English ↔ Luganda · AI-powered</div>
+        <div style="background:#cadf3e;border-radius:50px;padding:10px 20px;display:inline-block">
+          <span style="font-size:13px;font-weight:700;color:#1c2b1a">⇄ Translate →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B — Plus Jakarta Sans 800</h3>
+      <p>Slightly tighter, more editorial. Strong vertical strokes. Feels more serious/professional than Outfit. New font to import.</p>
+    </div>
+  </div>
+
+  <!-- Option C: Figtree 800 -->
+  <div class="card" data-choice="c" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#e8e6de;border-radius:10px;padding:20px;text-align:center;font-family:'Figtree',sans-serif">
+        <div style="font-size:11px;color:#8a9a8a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">Figtree 800</div>
+        <div style="font-size:28px;font-weight:800;color:#1c2b1a;line-height:1.15;margin-bottom:8px">Translate<br>Luganda<br><span style="text-decoration:underline;text-decoration-color:#cadf3e;text-decoration-thickness:4px">instantly.</span></div>
+        <div style="font-size:12px;color:#5a6b5a;font-family:'DM Sans',sans-serif;margin-bottom:12px">English ↔ Luganda · AI-powered</div>
+        <div style="background:#cadf3e;border-radius:50px;padding:10px 20px;display:inline-block">
+          <span style="font-size:13px;font-weight:700;color:#1c2b1a">⇄ Translate →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>C — Figtree 800</h3>
+      <p>Clean, modern, slightly condensed. Less common than Outfit — more distinctive. Great contrast with DM Sans body text. New font to import.</p>
+    </div>
+  </div>
+
+  <!-- Option D: DM Sans 800 (no new font) -->
+  <div class="card" data-choice="d" onclick="toggleSelect(this)">
+    <div class="card-image">
+      <div style="background:#e8e6de;border-radius:10px;padding:20px;text-align:center;font-family:'DM Sans',sans-serif">
+        <div style="font-size:11px;color:#8a9a8a;letter-spacing:0.1em;text-transform:uppercase;margin-bottom:8px">DM Sans 800 (already loaded)</div>
+        <div style="font-size:28px;font-weight:800;color:#1c2b1a;line-height:1.15;margin-bottom:8px">Translate<br>Luganda<br><span style="text-decoration:underline;text-decoration-color:#cadf3e;text-decoration-thickness:4px">instantly.</span></div>
+        <div style="font-size:12px;color:#5a6b5a;margin-bottom:12px">English ↔ Luganda · AI-powered</div>
+        <div style="background:#cadf3e;border-radius:50px;padding:10px 20px;display:inline-block">
+          <span style="font-size:13px;font-weight:700;color:#1c2b1a">⇄ Translate →</span>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>D — DM Sans 800 (no new font)</h3>
+      <p>Already in your codebase. Just remove Fraunces, push DM Sans to weight 800. Least change, no extra font load. Less distinctive but consistent.</p>
+    </div>
+  </div>
+
+</div>
+
+<p class="subtitle" style="margin-top:16px;text-align:center">My recommendation: <strong>A — Outfit 800</strong>. Closest match to Creatorly's exact typographic energy. Small file, fast load.</p>
