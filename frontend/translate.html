@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,7 +8,9 @@
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#E8E6DE" />
   <!-- CHANGED: PWA meta tags for iOS support -->
+  <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Luganda AI" />
   <link rel="apple-touch-icon" href="/app/icons/icon-192.svg" />
@@ -964,28 +966,37 @@ if ('serviceWorker' in navigator) {
 
   function _playTTS(text, button) {
     button.disabled = true;
-    button.textContent = '⏳ Speaking…';
+    button.textContent = '⏳ Loading…';
     _showFirstUseToast();
+
     fetch('/api/v1/tts', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ text: text, lang: 'lug' }),
     })
       .then(function (res) {
-        if (!res.ok) throw new Error('TTS request failed: ' + res.status);
-        return res.blob();
+        if (!res.ok) throw new Error('TTS ' + res.status);
+        return res.arrayBuffer();
       })
-      .then(function (blob) {
-        var url = URL.createObjectURL(blob);
-        var audio = new Audio(url);
-        button.textContent = '🔊 Listen';
-        function _done() { button.disabled = false; URL.revokeObjectURL(url); }
-        audio.onended = _done;
-        audio.onerror = _done;
-        audio.onabort = _done;
-        audio.play().catch(function (err) {
-          console.error('TTS playback blocked:', err);
-          _done();
+      .then(function (buf) {
+        // Decode via Web Audio API — works cross-browser, bypasses autoplay policy
+        // because we resume a context created in direct response to user click
+        var AudioCtx = window.AudioContext || window.webkitAudioContext;
+        var ctx = new AudioCtx();
+        ctx.decodeAudioData(buf, function (audioBuffer) {
+          var source = ctx.createBufferSource();
+          source.buffer = audioBuffer;
+          source.connect(ctx.destination);
+          source.start(0);
+          button.textContent = '🔊 Listen';
+          source.onended = function () {
+            button.disabled = false;
+            ctx.close();
+          };
+        }, function (err) {
+          console.error('TTS decode error:', err);
+          button.textContent = '🔊 Listen';
+          button.disabled = false;
         });
       })
       .catch(function (err) {
@@ -1045,15 +1056,26 @@ updateThemeUI();
   function startRecording() {
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(function (stream) {
-        audioChunks  = [];
+        audioChunks = [];
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = function (e) {
           if (e.data.size > 0) audioChunks.push(e.data);
         };
         mediaRecorder.onstop = function () {
           stream.getTracks().forEach(function (t) { t.stop(); });
-          var blob = new Blob(audioChunks, { type: 'audio/wav' });
-          sendAudio(blob);
+          // Browser records in WebM/OGG — decode via Web Audio API then re-encode as WAV
+          var rawBlob = new Blob(audioChunks);
+          rawBlob.arrayBuffer().then(function (arrayBuf) {
+            var ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
+            ctx.decodeAudioData(arrayBuf, function (audioBuffer) {
+              ctx.close();
+              var wavBytes = audioBufferToWav(audioBuffer);
+              sendAudio(wavBytes);
+            }, function (err) {
+              console.error('Audio decode failed:', err);
+              resetMicBtn();
+            });
+          });
         };
         mediaRecorder.start();
         isRecording = true;
@@ -1077,29 +1099,70 @@ updateThemeUI();
     micBtn.disabled = true;
   }
 
-  function sendAudio(blob) {
-    var reader = new FileReader();
-    reader.onloadend = function () {
-      var base64 = reader.result.split(',')[1];
-      fetch('/api/v1/stt', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ audio: base64, source: 'translate' }),
+  // Encode an AudioBuffer as a 16kHz mono 16-bit WAV ArrayBuffer
+  function audioBufferToWav(buffer) {
+    var numChannels = 1;
+    var sampleRate  = buffer.sampleRate;
+    var samples     = buffer.getChannelData(0); // mono: use channel 0
+    // If stereo, average both channels
+    if (buffer.numberOfChannels > 1) {
+      var ch1 = buffer.getChannelData(1);
+      var mixed = new Float32Array(samples.length);
+      for (var i = 0; i < samples.length; i++) mixed[i] = (samples[i] + ch1[i]) / 2;
+      samples = mixed;
+    }
+    var dataLen   = samples.length * 2; // 16-bit = 2 bytes per sample
+    var wavBuf    = new ArrayBuffer(44 + dataLen);
+    var view      = new DataView(wavBuf);
+    function writeStr(off, str) { for (var i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i)); }
+    writeStr(0,  'RIFF');
+    view.setUint32(4,  36 + dataLen, true);
+    writeStr(8,  'WAVE');
+    writeStr(12, 'fmt ');
+    view.setUint32(16, 16, true);          // PCM chunk size
+    view.setUint16(20, 1,  true);          // PCM format
+    view.setUint16(22, numChannels, true);
+    view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true); // byte rate
+    view.setUint16(32, 2,  true);          // block align
+    view.setUint16(34, 16, true);          // bits per sample
+    writeStr(36, 'data');
+    view.setUint32(40, dataLen, true);
+    var offset = 44;
+    for (var j = 0; j < samples.length; j++) {
+      var s = Math.max(-1, Math.min(1, samples[j]));
+      view.setInt16(offset, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+      offset += 2;
+    }
+    return wavBuf;
+  }
+
+  function sendAudio(wavArrayBuffer) {
+    // Convert ArrayBuffer → base64
+    var bytes = new Uint8Array(wavArrayBuffer);
+    var binary = '';
+    for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
+    var base64 = btoa(binary);
+
+    fetch('/api/v1/stt', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ audio: base64, source: 'translate' }),
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        if (data.text) {
+          document.getElementById('inputText').value = data.text;
+          onInputChange();
+        } else {
+          console.error('STT returned no text:', data);
+        }
+        resetMicBtn();
       })
-        .then(function (res) { return res.json(); })
-        .then(function (data) {
-          if (data.text) {
-            document.getElementById('inputText').value = data.text;
-            onInputChange();
-          }
-          resetMicBtn();
-        })
-        .catch(function (err) {
-          console.error('STT error:', err);
-          resetMicBtn();
-        });
-    };
-    reader.readAsDataURL(blob);
+      .catch(function (err) {
+        console.error('STT error:', err);
+        resetMicBtn();
+      });
   }
 
   function resetMicBtn() {

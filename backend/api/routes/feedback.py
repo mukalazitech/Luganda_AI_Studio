@@ -60,7 +60,7 @@ class FeedbackRequest(BaseModel):
     # Required
     input_text: str
     direction: str
-    translated_text: str
+    translated_text: Optional[str] = None   # empty when original result was not_found
     verdict: str
 
     # Optional — from translation result metadata
@@ -88,11 +88,11 @@ class FeedbackRequest(BaseModel):
             )
         return v
 
-    @field_validator("input_text", "translated_text")
+    @field_validator("input_text")
     @classmethod
     def text_must_not_be_empty(cls, v: str) -> str:
         if not v or not v.strip():
-            raise ValueError("text fields must not be empty or whitespace only")
+            raise ValueError("input_text must not be empty or whitespace only")
         return v.strip()
 
 
@@ -177,13 +177,35 @@ def submit_feedback(request: FeedbackRequest) -> FeedbackResponse:
             ),
         )
 
+    # ── Auto-ingest corrections into ChromaDB immediately ────────────────────
+    # Only runs when verdict="wrong" and expected_output is provided.
+    # Failures are logged but do NOT block the 200 response — the record
+    # is already safely on disk and can be reprocessed via process_feedback.py.
+    ingested = False
+    if request.verdict == "wrong" and request.expected_output and request.expected_output.strip():
+        try:
+            from scripts.process_feedback import ingest_correction, append_training_pair, log_auto_ingestion
+            ingested = ingest_correction(record)
+            append_training_pair(record)
+            log_auto_ingestion(record, ingested)
+            if ingested:
+                logger.info(f"Auto-ingested correction into ChromaDB: '{request.input_text}' → '{request.expected_output}'")
+            else:
+                logger.warning(f"Auto-ingestion skipped (duplicate or invalid pair): '{request.input_text}'")
+        except Exception as e:
+            logger.error(f"Auto-ingestion failed (record still saved to disk): {e}", exc_info=True)
+
     # ── Return confirmation ───────────────────────────────────────────────────
+
+    msg = f"Feedback recorded as '{request.verdict}'."
+    if request.verdict == "wrong" and request.expected_output:
+        msg += " Correction added to ChromaDB." if ingested else " Correction saved — will be ingested on next process run."
 
     return FeedbackResponse(
         status="saved",
         id=record_id,
         timestamp=timestamp,
-        message=f"Feedback recorded as '{request.verdict}'.",
+        message=msg,
     )
 
 

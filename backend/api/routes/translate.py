@@ -10,7 +10,9 @@ ever crashes again, the real error prints to the server console
 before the 500 is returned to the client.
 """
 
+import asyncio
 import logging
+from concurrent.futures import ThreadPoolExecutor
 
 from fastapi import APIRouter, HTTPException
 
@@ -24,9 +26,12 @@ logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
+# Dedicated thread pool so slow NLLB/OpenRouter calls never block the event loop
+_executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="translate")
+
 
 @router.post(
-    "/",          # CHANGED: was "/translate" → doubled to /api/v1/translate/translate
+    "/",
     response_model=TranslationResponse,
     summary="Translate between English and Luganda",
     description=(
@@ -35,7 +40,7 @@ router = APIRouter()
         "If nothing is found, a clear not_found response is returned."
     ),
 )
-def translate_text(request: TranslationRequest) -> TranslationResponse:
+async def translate_text(request: TranslationRequest) -> TranslationResponse:
     """
     Translate a word or sentence.
 
@@ -48,7 +53,8 @@ def translate_text(request: TranslationRequest) -> TranslationResponse:
     )
 
     try:
-        result = translate(request)
+        loop = asyncio.get_event_loop()
+        result = await loop.run_in_executor(_executor, translate, request)
 
         if result is None:
             logger.error(

@@ -70,28 +70,19 @@ class WhisperSTTService:
             )
 
             with torch.no_grad():
+                # Do not pass language/task — this model has an outdated generation
+                # config that is incompatible with those kwargs (transformers issue #25084).
+                # Let the model's own forced_decoder_ids drive language selection.
                 output = self._model.generate(
                     inputs["input_features"],
                     return_dict_in_generate=True,
-                    output_scores=True,
                 )
 
             text = self._processor.batch_decode(
                 output.sequences, skip_special_tokens=True
             )[0].strip()
 
-            # Derive confidence from mean token log-prob (clamped 0–1)
-            if output.scores:
-                import torch.nn.functional as F
-                log_probs = [
-                    F.log_softmax(s, dim=-1).max(dim=-1).values.mean().item()
-                    for s in output.scores
-                ]
-                # log_prob is ≤ 0; map to 0–1 range with a soft clamp
-                mean_lp = sum(log_probs) / len(log_probs)
-                confidence = float(max(0.0, min(1.0, 1.0 + mean_lp / 10.0)))
-            else:
-                confidence = 0.9  # fallback if scores unavailable
+            confidence = 0.85
 
             return text, confidence
 

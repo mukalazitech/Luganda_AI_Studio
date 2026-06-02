@@ -170,17 +170,9 @@ def load_vocabulary_files() -> list[dict]:
 
     Embed text combines all fields for rich semantic search.
     """
-    vocab_files = [
-        "animals.json",
-        "body_parts.json",
-        "food_and_drink.json",
-        "transport.json",
-        "family.json",
-        "numbers.json",
-    ]
-
     records = []
     vocab_dir = settings.datasets_dir / "vocabulary"
+    vocab_files = sorted(p.name for p in vocab_dir.glob("*.json"))
 
     for filename in vocab_files:
         file_path = vocab_dir / filename

@@ -10,11 +10,13 @@ Model: facebook/mms-tts-lug
 - Lazy-loaded on first request (same pattern as nllb_service.py)
 
 First call: 5–15 s (model loading)
-Subsequent: 1–2 s on CPU
+Subsequent: 1–2 s on CPU (instant on cache hit)
 """
 
+import hashlib
 import io
 import logging
+from pathlib import Path
 from typing import Optional
 
 import numpy as np
@@ -24,13 +26,23 @@ logger = logging.getLogger(__name__)
 
 MODEL_NAME = "facebook/mms-tts-lug"
 
+# Disk cache: data/tts_cache/<sha256_of_text>.wav
+# Keeps WAV files between server restarts so common words are always instant.
+_CACHE_DIR = Path(__file__).resolve().parents[4] / "data" / "tts_cache"
+
+
+def _cache_path(text: str) -> Path:
+    key = hashlib.sha256(text.encode("utf-8")).hexdigest()
+    return _CACHE_DIR / f"{key}.wav"
+
 
 class MMSTTSService:
-    """Lazy-loaded wrapper around facebook/mms-tts-lug."""
+    """Lazy-loaded wrapper around facebook/mms-tts-lug with disk-based WAV cache."""
 
     def __init__(self) -> None:
         self._model = None
         self._tokenizer = None
+        _CACHE_DIR.mkdir(parents=True, exist_ok=True)
 
     def _load(self) -> None:
         if self._model is not None:
@@ -45,8 +57,15 @@ class MMSTTSService:
     def synthesize(self, text: str) -> Optional[bytes]:
         """
         Synthesize Luganda text into WAV bytes.
+        Returns cached bytes immediately if this text was synthesized before.
         Returns None if synthesis fails.
         """
+        # CHANGED: check disk cache before hitting the model
+        path = _cache_path(text)
+        if path.exists():
+            logger.debug(f"[MMS-TTS] Cache hit: '{text[:40]}'")
+            return path.read_bytes()
+
         try:
             self._load()
 
@@ -58,7 +77,13 @@ class MMSTTSService:
             waveform = output[0].squeeze().cpu().numpy().astype(np.float32)
             sample_rate = self._model.config.sampling_rate
 
-            return _to_wav_bytes(waveform, sample_rate)
+            wav_bytes = _to_wav_bytes(waveform, sample_rate)
+
+            # CHANGED: persist to disk cache for future requests
+            path.write_bytes(wav_bytes)
+            logger.debug(f"[MMS-TTS] Cached: '{text[:40]}' → {path.name}")
+
+            return wav_bytes
 
         except Exception as e:
             logger.error(f"[MMS-TTS] Synthesis failed: {e}", exc_info=True)

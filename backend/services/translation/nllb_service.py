@@ -33,6 +33,48 @@ _LANG_CODES: dict[str, tuple[str, str]] = {
 }
 
 
+def _validate_nllb_output(input_text: str, result: str, direction: str) -> Optional[str]:
+    """
+    Reject hallucinated NLLB output before returning it to the caller.
+
+    NLLB-200 has two common failure modes:
+    1. Repetition — translates "dance" as "dance dance dance"
+    2. Echo — returns the input word unchanged (no real translation occurred)
+
+    For en_to_lg we also reject output that is pure ASCII with no Luganda
+    character patterns — genuine Luganda always contains vowel clusters,
+    prefix syllables (e-, o-, k-, n-, m-, ss-, ng', ny-, etc.) or words
+    longer than the English input due to agglutinative morphology.
+    """
+    if not result:
+        return None
+
+    input_lower  = input_text.strip().lower()
+    result_lower = result.strip().lower()
+
+    # Reject if output is just the input repeated (e.g. "dance dance dance")
+    result_words = result_lower.split()
+    if all(w == input_lower for w in result_words):
+        logger.warning(f"[NLLB] Rejected repetition hallucination: '{result}'")
+        return None
+
+    # Reject if output equals input (echo, no translation happened)
+    if result_lower == input_lower:
+        logger.warning(f"[NLLB] Rejected echo output: '{result}'")
+        return None
+
+    # For en→lg: reject if result contains ONLY ASCII letters and spaces
+    # (real Luganda can be ASCII but will differ meaningfully from the English input)
+    # Specifically catch the case where every result word appears in the input
+    if direction == "en_to_lg":
+        input_words = set(input_lower.split())
+        if result_words and all(w in input_words for w in result_words):
+            logger.warning(f"[NLLB] Rejected: output words all came from input '{result}'")
+            return None
+
+    return result
+
+
 class NLLBTranslator:
     """Lazy-loaded wrapper around NLLB-200-distilled-600M."""
 
@@ -117,9 +159,9 @@ class NLLBTranslator:
                     early_stopping=True,
                 )
 
-            result = self._tokenizer.decode(output_ids[0], skip_special_tokens=True)
+            result = self._tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
             logger.debug(f"[NLLB] '{text}' ({direction}) → '{result}'")
-            return result.strip() or None
+            return _validate_nllb_output(text, result, direction) or None
 
         except torch.cuda.OutOfMemoryError:
             # VRAM exhausted — retry on CPU
@@ -153,8 +195,8 @@ class NLLBTranslator:
                     max_new_tokens=256,
                 )
 
-            result = self._tokenizer.decode(output_ids[0], skip_special_tokens=True)
-            return result.strip() or None
+            result = self._tokenizer.decode(output_ids[0], skip_special_tokens=True).strip()
+            return _validate_nllb_output(text, result, direction) or None
 
         except Exception as e:
             logger.error(f"[NLLB] CPU fallback also failed: {e}", exc_info=True)

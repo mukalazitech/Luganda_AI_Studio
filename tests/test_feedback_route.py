@@ -213,12 +213,12 @@ def test_missing_direction_returns_422(client):
     assert response.status_code == 422
 
 
-def test_missing_provided_translation_returns_422(client):
-    """Missing translated_text returns validation error."""
+def test_missing_provided_translation_is_allowed(client):
+    """translated_text is optional — omitting it is valid (used for not_found corrections)."""
     payload = _payload()
     del payload["translated_text"]
     response = client.post("/api/v1/feedback", json=payload)
-    assert response.status_code == 422
+    assert response.status_code == 200
 
 
 def test_missing_verdict_returns_422(client):
