@@ -1,7 +1,7 @@
 // frontend/app.js
 // Shared JavaScript used by all pages
 
-const API_BASE = 'http://127.0.0.1:8000/api/v1';
+const API_BASE = 'https://lugandastudio.com/api/v1';
 
 // ── Direction toggle (used on dashboard + translate page) ──────────────
 
