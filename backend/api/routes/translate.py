@@ -31,7 +31,7 @@ _executor = ThreadPoolExecutor(max_workers=2, thread_name_prefix="translate")
 
 
 @router.post(
-    "/",
+    "",
     response_model=TranslationResponse,
     summary="Translate between English and Luganda",
     description=(
