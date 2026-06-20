@@ -144,8 +144,8 @@ function updateThemeUI() {
 }
 updateThemeUI();
 
-// Load stats from /api/v1/knowledge/stats
-fetch('/api/v1/knowledge/stats')
+// Load stats from /api/v1/knowledge/status
+fetch('/api/v1/knowledge/status')
   .then(r => r.json())
   .then(d => {
     // CHANGED: Unpack d.collections to handle API response shape

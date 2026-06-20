@@ -44,7 +44,7 @@ async function loadCollectionStats() {
   const gridEl = document.getElementById('collections-grid');
 
   try {
-    const res = await fetch(`${API_BASE}/knowledge/stats`);
+    const res = await fetch(`${API_BASE}/knowledge/status`);
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
 
