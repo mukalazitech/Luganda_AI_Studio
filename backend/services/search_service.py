@@ -26,7 +26,7 @@ import logging
 import unicodedata
 from typing import Any
 
-from backend.db.chroma_client import get_chroma_client
+from backend.db.chroma_client import get_chroma_client, get_or_create_collection_safe
 from backend.services.ingestion.embedder import get_chroma_embedding_fn
 
 logger = logging.getLogger(__name__)
@@ -220,7 +220,8 @@ def search_knowledge(
 
     for col_name in collections_to_search:
         try:
-            collection = client.get_or_create_collection(
+            collection = get_or_create_collection_safe(
+                client,
                 col_name,
                 embedding_function=get_chroma_embedding_fn(),
             )

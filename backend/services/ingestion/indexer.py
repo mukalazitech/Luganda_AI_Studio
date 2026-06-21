@@ -32,7 +32,7 @@ CHROMADB METADATA RULES:
 import logging
 from typing import Any
 
-from backend.db.chroma_client import get_chroma_client
+from backend.db.chroma_client import get_chroma_client, get_or_create_collection_safe
 from backend.services.ingestion.embedder import get_chroma_embedding_fn
 
 logger = logging.getLogger(__name__)
@@ -128,7 +128,8 @@ def index_records(
         # This matches the score formula in search_service.py:
         #   score = (1 - distance / 2) * 100
         try:
-            collection = client.get_or_create_collection(
+            collection = get_or_create_collection_safe(
+                client,
                 name=collection_name,
                 embedding_function=get_chroma_embedding_fn(),
                 metadata={
