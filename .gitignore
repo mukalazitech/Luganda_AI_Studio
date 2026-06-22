@@ -88,4 +88,4 @@ models/
 # --- Coverage and test output ---
 htmlcov/
 .coverage
-.pytest_cache/
+.pytest_cache/.worktrees/
