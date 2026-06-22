@@ -1,0 +1,261 @@
+{
+  "metadata": {
+    "category": "health",
+    "description": "Luganda vocabulary for health, illness, and medical terms",
+    "source_ids": ["ish_handbook", "lajenta_phrasebook"],
+    "total_entries": 25,
+    "last_updated": "2026-05-20"
+  },
+  "entries": [
+    {
+      "luganda": "Olulwadde",
+      "english": "Illness / Disease",
+      "category": "health",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Mulwadde",
+      "english": "Sick / Ill",
+      "category": "health",
+      "subcategory": "conditions",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": "Omwana mulwadde.",
+      "example_sentence_english": "The child is sick.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Obudde obulungi",
+      "english": "Good health",
+      "category": "health",
+      "subcategory": "general",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omusawo",
+      "english": "Doctor",
+      "category": "health",
+      "subcategory": "people",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Genda eri omusawo.",
+      "example_sentence_english": "Go to the doctor.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Omujjanjabi",
+      "english": "Nurse",
+      "category": "health",
+      "subcategory": "people",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Eddwaliro",
+      "english": "Hospital / Clinic",
+      "category": "health",
+      "subcategory": "places",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Twagenda ku ddwaliro.",
+      "example_sentence_english": "We went to the hospital.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Eddagala",
+      "english": "Medicine",
+      "category": "health",
+      "subcategory": "treatment",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Nnywa eddagala lyo.",
+      "example_sentence_english": "Take your medicine.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Obujeemu",
+      "english": "Pain / Ache",
+      "category": "health",
+      "subcategory": "symptoms",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ndi na obujeemu mu mutwe.",
+      "example_sentence_english": "I have a headache.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Omusujja",
+      "english": "Fever / Malaria",
+      "category": "health",
+      "subcategory": "diseases",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ali na omusujja.",
+      "example_sentence_english": "He/she has a fever.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Enkuba",
+      "english": "Cough",
+      "category": "health",
+      "subcategory": "symptoms",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omusaayi",
+      "english": "Blood",
+      "category": "health",
+      "subcategory": "body_substances",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okukolima",
+      "english": "To vomit",
+      "category": "health",
+      "subcategory": "symptoms",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Enjoka",
+      "english": "Stomach worms / Diarrhea",
+      "category": "health",
+      "subcategory": "diseases",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omutwe",
+      "english": "Head (in context of headache)",
+      "category": "health",
+      "subcategory": "body_reference",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Omutwe gwange gujja.",
+      "example_sentence_english": "My head is aching.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Olukusa",
+      "english": "Wound / Sore",
+      "category": "health",
+      "subcategory": "symptoms",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okulumwa",
+      "english": "To be in pain / To hurt",
+      "category": "health",
+      "subcategory": "verbs",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Ndwadde, ndi kulumwa.",
+      "example_sentence_english": "I am sick, I am in pain.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Obutonde",
+      "english": "Pregnancy",
+      "category": "health",
+      "subcategory": "conditions",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omuzigo",
+      "english": "Weight",
+      "category": "health",
+      "subcategory": "measurements",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omukono ogugwa",
+      "english": "Broken arm",
+      "category": "health",
+      "subcategory": "injuries",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekyambu",
+      "english": "Injection / Vaccine",
+      "category": "health",
+      "subcategory": "treatment",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ssiga",
+      "english": "Pill / Tablet",
+      "category": "health",
+      "subcategory": "treatment",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okwetabira",
+      "english": "To recover / To get well",
+      "category": "health",
+      "subcategory": "verbs",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Webale okutuuka bulungi.",
+      "example_sentence_english": "Thank God you have recovered.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Omutima",
+      "english": "Heart",
+      "category": "health",
+      "subcategory": "organs",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ebbere",
+      "english": "Chest / Breast",
+      "category": "health",
+      "subcategory": "organs",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Amatengeka",
+      "english": "First aid",
+      "category": "health",
+      "subcategory": "treatment",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    }
+  ]
+}

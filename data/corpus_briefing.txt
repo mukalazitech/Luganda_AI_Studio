@@ -1,0 +1,1 @@
+Luganda AI corpus: 47 training pairs (need 453 more for LoRA), 8 audio files (0.01 hrs), 622 source dataset rows, ChromaDB 20.8 MB.

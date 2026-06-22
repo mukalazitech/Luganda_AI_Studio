@@ -1,0 +1,211 @@
+{
+  "metadata": {
+    "category": "clothing",
+    "description": "Luganda vocabulary for clothing and accessories",
+    "source_ids": ["ish_handbook", "lajenta_phrasebook"],
+    "total_entries": 20,
+    "last_updated": "2026-05-20"
+  },
+  "entries": [
+    {
+      "luganda": "Engoye",
+      "english": "Clothes / Clothing",
+      "category": "clothing",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Engoye zaange zivaamu.",
+      "example_sentence_english": "My clothes are worn out.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekitenge",
+      "english": "African print fabric / Chitenge",
+      "category": "clothing",
+      "subcategory": "traditional",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Kanzu",
+      "english": "Kanzu (traditional men's robe)",
+      "category": "clothing",
+      "subcategory": "traditional",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Taata yambala kanzu ku ssabbiiti.",
+      "example_sentence_english": "Father wears a kanzu on Sunday.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Gomesi",
+      "english": "Gomesi (traditional women's dress)",
+      "category": "clothing",
+      "subcategory": "traditional",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekisulo",
+      "english": "Shirt",
+      "category": "clothing",
+      "subcategory": "tops",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekitelevize",
+      "english": "T-shirt",
+      "category": "clothing",
+      "subcategory": "tops",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Engatto",
+      "english": "Shoes",
+      "category": "clothing",
+      "subcategory": "footwear",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Engatto zaange ziggwa.",
+      "example_sentence_english": "My shoes are worn out.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ensawo",
+      "english": "Bag / Handbag",
+      "category": "clothing",
+      "subcategory": "accessories",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekizikizo",
+      "english": "Belt",
+      "category": "clothing",
+      "subcategory": "accessories",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekiraalo",
+      "english": "Hat / Cap",
+      "category": "clothing",
+      "subcategory": "accessories",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Oluggi",
+      "english": "Trousers / Pants",
+      "category": "clothing",
+      "subcategory": "bottoms",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekidinda",
+      "english": "Skirt",
+      "category": "clothing",
+      "subcategory": "bottoms",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekyambalo",
+      "english": "Dress (women's)",
+      "category": "clothing",
+      "subcategory": "tops",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekikuufu",
+      "english": "Jacket / Coat",
+      "category": "clothing",
+      "subcategory": "outerwear",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ensokka",
+      "english": "Socks",
+      "category": "clothing",
+      "subcategory": "footwear",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okwambala",
+      "english": "To wear / To dress",
+      "category": "clothing",
+      "subcategory": "verbs",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Yambala engoye zo.",
+      "example_sentence_english": "Put on your clothes.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Okuyoza",
+      "english": "To wash (clothes)",
+      "category": "clothing",
+      "subcategory": "verbs",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Yogera engoye zo.",
+      "example_sentence_english": "Wash your clothes.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekisanvu",
+      "english": "Needle",
+      "category": "clothing",
+      "subcategory": "sewing",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Olukanda",
+      "english": "Thread",
+      "category": "clothing",
+      "subcategory": "sewing",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekyambalo eky'obulambu",
+      "english": "Uniform",
+      "category": "clothing",
+      "subcategory": "general",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    }
+  ]
+}

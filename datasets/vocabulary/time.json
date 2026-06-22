@@ -1,0 +1,311 @@
+{
+  "metadata": {
+    "category": "time",
+    "description": "Luganda vocabulary for days, months, and time expressions",
+    "source_ids": ["ish_handbook", "lajenta_phrasebook"],
+    "total_entries": 30,
+    "last_updated": "2026-05-20"
+  },
+  "entries": [
+    {
+      "luganda": "Olunaku",
+      "english": "Day",
+      "category": "time",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Olunaku luno lulungi.",
+      "example_sentence_english": "Today is a good day.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Wiiki",
+      "english": "Week",
+      "category": "time",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omwezi",
+      "english": "Month",
+      "category": "time",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omwaka",
+      "english": "Year",
+      "category": "time",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Leero",
+      "english": "Today",
+      "category": "time",
+      "subcategory": "relative_time",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": "Leero ndi busitani.",
+      "example_sentence_english": "Today I am busy.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Jjo",
+      "english": "Yesterday",
+      "category": "time",
+      "subcategory": "relative_time",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": "Jjo nagenda ku ssomero.",
+      "example_sentence_english": "Yesterday I went to school.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Enkya",
+      "english": "Tomorrow",
+      "category": "time",
+      "subcategory": "relative_time",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": "Enkya nzija.",
+      "example_sentence_english": "Tomorrow I will come.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ku makya",
+      "english": "In the morning",
+      "category": "time",
+      "subcategory": "time_of_day",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": "Ku makya tunywa chai.",
+      "example_sentence_english": "In the morning we drink tea.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Omupiira",
+      "english": "Afternoon",
+      "category": "time",
+      "subcategory": "time_of_day",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Akawungeezi",
+      "english": "Evening",
+      "category": "time",
+      "subcategory": "time_of_day",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekiro",
+      "english": "Night",
+      "category": "time",
+      "subcategory": "time_of_day",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ekiro tuloga.",
+      "example_sentence_english": "At night we sleep.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ssande",
+      "english": "Sunday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Bbalaza",
+      "english": "Monday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Lwakubiri",
+      "english": "Tuesday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Lwakusatu",
+      "english": "Wednesday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Lwakuna",
+      "english": "Thursday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Lwakutaano",
+      "english": "Friday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Lwamukaaga",
+      "english": "Saturday",
+      "category": "time",
+      "subcategory": "days_of_week",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Janwaliyo",
+      "english": "January",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Febwaliyo",
+      "english": "February",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Marisi",
+      "english": "March",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Apuli",
+      "english": "April",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Meyi",
+      "english": "May",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Juuni",
+      "english": "June",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Julaayi",
+      "english": "July",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Agusito",
+      "english": "August",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Sebuttemba",
+      "english": "September",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okitobba",
+      "english": "October",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Novemba",
+      "english": "November",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Desemba",
+      "english": "December",
+      "category": "time",
+      "subcategory": "months",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    }
+  ]
+}

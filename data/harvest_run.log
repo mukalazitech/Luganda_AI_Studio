@@ -1,0 +1,886 @@
+ 
+=============================== 
+07/06/2026  2:00:00.43 â€” Nightly harvest started 
+=============================== 
+02:00:00 | INFO    | === Luganda Text Harvester — 2026-06-07 ===
+02:00:00 | INFO    | Sources: ['wiki', 'flores', 'commonvoice', 'opus']
+02:00:00 | INFO    | 
+--- Luganda Wikipedia ---
+02:00:00 | INFO    | [wikipedia] Already harvested today (wikipedia_lg_2026-06-07.json). Use --force to re-fetch.
+02:00:00 | INFO    |   \u2192 796 entries
+02:00:00 | INFO    | 
+--- FLORES-200 ---
+02:00:00 | INFO    | [flores] Downloading FLORES-200 Luganda sentences …
+02:00:01 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:02 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:05 | ERROR   | [flores] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:05 | INFO    |   \u2192 0 entries
+02:00:05 | INFO    | 
+--- CommonVoice ---
+02:00:05 | INFO    | [commonvoice] Downloading CommonVoice Luganda sentences …
+02:00:06 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:07 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:09 | ERROR   | [commonvoice] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:09 | INFO    |   \u2192 0 entries
+02:00:09 | INFO    | 
+--- OPUS CCAligned ---
+02:00:09 | INFO    | [opus] Already downloaded (opus_ccaligned_enlg.json). Use --force to re-fetch.
+02:00:10 | INFO    |   \u2192 14701 entries
+02:00:10 | INFO    | 
+=== TOTAL new entries: 15497 ===
+02:00:10 | INFO    | Next step: run  python scripts/ingest_dataset.py  to load into ChromaDB
+02:00:10 | INFO    | Found 1 file(s) to ingest
+02:00:10 | INFO    | 
+--- Before ingestion ---
+02:00:10 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:11 | INFO    | 
+Processing: flores_sentences.json
+02:00:11 | INFO    |   Source: flores | Entries: 2009
+02:00:11 | INFO    |   \u2192 sentences: 2009 records
+02:00:11 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:11 | INFO    | 'vocabulary': no records to index — skipping.
+02:00:11 | INFO    | 'sentences': indexing 2009 records...
+02:00:17 | INFO    | Load pretrained SentenceTransformer: paraphrase-multilingual-MiniLM-L12-v2
+02:00:17 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:17 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:18 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:18 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:18 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:18 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:18 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+02:00:19 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/README.md "HTTP/1.1 200 OK"
+02:00:19 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:19 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:19 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:19 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentence_bert_config.json "HTTP/1.1 200 OK"
+02:00:20 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+02:00:20 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:20 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|##########| 199/199 [00:00<00:00, 5442.78it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+02:00:21 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:21 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+02:00:21 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:21 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:00:21 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:21 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:00:22 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+02:00:22 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+02:00:24 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+02:00:24 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:24 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+02:00:25 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.66it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.09it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.49it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.98it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.23it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.55it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.62it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.30it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.65it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.94it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.26it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.75it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.89it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.19it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.36it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.97it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.90it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.97it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.20it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.74it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.13it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.30it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.60it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.21it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.21it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.52it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.90it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.57it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.17it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.31it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.46it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.09it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.26it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.62it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.97it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.66it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.22it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.49it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.87it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.52it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.33it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.10it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.19it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.83it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.19it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.39it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.88it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.50it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.82it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.24it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.93it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.41it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.24it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.62it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.94it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.63it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.01it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.31it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.70it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.29it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.77it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.13it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.44it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.96it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.96it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.38it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.74it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.34it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.17it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.50it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.96it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.59it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.98it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.50it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.83it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.44it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.70it/s]Batches:  50%|#####     | 2/4 [00:01<00:00,  2.06it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.35it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.88it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|##########| 1/1 [00:00<00:00,  8.89it/s]Batches: 100%|##########| 1/1 [00:00<00:00,  8.89it/s]
+02:00:54 | INFO    | 'sentences': 2009 upserted, 0 skipped.
+02:00:54 | INFO    |   Ingested: {'vocabulary': 0, 'sentences': 2009}
+02:00:54 | INFO    | 
+==================================================
+02:00:54 | INFO    | INGESTION COMPLETE. 2009 records processed.
+02:00:54 | INFO    | 
+--- After ingestion ---
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+{
+  "audio": {
+    "files": 8,
+    "minutes": 0.5,
+    "hours": 0.01
+  },
+  "transcriptions": {
+    "total": 8,
+    "human_confirmed": 0
+  },
+  "training_pairs": 47,
+  "correction_pairs": 47,
+  "feedback_entries": 173,
+  "source_datasets": {
+    "vocabulary": {
+      "files": 12,
+      "rows": 424
+    },
+    "sentences": {
+      "files": 2,
+      "rows": 110
+    },
+    "grammar": {
+      "files": 4,
+      "rows": 28
+    },
+    "proverbs": {
+      "files": 1,
+      "rows": 60
+    }
+  },
+  "chromadb_mb": 19.1,
+  "knowledge_pdfs": 0
+}
+07/06/2026  2:00:55.23 â€” Nightly harvest DONE 
+ 
+=============================== 
+08/06/2026  2:00:01.87 â€” Nightly harvest started 
+=============================== 
+02:00:01 | INFO    | === Luganda Text Harvester — 2026-06-08 ===
+02:00:01 | INFO    | Sources: ['wiki', 'flores', 'commonvoice', 'opus']
+02:00:01 | INFO    | 
+--- Luganda Wikipedia ---
+02:00:01 | INFO    | [wikipedia] Fetching article list from lg.wikipedia.org …
+02:00:04 | INFO    | [wikipedia] Found 120 article titles to process
+02:00:14 | INFO    | [wikipedia] Saved 557 sentences \u2192 wikipedia_lg_2026-06-08.json
+02:00:14 | INFO    |   \u2192 557 entries
+02:00:14 | INFO    | 
+--- FLORES-200 ---
+02:00:14 | INFO    | [flores] Downloading FLORES-200 Luganda sentences …
+02:00:15 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:16 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:19 | ERROR   | [flores] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:19 | INFO    |   \u2192 0 entries
+02:00:19 | INFO    | 
+--- CommonVoice ---
+02:00:19 | INFO    | [commonvoice] Downloading CommonVoice Luganda sentences …
+02:00:20 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:21 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:23 | ERROR   | [commonvoice] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:23 | INFO    |   \u2192 0 entries
+02:00:23 | INFO    | 
+--- OPUS CCAligned ---
+02:00:23 | INFO    | [opus] Already downloaded (opus_ccaligned_enlg.json). Use --force to re-fetch.
+02:00:24 | INFO    |   \u2192 14701 entries
+02:00:24 | INFO    | 
+=== TOTAL new entries: 15258 ===
+02:00:24 | INFO    | Next step: run  python scripts/ingest_dataset.py  to load into ChromaDB
+02:00:24 | INFO    | Found 1 file(s) to ingest
+02:00:24 | INFO    | 
+--- Before ingestion ---
+02:00:25 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:25 | INFO    | 
+Processing: flores_sentences.json
+02:00:25 | INFO    |   Source: flores | Entries: 2009
+02:00:25 | INFO    |   \u2192 sentences: 2009 records
+02:00:25 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:25 | INFO    | 'vocabulary': no records to index — skipping.
+02:00:25 | INFO    | 'sentences': indexing 2009 records...
+02:00:32 | INFO    | Load pretrained SentenceTransformer: paraphrase-multilingual-MiniLM-L12-v2
+02:00:32 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:32 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:32 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:32 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:33 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:33 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:33 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+02:00:33 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/README.md "HTTP/1.1 200 OK"
+02:00:33 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:33 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:34 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:34 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentence_bert_config.json "HTTP/1.1 200 OK"
+02:00:34 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+02:00:34 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:34 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|##########| 199/199 [00:00<00:00, 6284.86it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+02:00:35 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:35 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+02:00:35 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:35 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:00:36 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:36 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:00:36 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+02:00:36 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+02:00:38 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+02:00:38 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:38 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+02:00:38 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.21it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.58it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.92it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.30it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.81it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.17it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.69it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.22it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.17it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.54it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.95it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.59it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.64it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.24it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.85it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.31it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.83it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.04it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.48it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.01it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.34it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.61it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.92it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.62it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.28it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.67it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.86it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.59it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.29it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.69it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  3.00it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.74it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.22it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.72it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  3.16it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.82it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.39it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.76it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  3.13it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.84it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.14it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.54it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.90it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.57it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.35it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.60it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  3.03it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.75it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.36it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.79it/s]Batches:  75%|#######5  | 3/4 [00:00<00:00,  3.47it/s]Batches: 100%|##########| 4/4 [00:00<00:00,  4.15it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.41it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.91it/s]Batches:  75%|#######5  | 3/4 [00:00<00:00,  3.36it/s]Batches: 100%|##########| 4/4 [00:00<00:00,  4.12it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.27it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.60it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.98it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.65it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.41it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.62it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  3.15it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.85it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.34it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.84it/s]Batches:  75%|#######5  | 3/4 [00:00<00:00,  3.25it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.95it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.92it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.25it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.71it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.28it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.33it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.87it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.93it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.67it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.20it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.54it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.95it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.59it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|##########| 1/1 [00:00<00:00, 11.99it/s]
+02:01:04 | INFO    | 'sentences': 2009 upserted, 0 skipped.
+02:01:04 | INFO    |   Ingested: {'vocabulary': 0, 'sentences': 2009}
+02:01:04 | INFO    | 
+==================================================
+02:01:04 | INFO    | INGESTION COMPLETE. 2009 records processed.
+02:01:04 | INFO    | 
+--- After ingestion ---
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+{
+  "audio": {
+    "files": 8,
+    "minutes": 0.5,
+    "hours": 0.01
+  },
+  "transcriptions": {
+    "total": 8,
+    "human_confirmed": 0
+  },
+  "training_pairs": 47,
+  "correction_pairs": 47,
+  "feedback_entries": 173,
+  "source_datasets": {
+    "vocabulary": {
+      "files": 12,
+      "rows": 424
+    },
+    "sentences": {
+      "files": 2,
+      "rows": 110
+    },
+    "grammar": {
+      "files": 4,
+      "rows": 28
+    },
+    "proverbs": {
+      "files": 1,
+      "rows": 60
+    }
+  },
+  "chromadb_mb": 19.1,
+  "knowledge_pdfs": 0
+}
+08/06/2026  2:01:05.43 â€” Nightly harvest DONE 
+ 
+=============================== 
+09/06/2026  2:00:01.60 â€” Nightly harvest started 
+=============================== 
+02:00:01 | INFO    | === Luganda Text Harvester — 2026-06-09 ===
+02:00:01 | INFO    | Sources: ['wiki', 'flores', 'commonvoice', 'opus']
+02:00:01 | INFO    | 
+--- Luganda Wikipedia ---
+02:00:01 | INFO    | [wikipedia] Fetching article list from lg.wikipedia.org …
+02:00:22 | WARNING |   Retry 1/3 for https://lg.wikipedia.org/w/api.php: HTTPSConnectionPool(host='lg.wikipedia.org', port=443): Read timed out. (read timeout=20)
+02:00:44 | WARNING |   Retry 2/3 for https://lg.wikipedia.org/w/api.php: HTTPSConnectionPool(host='lg.wikipedia.org', port=443): Read timed out. (read timeout=20)
+02:01:06 | ERROR   | [wikipedia] Failed to get article list: HTTPSConnectionPool(host='lg.wikipedia.org', port=443): Read timed out. (read timeout=20)
+02:01:06 | INFO    |   \u2192 0 entries
+02:01:06 | INFO    | 
+--- FLORES-200 ---
+02:01:06 | INFO    | [flores] Downloading FLORES-200 Luganda sentences …
+02:01:27 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Read timed out. (read timeout=20)
+02:01:47 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+02:02:09 | ERROR   | [flores] Download failed: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+02:02:09 | INFO    |   \u2192 0 entries
+02:02:09 | INFO    | 
+--- CommonVoice ---
+02:02:09 | INFO    | [commonvoice] Downloading CommonVoice Luganda sentences …
+02:02:28 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+02:02:49 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+02:03:11 | ERROR   | [commonvoice] Download failed: ('Connection aborted.', ConnectionResetError(10054, 'An existing connection was forcibly closed by the remote host', None, 10054, None))
+02:03:11 | INFO    |   \u2192 0 entries
+02:03:11 | INFO    | 
+--- OPUS CCAligned ---
+02:03:11 | INFO    | [opus] Already downloaded (opus_ccaligned_enlg.json). Use --force to re-fetch.
+02:03:11 | INFO    |   \u2192 14701 entries
+02:03:11 | INFO    | 
+=== TOTAL new entries: 14701 ===
+02:03:11 | INFO    | Next step: run  python scripts/ingest_dataset.py  to load into ChromaDB
+02:03:11 | INFO    | Found 1 file(s) to ingest
+02:03:11 | INFO    | 
+--- Before ingestion ---
+02:03:13 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:03:13 | INFO    | 
+Processing: flores_sentences.json
+02:03:13 | INFO    |   Source: flores | Entries: 2009
+02:03:13 | INFO    |   \u2192 sentences: 2009 records
+02:03:13 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:03:13 | INFO    | 'vocabulary': no records to index — skipping.
+02:03:13 | INFO    | 'sentences': indexing 2009 records...
+02:03:35 | INFO    | Load pretrained SentenceTransformer: paraphrase-multilingual-MiniLM-L12-v2
+'[WinError 10054] An existing connection was forcibly closed by the remote host' thrown while requesting HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json
+02:04:37 | WARNING | '[WinError 10054] An existing connection was forcibly closed by the remote host' thrown while requesting HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json
+Retrying in 1s [Retry 1/5].
+02:04:37 | WARNING | Retrying in 1s [Retry 1/5].
+02:04:38 | ERROR   | Could not get/create collection 'sentences': Cannot send a request, as the client has been closed.
+02:04:38 | INFO    |   Ingested: {'vocabulary': 0, 'sentences': 0}
+02:04:38 | INFO    | 
+==================================================
+02:04:38 | INFO    | INGESTION COMPLETE. 2009 records processed.
+02:04:38 | INFO    | 
+--- After ingestion ---
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+{
+  "audio": {
+    "files": 8,
+    "minutes": 0.5,
+    "hours": 0.01
+  },
+  "transcriptions": {
+    "total": 8,
+    "human_confirmed": 0
+  },
+  "training_pairs": 47,
+  "correction_pairs": 47,
+  "feedback_entries": 173,
+  "source_datasets": {
+    "vocabulary": {
+      "files": 12,
+      "rows": 424
+    },
+    "sentences": {
+      "files": 2,
+      "rows": 110
+    },
+    "grammar": {
+      "files": 4,
+      "rows": 28
+    },
+    "proverbs": {
+      "files": 1,
+      "rows": 60
+    }
+  },
+  "chromadb_mb": 19.1,
+  "knowledge_pdfs": 0
+}
+09/06/2026  2:04:39.07 â€” Nightly harvest DONE 
+ 
+=============================== 
+10/06/2026  2:00:02.15 â€” Nightly harvest started 
+=============================== 
+02:00:02 | INFO    | === Luganda Text Harvester — 2026-06-10 ===
+02:00:02 | INFO    | Sources: ['wiki', 'flores', 'commonvoice', 'opus']
+02:00:02 | INFO    | 
+--- Luganda Wikipedia ---
+02:00:02 | INFO    | [wikipedia] Fetching article list from lg.wikipedia.org …
+02:00:02 | WARNING |   Retry 1/3 for https://lg.wikipedia.org/w/api.php: HTTPSConnectionPool(host='lg.wikipedia.org', port=443): Max retries exceeded with url: /w/api.php?action=query&list=random&rnnamespace=0&rnlimit=50&format=json (Caused by NameResolutionError("HTTPSConnection(host='lg.wikipedia.org', port=443): Failed to resolve 'lg.wikipedia.org' ([Errno 11001] getaddrinfo failed)"))
+02:00:03 | WARNING |   Retry 2/3 for https://lg.wikipedia.org/w/api.php: HTTPSConnectionPool(host='lg.wikipedia.org', port=443): Max retries exceeded with url: /w/api.php?action=query&list=random&rnnamespace=0&rnlimit=50&format=json (Caused by NameResolutionError("HTTPSConnection(host='lg.wikipedia.org', port=443): Failed to resolve 'lg.wikipedia.org' ([Errno 11001] getaddrinfo failed)"))
+02:00:05 | ERROR   | [wikipedia] Failed to get article list: HTTPSConnectionPool(host='lg.wikipedia.org', port=443): Max retries exceeded with url: /w/api.php?action=query&list=random&rnnamespace=0&rnlimit=50&format=json (Caused by NameResolutionError("HTTPSConnection(host='lg.wikipedia.org', port=443): Failed to resolve 'lg.wikipedia.org' ([Errno 11001] getaddrinfo failed)"))
+02:00:05 | INFO    |   \u2192 0 entries
+02:00:05 | INFO    | 
+--- FLORES-200 ---
+02:00:05 | INFO    | [flores] Downloading FLORES-200 Luganda sentences …
+02:00:05 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn (Caused by NameResolutionError("HTTPSConnection(host='raw.githubusercontent.com', port=443): Failed to resolve 'raw.githubusercontent.com' ([Errno 11001] getaddrinfo failed)"))
+02:00:06 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn (Caused by NameResolutionError("HTTPSConnection(host='raw.githubusercontent.com', port=443): Failed to resolve 'raw.githubusercontent.com' ([Errno 11001] getaddrinfo failed)"))
+02:00:08 | ERROR   | [flores] Download failed: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn (Caused by NameResolutionError("HTTPSConnection(host='raw.githubusercontent.com', port=443): Failed to resolve 'raw.githubusercontent.com' ([Errno 11001] getaddrinfo failed)"))
+02:00:08 | INFO    |   \u2192 0 entries
+02:00:08 | INFO    | 
+--- CommonVoice ---
+02:00:08 | INFO    | [commonvoice] Downloading CommonVoice Luganda sentences …
+02:00:08 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /common-voice/common-voice/main/sentences/lg.txt (Caused by NameResolutionError("HTTPSConnection(host='raw.githubusercontent.com', port=443): Failed to resolve 'raw.githubusercontent.com' ([Errno 11001] getaddrinfo failed)"))
+02:00:09 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /common-voice/common-voice/main/sentences/lg.txt (Caused by NameResolutionError("HTTPSConnection(host='raw.githubusercontent.com', port=443): Failed to resolve 'raw.githubusercontent.com' ([Errno 11001] getaddrinfo failed)"))
+02:00:11 | ERROR   | [commonvoice] Download failed: HTTPSConnectionPool(host='raw.githubusercontent.com', port=443): Max retries exceeded with url: /common-voice/common-voice/main/sentences/lg.txt (Caused by NameResolutionError("HTTPSConnection(host='raw.githubusercontent.com', port=443): Failed to resolve 'raw.githubusercontent.com' ([Errno 11001] getaddrinfo failed)"))
+02:00:11 | INFO    |   \u2192 0 entries
+02:00:11 | INFO    | 
+--- OPUS CCAligned ---
+02:00:11 | INFO    | [opus] Already downloaded (opus_ccaligned_enlg.json). Use --force to re-fetch.
+02:00:11 | INFO    |   \u2192 14701 entries
+02:00:11 | INFO    | 
+=== TOTAL new entries: 14701 ===
+02:00:11 | INFO    | Next step: run  python scripts/ingest_dataset.py  to load into ChromaDB
+02:00:11 | INFO    | Found 1 file(s) to ingest
+02:00:11 | INFO    | 
+--- Before ingestion ---
+02:00:12 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:13 | INFO    | 
+Processing: flores_sentences.json
+02:00:13 | INFO    |   Source: flores | Entries: 2009
+02:00:13 | INFO    |   \u2192 sentences: 2009 records
+02:00:13 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:13 | INFO    | 'vocabulary': no records to index — skipping.
+02:00:13 | INFO    | 'sentences': indexing 2009 records...
+02:00:30 | INFO    | Load pretrained SentenceTransformer: paraphrase-multilingual-MiniLM-L12-v2
+'[Errno 11001] getaddrinfo failed' thrown while requesting HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json
+02:00:30 | WARNING | '[Errno 11001] getaddrinfo failed' thrown while requesting HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json
+Retrying in 1s [Retry 1/5].
+02:00:30 | WARNING | Retrying in 1s [Retry 1/5].
+02:00:31 | ERROR   | Could not get/create collection 'sentences': Cannot send a request, as the client has been closed.
+02:00:31 | INFO    |   Ingested: {'vocabulary': 0, 'sentences': 0}
+02:00:31 | INFO    | 
+==================================================
+02:00:31 | INFO    | INGESTION COMPLETE. 2009 records processed.
+02:00:31 | INFO    | 
+--- After ingestion ---
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+{
+  "audio": {
+    "files": 8,
+    "minutes": 0.5,
+    "hours": 0.01
+  },
+  "transcriptions": {
+    "total": 8,
+    "human_confirmed": 0
+  },
+  "training_pairs": 47,
+  "correction_pairs": 47,
+  "feedback_entries": 173,
+  "source_datasets": {
+    "vocabulary": {
+      "files": 12,
+      "rows": 424
+    },
+    "sentences": {
+      "files": 2,
+      "rows": 110
+    },
+    "grammar": {
+      "files": 4,
+      "rows": 28
+    },
+    "proverbs": {
+      "files": 1,
+      "rows": 60
+    }
+  },
+  "chromadb_mb": 19.1,
+  "knowledge_pdfs": 0
+}
+10/06/2026  2:00:32.49 â€” Nightly harvest DONE 
+ 
+=============================== 
+13/06/2026  2:00:02.21 â€” Nightly harvest started 
+=============================== 
+02:00:02 | INFO    | === Luganda Text Harvester — 2026-06-13 ===
+02:00:02 | INFO    | Sources: ['wiki', 'flores', 'commonvoice', 'opus']
+02:00:02 | INFO    | 
+--- Luganda Wikipedia ---
+02:00:02 | INFO    | [wikipedia] Fetching article list from lg.wikipedia.org …
+02:00:04 | INFO    | [wikipedia] Found 120 article titles to process
+02:00:19 | INFO    | [wikipedia] Saved 630 sentences \u2192 wikipedia_lg_2026-06-13.json
+02:00:19 | INFO    |   \u2192 630 entries
+02:00:19 | INFO    | 
+--- FLORES-200 ---
+02:00:19 | INFO    | [flores] Downloading FLORES-200 Luganda sentences …
+02:00:20 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:21 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:24 | ERROR   | [flores] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:24 | INFO    |   \u2192 0 entries
+02:00:24 | INFO    | 
+--- CommonVoice ---
+02:00:24 | INFO    | [commonvoice] Downloading CommonVoice Luganda sentences …
+02:00:24 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:26 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:28 | ERROR   | [commonvoice] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:28 | INFO    |   \u2192 0 entries
+02:00:28 | INFO    | 
+--- OPUS CCAligned ---
+02:00:28 | INFO    | [opus] Already downloaded (opus_ccaligned_enlg.json). Use --force to re-fetch.
+02:00:28 | INFO    |   \u2192 14701 entries
+02:00:28 | INFO    | 
+=== TOTAL new entries: 15331 ===
+02:00:28 | INFO    | Next step: run  python scripts/ingest_dataset.py  to load into ChromaDB
+02:00:29 | INFO    | Found 1 file(s) to ingest
+02:00:29 | INFO    | 
+--- Before ingestion ---
+02:00:30 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:30 | INFO    | 
+Processing: flores_sentences.json
+02:00:30 | INFO    |   Source: flores | Entries: 2009
+02:00:30 | INFO    |   \u2192 sentences: 2009 records
+02:00:30 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:30 | INFO    | 'vocabulary': no records to index — skipping.
+02:00:30 | INFO    | 'sentences': indexing 2009 records...
+02:00:49 | INFO    | Load pretrained SentenceTransformer: paraphrase-multilingual-MiniLM-L12-v2
+02:00:50 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:50 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:50 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:50 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:51 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:51 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:51 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+02:00:51 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/README.md "HTTP/1.1 200 OK"
+02:00:51 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:51 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:52 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:52 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentence_bert_config.json "HTTP/1.1 200 OK"
+02:00:52 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+02:00:52 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:52 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|##########| 199/199 [00:00<00:00, 6171.97it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:00:54 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+02:00:54 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+02:00:56 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+02:00:56 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:56 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+02:00:56 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.25it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.62it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.90it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.30it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.54it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.79it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.09it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.55it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.55it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.94it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.31it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.77it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.62it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.92it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.41it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.87it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.58it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.76it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.11it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.56it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.59it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.96it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.16it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.67it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.70it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.12it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.46it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.98it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.87it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.24it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.45it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.03it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.86it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.24it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.65it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.19it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.94it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.18it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.51it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.08it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.93it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.10it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.28it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.87it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.02it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.23it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.75it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.29it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.97it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.27it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.86it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.41it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.09it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.59it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.96it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.60it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.95it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.22it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.52it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.09it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.77it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.15it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.50it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.03it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  2.06it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.24it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.54it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.15it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.91it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.34it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.57it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.16it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.87it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.30it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.49it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.07it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.81it/s]Batches:  50%|#####     | 2/4 [00:00<00:00,  2.14it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  2.46it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  3.00it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|##########| 1/1 [00:00<00:00,  8.02it/s]Batches: 100%|##########| 1/1 [00:00<00:00,  8.02it/s]
+02:01:26 | INFO    | 'sentences': 2009 upserted, 0 skipped.
+02:01:26 | INFO    |   Ingested: {'vocabulary': 0, 'sentences': 2009}
+02:01:26 | INFO    | 
+==================================================
+02:01:26 | INFO    | INGESTION COMPLETE. 2009 records processed.
+02:01:26 | INFO    | 
+--- After ingestion ---
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+{
+  "audio": {
+    "files": 8,
+    "minutes": 0.5,
+    "hours": 0.01
+  },
+  "transcriptions": {
+    "total": 8,
+    "human_confirmed": 0
+  },
+  "training_pairs": 47,
+  "correction_pairs": 47,
+  "feedback_entries": 173,
+  "source_datasets": {
+    "vocabulary": {
+      "files": 12,
+      "rows": 424
+    },
+    "sentences": {
+      "files": 2,
+      "rows": 110
+    },
+    "grammar": {
+      "files": 4,
+      "rows": 28
+    },
+    "proverbs": {
+      "files": 1,
+      "rows": 60
+    }
+  },
+  "chromadb_mb": 20.8,
+  "knowledge_pdfs": 0
+}
+13/06/2026  2:01:27.39 â€” Nightly harvest DONE 
+ 
+=============================== 
+17/06/2026  2:00:02.37 â€” Nightly harvest started 
+=============================== 
+02:00:02 | INFO    | === Luganda Text Harvester — 2026-06-17 ===
+02:00:02 | INFO    | Sources: ['wiki', 'flores', 'commonvoice', 'opus']
+02:00:02 | INFO    | 
+--- Luganda Wikipedia ---
+02:00:02 | INFO    | [wikipedia] Fetching article list from lg.wikipedia.org …
+02:00:05 | INFO    | [wikipedia] Found 120 article titles to process
+02:00:15 | INFO    | [wikipedia] Saved 472 sentences \u2192 wikipedia_lg_2026-06-17.json
+02:00:15 | INFO    |   \u2192 472 entries
+02:00:15 | INFO    | 
+--- FLORES-200 ---
+02:00:15 | INFO    | [flores] Downloading FLORES-200 Luganda sentences …
+02:00:15 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:17 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:19 | ERROR   | [flores] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/openlanguagedata/flores/main/flores200/data/devtest/devtest.lug_Latn
+02:00:19 | INFO    |   \u2192 0 entries
+02:00:19 | INFO    | 
+--- CommonVoice ---
+02:00:19 | INFO    | [commonvoice] Downloading CommonVoice Luganda sentences …
+02:00:20 | WARNING |   Retry 1/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:22 | WARNING |   Retry 2/3 for https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:24 | ERROR   | [commonvoice] Download failed: 404 Client Error: Not Found for url: https://raw.githubusercontent.com/common-voice/common-voice/main/sentences/lg.txt
+02:00:24 | INFO    |   \u2192 0 entries
+02:00:24 | INFO    | 
+--- OPUS CCAligned ---
+02:00:24 | INFO    | [opus] Already downloaded (opus_ccaligned_enlg.json). Use --force to re-fetch.
+02:00:24 | INFO    |   \u2192 14701 entries
+02:00:24 | INFO    | 
+=== TOTAL new entries: 15173 ===
+02:00:24 | INFO    | Next step: run  python scripts/ingest_dataset.py  to load into ChromaDB
+02:00:24 | INFO    | Found 1 file(s) to ingest
+02:00:24 | INFO    | 
+--- Before ingestion ---
+02:00:27 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:27 | INFO    | 
+Processing: flores_sentences.json
+02:00:27 | INFO    |   Source: flores | Entries: 2009
+02:00:27 | INFO    |   \u2192 sentences: 2009 records
+02:00:27 | INFO    | Connecting to ChromaDB at: D:\projects\Luganda_AI_Studio\data\chromadb
+02:00:27 | INFO    | 'vocabulary': no records to index — skipping.
+02:00:27 | INFO    | 'sentences': indexing 2009 records...
+02:00:52 | INFO    | Load pretrained SentenceTransformer: paraphrase-multilingual-MiniLM-L12-v2
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:53 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:54 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:54 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:54 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config_sentence_transformers.json "HTTP/1.1 307 Temporary Redirect"
+02:00:55 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config_sentence_transformers.json "HTTP/1.1 200 OK"
+02:00:55 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/README.md "HTTP/1.1 307 Temporary Redirect"
+02:00:55 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/README.md "HTTP/1.1 200 OK"
+02:00:56 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/modules.json "HTTP/1.1 307 Temporary Redirect"
+02:00:56 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/modules.json "HTTP/1.1 200 OK"
+02:00:56 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/sentence_bert_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:57 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/sentence_bert_config.json "HTTP/1.1 200 OK"
+02:00:57 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/adapter_config.json "HTTP/1.1 404 Not Found"
+02:00:57 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:58 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+Loading weights:   0%|          | 0/199 [00:00<?, ?it/s]Loading weights: 100%|##########| 199/199 [00:00<00:00, 6034.23it/s]
+[1mBertModel LOAD REPORT[0m from: sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2
+Key                     | Status     |  | 
+------------------------+------------+--+-
+embeddings.position_ids | UNEXPECTED |  | 
+
+[3mNotes:
+- UNEXPECTED[3m	:can be ignored when loading from different task/architecture; not ok if you expect identical arch.[0m
+02:00:58 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:59 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/config.json "HTTP/1.1 200 OK"
+02:00:59 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:00:59 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:01:00 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/tokenizer_config.json "HTTP/1.1 307 Temporary Redirect"
+02:01:00 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/tokenizer_config.json "HTTP/1.1 200 OK"
+02:01:00 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main/additional_chat_templates?recursive=false&expand=false "HTTP/1.1 404 Not Found"
+02:01:01 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/tree/main?recursive=true&expand=false "HTTP/1.1 200 OK"
+02:01:02 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+02:01:03 | INFO    | HTTP Request: HEAD https://huggingface.co/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/resolve/main/1_Pooling/config.json "HTTP/1.1 307 Temporary Redirect"
+02:01:03 | INFO    | HTTP Request: HEAD https://huggingface.co/api/resolve-cache/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2/e8f8c211226b894fcb81acc59f3b34ba3efd5f42/1_Pooling%2Fconfig.json "HTTP/1.1 200 OK"
+02:01:04 | INFO    | HTTP Request: GET https://huggingface.co/api/models/sentence-transformers/paraphrase-multilingual-MiniLM-L12-v2 "HTTP/1.1 200 OK"
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.05it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.43it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.65it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  2.00it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:01,  1.56it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.76it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.85it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.31it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.12it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.28it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.52it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.84it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.12it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.27it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.46it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.79it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.07it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.23it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.43it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.74it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.17it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.30it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.44it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.79it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.34it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.46it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.61it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.01it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.13it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.33it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.48it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.82it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.27it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.44it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.61it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.99it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.32it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.42it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.59it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.98it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.37it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.38it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.52it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.92it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.28it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.38it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.60it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.97it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.31it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.49it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.74it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.12it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.30it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.55it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.80it/s]Batches: 100%|##########| 4/4 [00:01<00:00,  2.19it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.24it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.34it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.47it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.83it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.27it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.42it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.64it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  2.00it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.29it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.45it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.41it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.82it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.21it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.41it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.58it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.92it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.16it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.45it/s]Batches:  75%|#######5  | 3/4 [00:01<00:00,  1.61it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.95it/s]
+Batches:   0%|          | 0/4 [00:00<?, ?it/s]Batches:  25%|##5       | 1/4 [00:00<00:02,  1.22it/s]Batches:  50%|#####     | 2/4 [00:01<00:01,  1.39it/s]Batches:  75%|#######5  | 3/4 [00:02<00:00,  1.55it/s]Batches: 100%|##########| 4/4 [00:02<00:00,  1.90it/s]
+Batches:   0%|          | 0/1 [00:00<?, ?it/s]Batches: 100%|##########| 1/1 [00:00<00:00,  5.90it/s]Batches: 100%|##########| 1/1 [00:00<00:00,  5.86it/s]
+02:01:49 | INFO    | 'sentences': 2009 upserted, 0 skipped.
+02:01:49 | INFO    |   Ingested: {'vocabulary': 0, 'sentences': 2009}
+02:01:49 | INFO    | 
+==================================================
+02:01:49 | INFO    | INGESTION COMPLETE. 2009 records processed.
+02:01:49 | INFO    | 
+--- After ingestion ---
+
+ChromaDB Collection Stats:
+----------------------------------------
+  documents       :      0 records
+  sentences       :   2009 records
+  proverbs        :      0 records
+  vocabulary      :      4 records
+  grammar         :      0 records
+  nonexistent_collection:      0 records
+  TOTAL           :   2013 records
+
+{
+  "audio": {
+    "files": 8,
+    "minutes": 0.5,
+    "hours": 0.01
+  },
+  "transcriptions": {
+    "total": 8,
+    "human_confirmed": 0
+  },
+  "training_pairs": 47,
+  "correction_pairs": 47,
+  "feedback_entries": 173,
+  "source_datasets": {
+    "vocabulary": {
+      "files": 12,
+      "rows": 424
+    },
+    "sentences": {
+      "files": 2,
+      "rows": 110
+    },
+    "grammar": {
+      "files": 4,
+      "rows": 28
+    },
+    "proverbs": {
+      "files": 1,
+      "rows": 60
+    }
+  },
+  "chromadb_mb": 20.8,
+  "knowledge_pdfs": 0
+}
+17/06/2026  2:01:51.17 â€” Nightly harvest DONE 

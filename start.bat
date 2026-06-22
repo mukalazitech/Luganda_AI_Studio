@@ -11,7 +11,7 @@ echo  ==========================================
 echo.
 
 REM Start FastAPI server in its own window
-start "Luganda API Server" cmd /k "cd /d D:\projects\Luganda_AI_Studio && call venv\Scripts\activate.bat && uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload"
+start "Luganda API Server" cmd /k "cd /d D:\projects\Luganda_AI_Studio && call venv\Scripts\activate.bat && uvicorn backend.main:app --host 127.0.0.1 --port 8000 --reload --timeout-keep-alive 120"
 
 REM Wait 4 seconds for the server to boot before starting tunnel
 timeout /t 4 /nobreak > nul

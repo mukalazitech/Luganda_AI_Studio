@@ -1,0 +1,20 @@
+{"source": "The hospital is near the market", "target": "Eddwaliro eriiri kumpi ne katale", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-04-19T04:39:39.488810+00:00"}
+{"source": "Come", "target": "Jangu", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-09T13:54:25.639203+00:00"}
+{"source": "Eating food", "target": "Okulya", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-10T06:37:04.834952+00:00"}
+{"source": "water", "target": "omwenge", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-10T08:52:57.674589+00:00"}
+{"source": "Cup", "target": "Ekikopo", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T15:39:05.885470+00:00"}
+{"source": "dance", "target": "okuzina", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T15:57:19.067366+00:00"}
+{"source": "sing", "target": "okuyimba", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T16:00:45.637522+00:00"}
+{"source": "sleep", "target": "okwebakka", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T16:05:00.795675+00:00"}
+{"source": "tugende ku dwaliro", "target": "let's go to hospital", "direction": "lg_to_en", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T16:14:51.965702+00:00"}
+{"source": "embwa yazze waffe waka", "target": "I dog came to our home", "direction": "lg_to_en", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T16:50:51.151650+00:00"}
+{"source": "Play", "target": "Omuzanyo", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-11T17:24:47.830608+00:00"}
+{"source": "Bed", "target": "Ekitanda", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T03:51:29.478930+00:00"}
+{"source": "Animal", "target": "Ekisolo", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T07:37:04.142878+00:00"}
+{"source": "Hello", "target": "Jebale", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T07:55:02.268253+00:00"}
+{"source": "What is your name?", "target": "Erinnya lyo gwe ani?", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T07:57:21.525666+00:00"}
+{"source": "I want", "target": "Njagala", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T08:00:41.220090+00:00"}
+{"source": "I want to buy food", "target": "Njagala kugula mmere", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T08:05:20.417933+00:00"}
+{"source": "Help me", "target": "Nyamba/ munyambe", "direction": "en_to_lg", "match_type": "correction", "verified": true, "submitted_at": "2026-05-12T08:07:27.052607+00:00"}
+{"source": "let's go to hospital", "target": "tugende ku dwaliro", "direction": "en_to_lg", "match_type": "auto", "verified": false, "submitted_at": "2026-05-14T06:47:30.002035+00:00"}
+{"source": "I dog came to our home", "target": "embwa yazze waffe waka", "direction": "en_to_lg", "match_type": "auto", "verified": false, "submitted_at": "2026-05-14T06:47:30.002035+00:00"}

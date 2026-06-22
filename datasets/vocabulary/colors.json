@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "category": "colors",
+    "description": "Luganda vocabulary for colors and shades",
+    "source_ids": ["ish_handbook", "lajenta_phrasebook"],
+    "total_entries": 15,
+    "last_updated": "2026-05-20"
+  },
+  "entries": [
+    {
+      "luganda": "Mweru",
+      "english": "White",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": "Engoye ye mweru nnyo.",
+      "example_sentence_english": "Her clothes are very white.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ddugavu",
+      "english": "Black",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Myufu",
+      "english": "Red",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ddwangu",
+      "english": "Yellow",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Kyengera",
+      "english": "Green",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Bululu",
+      "english": "Blue",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Kayirabakka",
+      "english": "Orange",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Violeeti",
+      "english": "Purple / Violet",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Bunvu",
+      "english": "Brown",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Kizukuzuku",
+      "english": "Grey",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Obululu obw'oku ggulu",
+      "english": "Sky blue",
+      "category": "colors",
+      "subcategory": "shades",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekolaa",
+      "english": "Pink",
+      "category": "colors",
+      "subcategory": "basic_colors",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omweru",
+      "english": "Light (color)",
+      "category": "colors",
+      "subcategory": "shades",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omukutte",
+      "english": "Dark (color)",
+      "category": "colors",
+      "subcategory": "shades",
+      "part_of_speech": "adjective",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Langi ki?",
+      "english": "What color?",
+      "category": "colors",
+      "subcategory": "questions",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": "Engoye yo ey'olangi ki?",
+      "example_sentence_english": "What color is your clothing?",
+      "needs_review": false
+    }
+  ]
+}

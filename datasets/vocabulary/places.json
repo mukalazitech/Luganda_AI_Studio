@@ -1,0 +1,231 @@
+{
+  "metadata": {
+    "category": "places",
+    "description": "Luganda vocabulary for locations, directions, and landmarks",
+    "source_ids": ["ish_handbook", "lajenta_phrasebook"],
+    "total_entries": 22,
+    "last_updated": "2026-05-20"
+  },
+  "entries": [
+    {
+      "luganda": "Ekibuga",
+      "english": "Town / City",
+      "category": "places",
+      "subcategory": "settlements",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Nkola mu kibuga.",
+      "example_sentence_english": "I work in town.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Kyalo",
+      "english": "Village",
+      "category": "places",
+      "subcategory": "settlements",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ntuuka mu kyalo.",
+      "example_sentence_english": "I stay in a village.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Olusuku",
+      "english": "Garden / Farm",
+      "category": "places",
+      "subcategory": "land",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Oluggya",
+      "english": "Compound / Yard",
+      "category": "places",
+      "subcategory": "around_home",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Olutindo",
+      "english": "Bridge",
+      "category": "places",
+      "subcategory": "infrastructure",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Oluguudo",
+      "english": "Road / Street",
+      "category": "places",
+      "subcategory": "infrastructure",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Oluguudo luno lujjuvu.",
+      "example_sentence_english": "This road is full.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ssomero",
+      "english": "School",
+      "category": "places",
+      "subcategory": "institutions",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Abaana bateguka ku ssomero.",
+      "example_sentence_english": "The children are coming from school.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekkanisa",
+      "english": "Church",
+      "category": "places",
+      "subcategory": "institutions",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omuzigo",
+      "english": "Market",
+      "category": "places",
+      "subcategory": "commerce",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Genda ku muzigo omunule emmere.",
+      "example_sentence_english": "Go to the market to buy food.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Obutabu",
+      "english": "Library",
+      "category": "places",
+      "subcategory": "institutions",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ebbanka",
+      "english": "Bank",
+      "category": "places",
+      "subcategory": "commerce",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Bwangu",
+      "english": "Near / Close",
+      "category": "places",
+      "subcategory": "directions",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": "Eddwaliro liri bwangu.",
+      "example_sentence_english": "The hospital is nearby.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Waggulu",
+      "english": "Up / Above",
+      "category": "places",
+      "subcategory": "directions",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Wansi",
+      "english": "Down / Below",
+      "category": "places",
+      "subcategory": "directions",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ddyo",
+      "english": "Right (direction)",
+      "category": "places",
+      "subcategory": "directions",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Kkono",
+      "english": "Left (direction)",
+      "category": "places",
+      "subcategory": "directions",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ddirira",
+      "english": "Straight ahead",
+      "category": "places",
+      "subcategory": "directions",
+      "part_of_speech": "adverb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ennyanja",
+      "english": "Lake / Sea",
+      "category": "places",
+      "subcategory": "natural",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ennyanja Victoria eri Uganda.",
+      "example_sentence_english": "Lake Victoria is in Uganda.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Olusozi",
+      "english": "Hill / Mountain",
+      "category": "places",
+      "subcategory": "natural",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Omugga",
+      "english": "River",
+      "category": "places",
+      "subcategory": "natural",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Kampala",
+      "english": "Kampala (capital city of Uganda)",
+      "category": "places",
+      "subcategory": "proper_nouns",
+      "part_of_speech": "proper noun",
+      "example_sentence_luganda": "Kampala ye kibuga ekikulu kya Uganda.",
+      "example_sentence_english": "Kampala is the capital city of Uganda.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Uganda",
+      "english": "Uganda",
+      "category": "places",
+      "subcategory": "proper_nouns",
+      "part_of_speech": "proper noun",
+      "example_sentence_luganda": "Ntuuka mu Uganda.",
+      "example_sentence_english": "I live in Uganda.",
+      "needs_review": false
+    }
+  ]
+}

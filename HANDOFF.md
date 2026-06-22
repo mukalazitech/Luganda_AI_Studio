@@ -1,5 +1,5 @@
 # Luganda AI Studio — Handoff Report
-> Last updated: 2026-05-14 | Session: 7-Task Maintenance Sprint
+> Last updated: 2026-06-06 | Session: Railway Fix + Docs + GPU Research
 > Read this at the start of every new session before touching any file.
 
 ---
@@ -42,7 +42,35 @@ Without this, chat shows "offline" but translate/search/teach all work.
 
 ---
 
-## 3. Session 2026-05-14 — What Was Done
+## 3. Session 2026-06-06 — What Was Done
+
+### Summary
+Railway confirmed ONLINE at lugandastudio.com. Three new guide docs generated.
+GitHub auto-deploy still NOT wired (repo transfer broke it — fix next session).
+
+### What Was Done
+- ✅ Confirmed Railway status: lugandastudio.com is **ONLINE** (no redeploy needed)
+- ✅ Created `docs/LUGANDA_AI_STUDIO_GUIDE.md` — full project guide for NotebookLM
+- ✅ Created `docs/AI_MODEL_TEST_PROMPTS.md` — copy-paste API test prompts + batch PowerShell test
+- ✅ Created `docs/GPU_NOTEBOOKLM_GUIDE.md` — GPU tier guide + RunPod rental advice + NotebookLM setup
+
+### Pending — Resume Next Session
+- 🔴 Wire GitHub auto-deploy on Railway (repo = `mukalazitech/Luganda_AI_Studio`)
+- 🔴 Test TTS + STT on Android phone at lugandastudio.com
+- 🔴 Add these 3 docs to NotebookLM and generate Audio Overview
+- 🔴 Decide: GitHub auto-deploy vs manual `railway up` (Patrick to confirm preference)
+- 🔴 Upload dataset snapshot to HuggingFace (even partial — 20 pairs ready)
+- 🔴 Collect more correction pairs toward 500 (currently at ~20)
+
+### Deploy Command (if app goes offline)
+```powershell
+cd D:\projects\Luganda_AI_Studio
+railway up
+```
+
+---
+
+## 3b. Session 2026-05-14 — What Was Done (previous)
 
 ### Summary
 7 maintenance tasks completed. 149 tests passing. TTS caching live.

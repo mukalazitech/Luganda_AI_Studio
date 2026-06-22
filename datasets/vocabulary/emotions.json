@@ -1,0 +1,191 @@
+{
+  "metadata": {
+    "category": "emotions",
+    "description": "Luganda vocabulary for feelings and emotional states",
+    "source_ids": ["ish_handbook", "lajenta_phrasebook"],
+    "total_entries": 18,
+    "last_updated": "2026-05-20"
+  },
+  "entries": [
+    {
+      "luganda": "Essanyu",
+      "english": "Happiness / Joy",
+      "category": "emotions",
+      "subcategory": "positive",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ndi na essanyu ennyo.",
+      "example_sentence_english": "I am very happy.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Obulumi",
+      "english": "Sadness / Grief",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Obugangaazi",
+      "english": "Anger / Rage",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ettima",
+      "english": "Fear / Fright",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": "Ndi na ettima.",
+      "example_sentence_english": "I am afraid.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Okussa omwoyo",
+      "english": "To feel proud / Pride",
+      "category": "emotions",
+      "subcategory": "positive",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ekintu ekikussa omwoyo",
+      "english": "Something that makes you proud",
+      "category": "emotions",
+      "subcategory": "positive",
+      "part_of_speech": "phrase",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okunyigiriza",
+      "english": "To worry / Anxiety",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okwagala",
+      "english": "To love",
+      "category": "emotions",
+      "subcategory": "positive",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Nkwagala nnyo.",
+      "example_sentence_english": "I love you very much.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Okwenyumya",
+      "english": "To enjoy / To have fun",
+      "category": "emotions",
+      "subcategory": "positive",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okukaabira",
+      "english": "To cry for / To mourn",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okusanyuka",
+      "english": "To be happy / To rejoice",
+      "category": "emotions",
+      "subcategory": "positive",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Nsanyuka okukulaba.",
+      "example_sentence_english": "I am happy to see you.",
+      "needs_review": false
+    },
+    {
+      "luganda": "Okusunguwala",
+      "english": "To be angry",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okwettirira",
+      "english": "To be calm / To relax",
+      "category": "emotions",
+      "subcategory": "neutral",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ensoni",
+      "english": "Shame / Embarrassment",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okutenderera",
+      "english": "To be surprised / Amazement",
+      "category": "emotions",
+      "subcategory": "neutral",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Ebirowoozo",
+      "english": "Thoughts / Feelings",
+      "category": "emotions",
+      "subcategory": "general",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Olukwe",
+      "english": "Jealousy / Envy",
+      "category": "emotions",
+      "subcategory": "negative",
+      "part_of_speech": "noun",
+      "example_sentence_luganda": null,
+      "example_sentence_english": null,
+      "needs_review": false
+    },
+    {
+      "luganda": "Okwetaaga",
+      "english": "To need / To miss someone",
+      "category": "emotions",
+      "subcategory": "neutral",
+      "part_of_speech": "verb",
+      "example_sentence_luganda": "Nkwetaaga nnyo.",
+      "example_sentence_english": "I miss you very much.",
+      "needs_review": false
+    }
+  ]
+}

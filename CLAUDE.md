@@ -204,13 +204,10 @@ Luganda_AI_Studio/
 
 ### Always do these
 
-- Read the relevant files before writing any code
 - Design before coding — explain what and why first
 - Return FULL files only — never snippets or partials
 - Label every file exactly as shown in Section 8
 - Explain what changed, why it changed, and what to test
-- End every response with clear next steps
-- Flag missing information instead of guessing
 - Keep changes minimal and focused on the stated task
 
 ### Never do these
@@ -219,7 +216,6 @@ Luganda_AI_Studio/
 - Do not return partial files or say "same as before"
 - Do not recommend training a large model from scratch
 - Do not assume we have enough Luganda data
-- Do not touch files unrelated to the current task
 - Do not silently invent missing requirements
 - Do not ignore machine constraints
 
@@ -301,71 +297,14 @@ Luganda data is limited. Always treat it carefully.
 
 ---
 
-## 10. What Is Coming Next
+## 10. Current Direction
 
-> Last updated: 2026-05-11
+> See `docs/ROADMAP_2026-06.md` for the current phase plan.
+> See `docs/STATUS.md` for completed features and past state snapshots.
 
-| Feature | Priority | Notes |
-|---|---|---|
-| ~~Run Phase 1 data scaling~~ | ~~NOW~~ | ✅ Done — Flores-200 ingested. ChromaDB 492 → 2,500+ pairs |
-| ~~NLLB-200 neural fallback~~ | ~~High~~ | ✅ Done — `nllb_service.py` + pipeline Pass 3. Benchmarked 2026-04-19 |
-| ~~Feedback loop~~ | ~~High~~ | ✅ Done — Correction UI → API → ChromaDB. Tested 2026-04-19 |
-| ~~Feedback API POST~~ | ~~High~~ | ✅ Done — `feedback.py` appends to `feedback_log.jsonl` |
-| ~~Data ingestion pipeline~~ | ~~High~~ | ✅ Done — `download_datasets.py`, `ingest_dataset.py`, `process_feedback.py` |
-| ~~Quality metrics~~ | ~~High~~ | ✅ Done — Session Summary card live in `translate.html` |
-| ~~Feedback review page~~ | ~~High~~ | ✅ Done — `reviews.html` + `GET /api/v1/feedback`. Built 2026-04-19 |
-| ~~Teaching mode~~ | ~~NOW~~ | ✅ Done — `teach.html` full flash card + quiz mode. 5 endpoints. Confirmed 2026-04-19 |
-| ~~CSV ingestor~~ | ~~High~~ | ✅ Done — `scripts/ingest_csv.py`. Auto-detect separator, column aliases. Built 2026-04-19 |
-| ~~PDF parser~~ | ~~High~~ | ✅ Done — `scripts/ingest_pdf.py`. Table + line pattern modes, direction auto-detect. Built 2026-04-19 |
-| ~~OpenRouter API integration~~ | ~~High~~ | ✅ Done — `openrouter_service.py` + pipeline Pass 4.5. Default: gemma-2-9b-it:free. Built 2026-05-10 |
-| ~~Luganda TTS (Meta MMS)~~ | ~~High~~ | ✅ Done — `mms_tts_service.py` + `/api/v1/tts`. 🔊 on translate + teach pages. Built 2026-05-10 |
-| ~~Dataset export pipeline~~ | ~~High~~ | ✅ Done — `scripts/export_dataset.py`. HuggingFace-compatible, cleaned, versioned. Built 2026-05-10 |
-| ~~Admin dashboard~~ | ~~Next~~ | ✅ Done — `admin.html` + `GET /api/v1/admin/status`. 5 cards. Built 2026-05-10 |
-| ~~Test infrastructure~~ | ~~High~~ | ✅ Done — pytest + 11 tests (admin + openrouter tracking). Built 2026-05-10 |
-| ~~Mobile responsive fix~~ | ~~High~~ | ✅ Done — `styles.css` full responsive overhaul. All breakpoints fixed. Built 2026-05-11 |
-| Set OPENROUTER_API_KEY in .env | **NOW** | Required to activate OpenRouter. Free key at openrouter.ai |
-| Install TTS deps | **NOW** | `pip install transformers scipy` then test 🔊 button |
-| Multilingual embeddings upgrade | Medium | Switch MiniLM → paraphrase-multilingual-MiniLM-L12-v2. Requires full re-embed |
-| TTS audio caching | Low | Cache common words so teach.html plays instantly after first load |
-| Test suite expansion | Low | Add degradation tests for admin; translate pipeline tests |
-| LoRA fine-tuning | Low | Only when 500+ correction pairs. Script not yet built |
-| Publish dataset to HuggingFace | Low | Run export_dataset.py, create HF dataset repo, upload |
+**Now (Phase 1):** Grow the text corpus. Run `scripts/harvest_text.py --source all` daily (nightly_harvest.bat handles this automatically once scheduled).
 
-## 11. Current State Snapshot
-
-> Updated: 2026-05-11 (session C)
-
-**What works right now:**
-- Translation pipeline: exact → normalized → partial → semantic → OpenRouter API → NLLB-200 neural
-- Luganda TTS: 🔊 speaker button on translate + teach pages (Meta MMS, real Luganda voice)
-- Search across vocabulary, sentences, grammar, proverbs collections
-- Feedback collection: users rate translations, corrections auto-ingest into ChromaDB
-- Dataset export: `scripts/export_dataset.py` produces clean HuggingFace-compatible JSONL
-- Reviews page: admin view of all submitted feedback with stats and filters
-- Session quality metrics: live summary on translate page
-- Admin dashboard: `/app/admin.html` — system health, collection counts, feedback stats, pipeline status
-- Test suite: 11 tests passing (`pytest tests/ -v`)
-- Mobile responsive layout: all pages work correctly at 360px–768px (phone), 374px (tiny phone), 480px (small phone)
-
-**Mobile responsive fixes applied (2026-05-11):**
-- Removed overly broad `.flex { flex-direction: column }` override that was breaking direction toggle, feedback buttons, and filter chips
-- Hero title uses continuous `clamp()` scaling across all breakpoints — no overflow at any width
-- Stats row stacks vertically at ≤768px; each stat becomes a horizontal value+label pair
-- Feature grid forced to `1fr` single column at ≤768px
-- Container padding: `0 16px` at 768px, `0 12px` at 480px, `0 10px` at 374px
-- `padding-bottom: calc(72px + env(safe-area-inset-bottom))` on `.main-content` — content never hidden behind bottom nav
-- All buttons and nav items meet 44–52px touch target minimums
-- `overflow-x: hidden` on `html` and `body` — no horizontal scroll
-- Admin grid forced to single column at ≤768px
-- Reviews stats bar reflows: 5-col → 3-col at 720px → 2-col at 400px with correct border cleanup
-
-**What does NOT exist yet:**
-- OPENROUTER_API_KEY not yet added to .env — OpenRouter silently skipped until this is done
-- TTS dependencies not yet installed — `pip install transformers scipy` required
-- Multilingual embeddings (MiniLM → paraphrase-multilingual-MiniLM-L12-v2)
-
-**Data:**
-- ChromaDB: ~2,500+ pairs (vocabulary + sentences + grammar + proverbs + corrections)
-- Feedback log: `data/feedback/feedback_log.jsonl` (grows with each user correction)
-- Training pairs: `data/training/training_pairs.jsonl` (for future LoRA fine-tuning)
-- Dataset export: `data/training/dataset_export_YYYY-MM-DD.jsonl` (run export_dataset.py to generate)
+**Next milestones:**
+- 500 correction pairs → unlock LoRA fine-tuning
+- 20 hrs audio → unlock proper Whisper training
+- Set OPENROUTER_API_KEY in .env to activate OpenRouter pipeline pass
