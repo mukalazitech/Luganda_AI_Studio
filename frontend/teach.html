@@ -111,6 +111,7 @@
           <div class="state-title">Session Complete!</div>
           <div class="done-score" id="doneScore">—%</div>
           <div class="done-score-label">accuracy this session</div>
+          <div class="chip chip-amber" id="doneStreakLine" style="margin-bottom:16px;">🔥 Streak: — · +— XP</div>
           <div class="done-stats">
             <div class="done-stat correct-stat">
               <div class="done-stat-value" id="summaryCorrect">0</div>
@@ -237,6 +238,11 @@ let quizCorrect       = 0;
 let quizWrong         = 0;
 let quizSeen          = 0;
 const QUIZ_LENGTH     = 10;
+
+// XP: 10 per correct answer, 2 per attempt regardless of outcome (encourages trying).
+function calculateSessionXP(correctCount, totalSeen) {
+  return (correctCount * 10) + (totalSeen * 2);
+}
 
 // ══════════════════════════════════════════════════════
 //  BOOT
@@ -459,6 +465,12 @@ function finishSession() {
 
   const reviewBtn = document.getElementById('reviewMissedBtn');
   reviewBtn.style.display = (mode === 'flash' && missedCards.length > 0) ? 'inline-flex' : 'none';
+
+  const sessionXP = calculateSessionXP(countCorrect, seen);
+  const updatedStreak = recordSessionComplete();
+  document.getElementById('doneStreakLine').textContent =
+    `🔥 Streak: ${updatedStreak.count} day${updatedStreak.count === 1 ? '' : 's'} · +${sessionXP} XP`;
+  renderStreakPill();
 
   // Save progress to backend
   fetch('/api/v1/teach/progress', {
