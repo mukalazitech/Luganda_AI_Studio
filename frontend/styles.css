@@ -438,6 +438,21 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .chip-success { background: var(--success-bg); color: var(--success); border: 1px solid var(--success-border); }
 .chip-amber   { background: var(--amber-bg);   color: var(--amber);   border: 1px solid var(--amber-border); }
 .chip-red     { background: var(--red-bg);     color: var(--red);     border: 1px solid var(--red-border); }
+
+.streak-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--amber-bg);
+  color: var(--amber);
+  border: 1px solid var(--amber-border);
+  font-size: 12px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  margin-right: 8px;
+}
 .chip-neutral { background: var(--bg-card);    color: var(--text-secondary); border: 1px solid var(--border); }
 .chip-lime    { background: var(--lime-bg);    color: var(--lime-dark); border: 1px solid var(--lime); }
 

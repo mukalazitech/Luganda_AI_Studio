@@ -46,7 +46,10 @@
   <!-- Mobile topbar -->
   <header class="mobile-topbar">
     <span class="mobile-topbar-title">Translate</span>
-    <button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    <div style="display:flex;align-items:center;">
+      <span class="streak-pill" id="streakPill">🔥 0</span>
+      <button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
+    </div>
   </header>
 
   <!-- Main content -->

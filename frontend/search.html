@@ -45,7 +45,10 @@
   <!-- Mobile topbar -->
   <header class="mobile-topbar">
     <span class="mobile-topbar-title">Search</span>
-    <button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()">☀</button>
+    <div style="display:flex;align-items:center;">
+      <span class="streak-pill" id="streakPill">🔥 0</span>
+      <button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()">☀</button>
+    </div>
   </header>
 
   <!-- Main content -->
