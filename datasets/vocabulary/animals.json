@@ -421,10 +421,10 @@
       "category": "animals",
       "subcategory": "wild",
       "part_of_speech": "noun",
-      "notes": "Bears are not native to Uganda or East Africa. This word may appear in translated texts, religious books, or formal Luganda dictionaries. Kept for reference but flagged.",
+      "notes": "Bears are not native to Uganda or East Africa; word appears in translated/religious texts and formal dictionaries. Confirmed by native speaker 2026-06-23.",
       "example_sentence_luganda": null,
       "example_sentence_english": null,
-      "needs_review": true
+      "needs_review": false
     },
     {
       "luganda": "Ngaali",
