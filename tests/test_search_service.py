@@ -9,6 +9,7 @@ from backend.services.search_service import (
     SCORE_NORMALIZED,
     SCORE_PREFIX,
     SCORE_SUBSTRING,
+    SCORE_FUZZY,
     SCORE_SEMANTIC_MAX,
     MIN_SCORE,
 )
@@ -67,6 +68,29 @@ def test_lexical_score_checks_all_metadata_fields():
 
 def test_lexical_score_empty_metadata_returns_none():
     assert lexical_score("hello", {}) is None
+
+def test_lexical_score_fuzzy_match_single_typo_returns_fuzzy_score():
+    # "Emesse" (typo, missing one 'm') should still find "Emmese"
+    meta = {"luganda": "Emmese"}
+    assert lexical_score("Emesse", meta) == SCORE_FUZZY
+
+def test_lexical_score_fuzzy_match_transposition():
+    meta = {"english": "elephant"}
+    assert lexical_score("elephnat", meta) == SCORE_FUZZY
+
+def test_lexical_score_fuzzy_does_not_match_too_different_words():
+    meta = {"luganda": "ssebo"}
+    assert lexical_score("kambe", meta) is None
+
+def test_lexical_score_fuzzy_requires_minimum_length():
+    # very short words shouldn't fuzzy-match (too many false positives)
+    meta = {"luganda": "ku"}
+    assert lexical_score("ka", meta) is None
+
+def test_lexical_score_exact_beats_fuzzy_tier_ordering():
+    # sanity check on score ordering used by ranking
+    assert SCORE_SUBSTRING > SCORE_FUZZY
+    assert SCORE_FUZZY > SCORE_SEMANTIC_MAX
 
 
 # ── chroma_distance_to_score() ────────────────────────────────────────────────

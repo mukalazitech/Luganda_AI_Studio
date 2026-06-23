@@ -10,7 +10,9 @@ Provides layered search with this priority order:
   2. NORMALIZED MATCH  → score 95    (after lowercasing + stripping punctuation)
   3. PREFIX MATCH      → score 85    (field starts with query)
   4. SUBSTRING MATCH   → score 65    (query appears inside field)
-  5. SEMANTIC MATCH    → score 0–60  (ChromaDB vector similarity)
+  5. FUZZY MATCH       → score 62    (single-word query within edit distance 1 of a field —
+                                       catches typos like "Emesse" → "Emmese")
+  6. SEMANTIC MATCH    → score 0–60  (ChromaDB vector similarity)
 
 Results below MIN_SCORE (25) are hidden from the user.
 
@@ -46,7 +48,12 @@ SCORE_EXACT      = 100
 SCORE_NORMALIZED = 95
 SCORE_PREFIX     = 85
 SCORE_SUBSTRING  = 65
+SCORE_FUZZY      = 62     # typo-tolerant match, just above semantic cap
 SCORE_SEMANTIC_MAX = 60   # semantic results are capped at 60 so exact wins
+
+# Fuzzy match tuning
+FUZZY_MIN_QUERY_LEN = 3     # don't fuzzy-match very short words (too many false hits)
+FUZZY_MAX_DISTANCE  = 2     # allowed edit distance (Levenshtein)
 
 # How many results to fetch from ChromaDB before re-ranking
 CHROMA_FETCH_K = 20
@@ -113,6 +120,33 @@ def score_label(score: int) -> str:
     return "Weak match"
 
 
+# ── Fuzzy Matching ────────────────────────────────────────────────────────────
+
+def levenshtein_distance(a: str, b: str) -> int:
+    """
+    Standard edit distance: minimum number of single-character inserts,
+    deletes, or substitutions to turn `a` into `b`.
+    """
+    if a == b:
+        return 0
+    if not a:
+        return len(b)
+    if not b:
+        return len(a)
+
+    previous_row = list(range(len(b) + 1))
+    for i, ca in enumerate(a, start=1):
+        current_row = [i]
+        for j, cb in enumerate(b, start=1):
+            insert_cost = current_row[j - 1] + 1
+            delete_cost = previous_row[j] + 1
+            substitute_cost = previous_row[j - 1] + (0 if ca == cb else 1)
+            current_row.append(min(insert_cost, delete_cost, substitute_cost))
+        previous_row = current_row
+
+    return previous_row[-1]
+
+
 # ── Exact / Prefix / Substring Matching ──────────────────────────────────────
 
 def _get_text_fields(metadata: dict) -> list[str]:
@@ -169,6 +203,16 @@ def lexical_score(query: str, metadata: dict) -> int | None:
         if q_norm and f_norm and len(q_norm) >= 2:
             if q_norm in f_norm or f_norm in q_norm:
                 return SCORE_SUBSTRING
+
+    # Tier 5: Fuzzy match (typo tolerance) — only against single-word fields,
+    # since comparing a whole sentence by edit distance is meaningless.
+    if q_norm and len(q_norm) >= FUZZY_MIN_QUERY_LEN and " " not in q_norm:
+        for field in fields:
+            f_norm = normalize(field)
+            if not f_norm or " " in f_norm:
+                continue
+            if levenshtein_distance(q_norm, f_norm) <= FUZZY_MAX_DISTANCE:
+                return SCORE_FUZZY
 
     return None  # No lexical match found
 
@@ -275,8 +319,10 @@ def search_knowledge(
                     mtype = "exact"
                 elif lex_score >= SCORE_PREFIX:
                     mtype = "prefix"
-                else:
+                elif lex_score >= SCORE_SUBSTRING:
                     mtype = "substring"
+                else:
+                    mtype = "fuzzy"
 
                 raw_results.append({
                     "text":        doc or "",
