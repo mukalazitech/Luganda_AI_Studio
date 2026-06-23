@@ -16,7 +16,7 @@ SETUP (one-time):
 
 USAGE:
   python scripts/upload_full_dataset_to_huggingface.py --dry-run
-  python scripts/upload_full_dataset_to_huggingface.py --repo MukalaziPatrick/luganda-vocabulary-dataset
+  python scripts/upload_full_dataset_to_huggingface.py --repo Mukalazipatrick/luganda-vocabulary-dataset
 
 WHAT GETS UPLOADED:
   The most recent data/training/full_dataset_export_*.jsonl file.
@@ -45,7 +45,6 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-sys.path.insert(0, str(PROJECT_ROOT))
 
 EXPORT_DIR = PROJECT_ROOT / "data" / "training"
 
@@ -98,7 +97,7 @@ Kiganda proverbs with their meanings.
 ```python
 from datasets import load_dataset
 
-ds = load_dataset("MukalaziPatrick/luganda-vocabulary-dataset")
+ds = load_dataset("Mukalazipatrick/luganda-vocabulary-dataset")
 ```
 
 ## License
@@ -131,6 +130,12 @@ def _load_latest_export() -> list[dict]:
 
 def _upload(records: list[dict], repo_id: str, private: bool, token: str) -> None:
     """Upload records to HuggingFace Hub as a dataset."""
+    # The repo's own datasets/ directory (source JSON tree) shadows the pip
+    # "datasets" package whenever the script runs from the project root, since
+    # Python puts the current working directory first on sys.path. Strip CWD
+    # entries before importing so the real library resolves.
+    original_path = list(sys.path)
+    sys.path = [p for p in sys.path if p not in ("", str(PROJECT_ROOT))]
     try:
         from datasets import Dataset
         from huggingface_hub import HfApi
@@ -140,16 +145,21 @@ def _upload(records: list[dict], repo_id: str, private: bool, token: str) -> Non
             "Install with: pip install huggingface_hub datasets"
         )
         sys.exit(1)
+    finally:
+        sys.path = original_path
 
     api = HfApi(token=token)
 
-    logger.info(f"Creating/verifying dataset repo: {repo_id}")
-    api.create_repo(
-        repo_id=repo_id,
-        repo_type="dataset",
-        private=private,
-        exist_ok=True,
-    )
+    logger.info(f"Verifying dataset repo exists: {repo_id}")
+    try:
+        api.repo_info(repo_id=repo_id, repo_type="dataset")
+    except Exception:
+        logger.error(
+            f"Repo {repo_id} doesn't exist yet. Create it manually at "
+            f"https://huggingface.co/new-dataset (API repo creation is blocked for this account), "
+            f"then re-run this script."
+        )
+        sys.exit(1)
 
     ds = Dataset.from_list(records)
     logger.info(f"Dataset built: {ds}")
@@ -160,7 +170,7 @@ def _upload(records: list[dict], repo_id: str, private: bool, token: str) -> Non
 
     card_path = EXPORT_DIR / "FULL_DATASET_README.md"
     card_path.write_text(
-        DATASET_CARD.replace("MukalaziPatrick/luganda-vocabulary-dataset", repo_id), encoding="utf-8"
+        DATASET_CARD.replace("Mukalazipatrick/luganda-vocabulary-dataset", repo_id), encoding="utf-8"
     )
     api.upload_file(
         path_or_fileobj=str(card_path),
@@ -177,7 +187,7 @@ def main():
     parser = argparse.ArgumentParser(description="Upload full Luganda dataset to HuggingFace Hub")
     parser.add_argument(
         "--repo",
-        default="MukalaziPatrick/luganda-vocabulary-dataset",
+        default="Mukalazipatrick/luganda-vocabulary-dataset",
         help="HuggingFace dataset repo ID",
     )
     parser.add_argument("--private", action="store_true", help="Create as private repo")
@@ -198,8 +208,8 @@ def main():
     token = os.getenv("HF_TOKEN", "")
     if not token:
         try:
-            from huggingface_hub import HfFolder
-            token = HfFolder.get_token() or ""
+            from huggingface_hub import get_token
+            token = get_token() or ""
         except Exception:
             pass
 
