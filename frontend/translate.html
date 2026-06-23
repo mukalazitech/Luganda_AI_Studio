@@ -153,9 +153,9 @@
           <!-- NOT FOUND -->
           <div id="stateNotFound" style="display:none;">
             <div style="font-size:14px;color:var(--warning,#d99b2a);line-height:1.65;" id="notFoundText">
-              No translation found in the current dataset.
-              The Luganda knowledge base is growing — try a simpler word,
-              or use the Expected Output field below to record the correct answer.
+              We don't know this word yet — but you can teach us!
+              Try a simpler word or phrase, or type the correct translation
+              below and we'll add it to the dictionary for everyone.
             </div>
           </div>
         </div>
@@ -730,7 +730,7 @@ async function runTranslation() {
     if (err.name === 'TimeoutError' || err.name === 'AbortError') {
       showError('Request timed out. The server took too long to respond. Please try again.');
     } else {
-      showError('Could not reach the translation API. Make sure the backend is running on port 8000.');
+      showError('We couldn\'t reach the server. Check your connection and try again.');
     }
   } finally {
     setLoading(false);

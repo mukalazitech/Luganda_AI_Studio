@@ -424,7 +424,8 @@ def translate(request: TranslationRequest) -> TranslationResponse:
         matched_source_file=None,
         status="not_found",
         message=(
-            "No translation found in the current dataset. "
-            "The dataset is growing and this word may be added in future."
+            "We don't know this word yet — but you can teach us! "
+            "Try a simpler word or phrase, or type the correct translation "
+            "below and we'll add it to the dictionary for everyone."
         ),
     )
