@@ -63,7 +63,7 @@
           Learn.<br>
           <span class="hero-underline">Communicate.</span>
         </h1>
-        <p class="hero-desc">AI-powered tools for the Luganda language — built to run on your machine.</p>
+        <p class="hero-desc">Verified by native Luganda speakers — works offline, no account needed to start.</p>
         <!-- CHANGED: Improved hero layout with button and theme toggle separated for mobile -->
         <div class="hero-actions mt-8">
           <a href="translate.html" class="btn-primary hero-cta">Start Translating →</a>
@@ -76,10 +76,10 @@
 
       <!-- Stats row -->
       <div class="stats-row" id="statsRow">
-        <div class="stat-item"><span class="stat-value" id="statVocab">—</span><span class="stat-label">Vocabulary pairs</span></div>
-        <div class="stat-item"><span class="stat-value" id="statSentences">—</span><span class="stat-label">Sentence pairs</span></div>
-        <div class="stat-item"><span class="stat-value" id="statGrammar">—</span><span class="stat-label">Grammar notes</span></div>
-        <div class="stat-item"><span class="stat-value" id="statProverbs">—</span><span class="stat-label">Proverbs</span></div>
+        <div class="stat-item" style="grid-column: 1 / -1;">
+          <span class="stat-value" id="statTotal">—</span>
+          <span class="stat-label">words, phrases, and proverbs ready to explore</span>
+        </div>
       </div>
 
       <!-- Feature grid -->
@@ -148,16 +148,13 @@ function updateThemeUI() {
 }
 updateThemeUI();
 
-// Load stats from /api/v1/knowledge/status
+// Load stats from /api/v1/knowledge/status — show one friendly combined total.
 fetch('/api/v1/knowledge/status')
   .then(r => r.json())
   .then(d => {
-    // CHANGED: Unpack d.collections to handle API response shape
     const c = d.collections ?? d;
-    document.getElementById('statVocab').textContent     = (c.vocabulary ?? '—').toLocaleString();
-    document.getElementById('statSentences').textContent = (c.sentences  ?? '—').toLocaleString();
-    document.getElementById('statGrammar').textContent   = (c.grammar    ?? '—').toLocaleString();
-    document.getElementById('statProverbs').textContent  = (c.proverbs   ?? '—').toLocaleString();
+    const total = Object.values(c).reduce((sum, n) => sum + (typeof n === 'number' ? n : 0), 0);
+    document.getElementById('statTotal').textContent = total > 0 ? total.toLocaleString() : '—';
   })
   .catch(() => {});
 </script>
