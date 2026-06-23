@@ -10,7 +10,7 @@ Provides layered search with this priority order:
   2. NORMALIZED MATCH  → score 95    (after lowercasing + stripping punctuation)
   3. PREFIX MATCH      → score 85    (field starts with query)
   4. SUBSTRING MATCH   → score 65    (query appears inside field)
-  5. FUZZY MATCH       → score 62    (single-word query within edit distance 1 of a field —
+  5. FUZZY MATCH       → score 62    (single-word query within edit distance 2 of a field —
                                        catches typos like "Emesse" → "Emmese")
   6. SEMANTIC MATCH    → score 0–60  (ChromaDB vector similarity)
 
@@ -217,6 +217,19 @@ def lexical_score(query: str, metadata: dict) -> int | None:
     return None  # No lexical match found
 
 
+def _lexical_match_type(lex_score: int) -> str:
+    """Map a lexical_score() result to its human-readable match_type label."""
+    if lex_score >= SCORE_EXACT:
+        return "exact"
+    if lex_score >= SCORE_NORMALIZED:
+        return "exact"
+    if lex_score >= SCORE_PREFIX:
+        return "prefix"
+    if lex_score >= SCORE_SUBSTRING:
+        return "substring"
+    return "fuzzy"
+
+
 # ── Main Search Function ──────────────────────────────────────────────────────
 
 def search_knowledge(
@@ -283,6 +296,44 @@ def search_knowledge(
             logger.debug(f"Collection '{col_name}' is empty, skipping.")
             continue
 
+        # ── Full-collection lexical scan ────────────────────────────────────
+        # ChromaDB's semantic query below only returns the top CHROMA_FETCH_K
+        # nearest-embedding neighbors. A typo like "Emesse" (for "Emmese") can
+        # be embedding-distant from its intended match, so it would never even
+        # appear as a candidate for lexical_score() to evaluate. To catch
+        # exact/fuzzy matches regardless of embedding distance, scan every
+        # record's metadata directly — cheap in Python at this dataset size
+        # (same approach already used in translation/service.py).
+        try:
+            all_records = collection.get(include=["documents", "metadatas"])
+            all_docs  = all_records.get("documents") or []
+            all_metas = all_records.get("metadatas") or []
+        except Exception as e:
+            logger.warning(f"Full-collection scan failed for '{col_name}': {e}")
+            all_docs, all_metas = [], []
+
+        lexical_matched_keys: set[tuple] = set()
+
+        for doc, meta in zip(all_docs, all_metas):
+            meta = dict(meta or {})
+            meta["_collection"] = col_name
+
+            lex_score = lexical_score(query, meta)
+            if lex_score is None:
+                continue
+
+            mtype = _lexical_match_type(lex_score)
+            raw_results.append({
+                "text":        doc or "",
+                "metadata":    meta,
+                "score":       lex_score,
+                "score_label": score_label(lex_score),
+                "match_type":  mtype,
+                "collection":  col_name,
+                "distance":    None,
+            })
+            lexical_matched_keys.add((doc or "", col_name))
+
         # Query ChromaDB for semantic matches
         try:
             fetch_k = min(CHROMA_FETCH_K, count)
@@ -308,22 +359,16 @@ def search_knowledge(
             # Inject collection name into metadata so frontend can use it
             meta["_collection"] = col_name
 
+            # Already captured by the full-collection lexical scan above —
+            # skip re-adding it as a (weaker) semantic result.
+            if (doc or "", col_name) in lexical_matched_keys:
+                continue
+
             # Try lexical (exact/prefix/substring) match first
             lex_score = lexical_score(query, meta)
 
             if lex_score is not None:
-                # We got a lexical match — determine the label
-                if lex_score >= SCORE_EXACT:
-                    mtype = "exact"
-                elif lex_score >= SCORE_NORMALIZED:
-                    mtype = "exact"
-                elif lex_score >= SCORE_PREFIX:
-                    mtype = "prefix"
-                elif lex_score >= SCORE_SUBSTRING:
-                    mtype = "substring"
-                else:
-                    mtype = "fuzzy"
-
+                mtype = _lexical_match_type(lex_score)
                 raw_results.append({
                     "text":        doc or "",
                     "metadata":    meta,
