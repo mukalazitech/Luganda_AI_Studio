@@ -295,13 +295,22 @@ In the `.card-front` block, insert the emoji **above** `#cardLuganda`. The block
 ```html
             <div class="card-face card-front">
               <div class="card-badge">Luganda</div>
-              <div class="card-emoji" id="cardEmoji" aria-hidden="true">📖</div>
+              <span class="card-emoji" id="cardEmoji" aria-hidden="true">📖</span>
               <div class="card-word" id="cardLuganda">—</div>
               <button class="tts-btn" id="ttsBtnCard" style="display:none" title="Speak Luganda" aria-label="Listen to Luganda">🔊 Listen</button>
               <div class="card-hint">Tap card to reveal the meaning</div>
               <div class="card-type-tag" id="cardType">vocabulary</div>
             </div>
 ```
+
+**Accessibility rationale (do not change):** the emoji is a `<span>` with
+`aria-hidden="true"` and **no `role="img"`**. The two are mutually exclusive —
+`aria-hidden` removes the node from the a11y tree, so a `role` on it is dead. The
+emoji is *decorative* here because the adjacent category chip (`#cardType`)
+carries the readable label (e.g. "Animals"). Screen-reader users get the label
+from the chip, not a noisy "goat" emoji announcement. (If the emoji were ever the
+*only* cue, the correct pattern would be `role="img"` + `aria-label` and no
+`aria-hidden` — but that is not this design.)
 
 - [ ] **Step 3: Set the emoji + category label in `showFlashCard`**
 
@@ -364,12 +373,19 @@ Change `.card-word`:
 .card-word { font-family: var(--font-display); font-size: 52px; font-weight: 700; color: var(--text-primary); line-height: 1.2; margin-bottom: 12px; }
 ```
 
-- [ ] **Step 2: Add the `.card-emoji` rule**
+- [ ] **Step 2: Add the `.card-emoji` rule (with neutral backdrop)**
 
-Immediately after the `.card-word` rule, add:
+Immediately after the `.card-word` rule, add. The soft circular backdrop keeps
+pale emoji (😊 ✋ 🎨) legible against both the light card and dark theme, and
+renders the `<span>` as a centred block:
 
 ```css
-.card-emoji { font-size: 60px; line-height: 1; margin-bottom: 16px; }
+.card-emoji {
+  display: flex; align-items: center; justify-content: center;
+  width: 92px; height: 92px; margin: 0 auto 16px;
+  font-size: 56px; line-height: 1;
+  background: var(--bg-input); border-radius: 50%;
+}
 ```
 
 - [ ] **Step 3: Scale down at the 768px breakpoint**
@@ -379,7 +395,7 @@ In the `@media (max-width: 768px)` block, update `.card-word` and add `.card-emo
 ```css
 @media (max-width: 768px) {
   .card-word    { font-size: 40px; }
-  .card-emoji   { font-size: 52px; margin-bottom: 12px; }
+  .card-emoji   { width: 80px; height: 80px; font-size: 48px; margin-bottom: 12px; }
   .quiz-word    { font-size: 28px; }
   /* CHANGED: quiz options — single column on mobile for readability */
   .quiz-options { grid-template-columns: 1fr; gap: 10px; }
@@ -398,7 +414,7 @@ In the `@media (max-width: 480px)` block, update `.card-word` and add `.card-emo
 ```css
 @media (max-width: 480px) {
   .card-word  { font-size: 38px; }
-  .card-emoji { font-size: 48px; margin-bottom: 10px; }
+  .card-emoji { width: 72px; height: 72px; font-size: 44px; margin-bottom: 10px; }
   .quiz-word  { font-size: 24px; }
   .done-score { font-size: 40px; }
   /* CHANGED: done-stats stacks vertically on tiny phones */
@@ -411,8 +427,14 @@ In the `@media (max-width: 480px)` block, update `.card-word` and add `.card-emo
 
 Open Teach in the browser and check at desktop, 768px, and 390px (DevTools device toolbar):
 - Card fills most of the viewport; the Luganda word is the visual hero.
-- Emoji is clearly visible above the word.
-- Progress bar (top) and Got It / Try Again buttons (below) remain visible and usable on a 390px-wide phone — the card does not push the answer row off-screen.
+- Emoji is clearly visible above the word, and its circular backdrop keeps pale
+  emoji (😊 ✋ 🎨) legible in **both** light and dark themes (toggle and recheck).
+- **Hard gate — no scroll for controls:** at 390px width AND a short viewport
+  (set DevTools height to ~640px, the short end of common low-end Android), the
+  progress bar (top) and the Got It / Try Again row (bottom) must both be visible
+  without scrolling. If either is pushed off-screen, lower the desktop rule from
+  `min(68vh, 480px)` to `min(62vh, 440px)` and re-verify. Do not ship if controls
+  require scrolling on a 390×640 viewport.
 
 - [ ] **Step 6: Commit**
 
