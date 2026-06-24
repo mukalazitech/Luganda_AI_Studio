@@ -19,6 +19,7 @@
   <link rel="stylesheet" href="/app/styles.css" />
   <script src="/app/streak.js"></script>
   <script src="/app/mascot.js"></script>
+  <script src="/app/category-icons.js"></script>
 </head>
 <body>
 <div class="app-shell">
@@ -141,6 +142,7 @@
           <div class="flash-card" id="flashCard" onclick="flipCard()">
             <div class="card-face card-front">
               <div class="card-badge">Luganda</div>
+              <span class="card-emoji" id="cardEmoji" aria-hidden="true">📖</span>
               <div class="card-word" id="cardLuganda">—</div>
               <button class="tts-btn" id="ttsBtnCard" style="display:none" title="Speak Luganda" aria-label="Listen to Luganda">🔊 Listen</button>
               <div class="card-hint">Tap card to reveal the meaning</div>
@@ -305,7 +307,11 @@ function showFlashCard(index) {
   if (window.setCardTTSText) window.setCardTTSText(card.luganda || '');
   document.getElementById('cardEnglish').textContent = card.english || '—';
   document.getElementById('cardNotes').textContent   = card.notes   || '';
-  document.getElementById('cardType').textContent    = card.type    || 'vocabulary';
+  const cat = (card.category || '').toLowerCase();
+  document.getElementById('cardEmoji').textContent = window.categoryIcon(cat);
+  document.getElementById('cardType').textContent  = cat
+    ? window.categoryLabel(cat)
+    : (card.type || 'vocabulary');
   updateProgress(index, sessionCards.length);
   const slot = document.getElementById('flashMascot');
   if (slot) slot.style.display = 'none';
