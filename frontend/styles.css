@@ -951,7 +951,7 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .card-scene { perspective: 1200px; margin-bottom: 20px; }
 
 .flash-card {
-  width: 100%; min-height: 260px;
+  width: 100%; min-height: min(68vh, 480px);
   position: relative; cursor: pointer;
   transform-style: preserve-3d;
   transition: transform 0.5s cubic-bezier(0.4,0,0.2,1);
@@ -989,7 +989,13 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .card-front .card-badge { background: var(--lime-bg); color: var(--lime-dark); }
 .card-back  .card-badge { background: var(--bg-input); color: var(--text-secondary); }
 
-.card-word { font-family: var(--font-display); font-size: 36px; font-weight: 700; color: var(--text-primary); line-height: 1.2; margin-bottom: 12px; }
+.card-word { font-family: var(--font-display); font-size: 52px; font-weight: 700; color: var(--text-primary); line-height: 1.2; margin-bottom: 12px; }
+.card-emoji {
+  display: flex; align-items: center; justify-content: center;
+  width: 92px; height: 92px; margin: 0 auto 16px;
+  font-size: 56px; line-height: 1;
+  background: var(--bg-input); border-radius: 50%;
+}
 .card-hint { font-size: 12px; color: var(--text-muted); margin-top: 16px; }
 .card-notes { font-size: 13px; color: var(--text-secondary); font-style: italic; margin-top: 12px; line-height: 1.5; }
 .card-type-tag { position: absolute; top: 14px; right: 14px; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-muted); background: var(--bg-input); padding: 2px 8px; border-radius: var(--radius-sm); border: 1px solid var(--border-subtle); }
@@ -1112,7 +1118,8 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 
 /* ── Teach page responsive ── */
 @media (max-width: 768px) {
-  .card-word    { font-size: 28px; }
+  .card-word    { font-size: 40px; }
+  .card-emoji   { width: 80px; height: 80px; font-size: 48px; margin-bottom: 12px; }
   .quiz-word    { font-size: 28px; }
   /* CHANGED: quiz options — single column on mobile for readability */
   .quiz-options { grid-template-columns: 1fr; gap: 10px; }
@@ -1124,7 +1131,8 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 }
 
 @media (max-width: 480px) {
-  .card-word  { font-size: 24px; }
+  .card-word  { font-size: 38px; }
+  .card-emoji { width: 72px; height: 72px; font-size: 44px; margin-bottom: 10px; }
   .quiz-word  { font-size: 24px; }
   .done-score { font-size: 40px; }
   /* CHANGED: done-stats stacks vertically on tiny phones */
