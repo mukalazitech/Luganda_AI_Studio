@@ -1574,6 +1574,11 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   .reviews-stat-num { font-size: 1.4rem; }
 }
 
+/* ── Developer/QA-only views — hidden from normal users ───────── */
+.dev-only-hidden {
+  display: none !important;
+}
+
 /* ── Mascot layer ───────────────────────────────────────────── */
 .mascot-slot {
   display: flex;
@@ -1591,4 +1596,12 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 }
 @media (min-width: 900px) {
   .mascot-img { width: 170px; }
+}
+.mascot-slot-sm {
+  margin: 0;
+}
+.mascot-slot-sm .mascot-img {
+  width: 56px;
+  max-width: 56px;
+  border-radius: 8px;
 }

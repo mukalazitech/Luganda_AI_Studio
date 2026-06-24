@@ -19,6 +19,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/app/styles.css" />
   <script src="/app/streak.js"></script>
+  <script src="/app/mascot.js"></script>
 </head>
 <body>
 <div class="app-shell">
@@ -117,7 +118,10 @@
       <div class="card" id="outputCard" style="margin-bottom:12px; overflow:hidden; padding:0;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border-subtle);min-height:42px;">
           <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);" id="outputLabel">Output</span>
-          <button style="display:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;" id="copyBtn" onclick="copyResult()">Copy</button>
+          <div style="display:flex;align-items:center;gap:8px;">
+            <div id="translateMascot" class="mascot-slot mascot-slot-sm" data-character="kintu" data-state="thinking" style="display:none;"></div>
+            <button style="display:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;" id="copyBtn" onclick="copyResult()">Copy</button>
+          </div>
         </div>
 
         <div style="padding:20px 16px;" id="outputBody">
@@ -197,8 +201,8 @@
         </div>
       </div>
 
-      <!-- SESSION SUMMARY CARD -->
-      <div class="card" id="summaryCard" style="display:none;margin-top:32px;overflow:hidden;padding:0;">
+      <!-- SESSION SUMMARY CARD (developer/QA view — hidden from normal users) -->
+      <div class="card dev-only-hidden" id="summaryCard" style="display:none;margin-top:32px;overflow:hidden;padding:0;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border-subtle);">
           <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">
             Session Summary
@@ -229,8 +233,8 @@
         </div>
       </div>
 
-      <!-- SESSION HISTORY -->
-      <div id="historyPanel" style="display:none;background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-top:16px;">
+      <!-- SESSION HISTORY (developer/QA view — hidden from normal users) -->
+      <div id="historyPanel" class="dev-only-hidden" style="display:none;background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-top:16px;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-subtle);">
           <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-primary);">
             History
@@ -425,6 +429,15 @@ function resetOutput() {
   qs('feedbackStatus').style.color = '';
   ['fbCorrect','fbWrong','fbReview'].forEach(id => { const el = qs(id); if (el) el.className = 'feedback-btn'; });
   qs('copyBtn').classList.remove('copied');
+  const slot = qs('translateMascot');
+  if (slot) slot.style.display = 'none';
+}
+
+function showMascot(state) {
+  const slot = qs('translateMascot');
+  if (!slot) return;
+  slot.style.display = '';
+  setMascot('translateMascot', 'kintu', state);
 }
 
 function showLoading() {
@@ -432,6 +445,7 @@ function showLoading() {
   showOutputState('stateLoading');
   const fb = qs('feedbackSection');
   if (fb) fb.style.display = 'none';
+  showMascot('thinking');
 }
 
 function showSuccess(text, meta) {
@@ -441,21 +455,13 @@ function showSuccess(text, meta) {
   qs('resultText').textContent = text;
 
   const row = qs('chipsRow');
-  row.innerHTML = '';
   const dirLabel = currentDirection === 'en-lg' ? 'EN → LG' : 'LG → EN';
-  row.innerHTML += `<span class="chip chip-neutral">${dirLabel}</span>`;
-
-  if (meta.confidence !== null && meta.confidence !== undefined) {
-    const pct = Math.round(meta.confidence * 100);
-    const cls = pct >= 90 ? 'chip-success' : pct >= 70 ? 'chip-amber' : 'chip-red';
-    row.innerHTML += `<span class="chip ${cls}">Confidence ${pct}%</span>`;
-  }
-  if (meta.match_type === 'exact') {
-    row.innerHTML += `<span class="chip chip-lime">Match: ${meta.match_type}</span>`;
-  } else if (meta.match_type) {
-    row.innerHTML += `<span class="chip chip-neutral">Match: ${meta.match_type}</span>`;
-  }
-  if (meta.matched_collection) row.innerHTML += `<span class="chip chip-neutral">${meta.matched_collection}</span>`;
+  const dirChip = document.createElement('span');
+  dirChip.className = 'chip chip-neutral';
+  dirChip.textContent = dirLabel;
+  row.replaceChildren(dirChip);
+  // Developer metadata (confidence/match_type/matched_collection) intentionally
+  // not rendered for normal users — keeps this screen feeling like an app, not a QA tool.
 
   currentFeedback = null;
   ['fbCorrect','fbWrong','fbReview'].forEach(id => { const el = qs(id); if (el) el.className = 'feedback-btn'; });
@@ -463,6 +469,7 @@ function showSuccess(text, meta) {
   qs('feedbackStatus').style.color = '';
   const fb = qs('feedbackSection');
   if (fb) fb.style.display = 'flex';
+  showMascot('happy');
 }
 
 function showError(msg) {
@@ -471,6 +478,8 @@ function showError(msg) {
   qs('errorText').textContent = msg;
   const fb = qs('feedbackSection');
   if (fb) fb.style.display = 'none';
+  const slot = qs('translateMascot');
+  if (slot) slot.style.display = 'none';
 }
 
 function showNotFound(msg) {
@@ -479,6 +488,7 @@ function showNotFound(msg) {
   if (msg) qs('notFoundText').textContent = msg;
   const fb = qs('feedbackSection');
   if (fb) fb.style.display = 'none';
+  showMascot('oops');
 }
 
 /* ─────────────────────────────────────────────────
@@ -577,6 +587,7 @@ async function submitWithExpected() {
 
     if (response.ok) {
       if (st) { st.textContent = '✓ Correction saved to server'; st.style.color = 'var(--success,#3daa60)'; }
+      showMascot('celebrate');
       // Update local entry too
       currentEntry.expected = expected;
       currentEntry.verdict  = currentFeedback || 'wrong';
@@ -610,6 +621,9 @@ async function setFeedback(verdict) {
   Object.values(map).forEach(({ id }) => { const el = qs(id); if (el) el.className = 'feedback-btn'; });
   const activeEl = qs(map[verdict].id);
   if (activeEl) activeEl.className = map[verdict].cls;
+
+  if (verdict === 'correct') showMascot('celebrate');
+  else if (verdict === 'wrong' || verdict === 'review') showMascot('oops');
 
   if (currentEntry) {
     currentEntry.verdict  = verdict;
