@@ -1573,3 +1573,22 @@ textarea.input-field { resize: vertical; min-height: 100px; }
   /* CHANGED: stat numbers smaller on tiny phones */
   .reviews-stat-num { font-size: 1.4rem; }
 }
+
+/* ── Mascot layer ───────────────────────────────────────────── */
+.mascot-slot {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin: 8px 0 0;
+  pointer-events: none; /* never block taps on low-end mobile */
+}
+.mascot-img {
+  width: 140px;
+  max-width: 40vw;
+  height: auto;
+  border-radius: 14px;
+  display: block;
+}
+@media (min-width: 900px) {
+  .mascot-img { width: 170px; }
+}
