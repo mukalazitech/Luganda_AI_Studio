@@ -59,11 +59,12 @@ CHROMA_FETCH_LIMIT = 200
 # ── Response Models ────────────────────────────────────────────────────────────
 
 class FlashCard(BaseModel):
-    id:      str
-    luganda: str
-    english: str
-    type:    str = "vocabulary"
-    notes:   str = ""
+    id:       str
+    luganda:  str
+    english:  str
+    type:     str = "vocabulary"
+    notes:    str = ""
+    category: str = ""
 
 
 class CardsResponse(BaseModel):
@@ -121,21 +122,21 @@ class SaveProgressRequest(BaseModel):
 # Used only if ChromaDB vocabulary collection is empty.
 
 FALLBACK_CARDS = [
-    {"id": "f001", "luganda": "Oli otya",      "english": "How are you?",          "type": "greeting",   "notes": "Very common casual greeting"},
-    {"id": "f002", "luganda": "Bulungi",        "english": "Fine / Good",            "type": "greeting",   "notes": "Standard reply to 'Oli otya'"},
-    {"id": "f003", "luganda": "Webale nyo",     "english": "Thank you very much",    "type": "greeting",   "notes": "'Webale' alone = 'thank you'"},
-    {"id": "f004", "luganda": "Amazzi",         "english": "Water",                  "type": "vocabulary", "notes": ""},
-    {"id": "f005", "luganda": "Emmere",         "english": "Food",                   "type": "vocabulary", "notes": "Food in general"},
-    {"id": "f006", "luganda": "Ssebo",          "english": "Sir / Mr.",              "type": "vocabulary", "notes": "Respectful address for older man"},
-    {"id": "f007", "luganda": "Nnyabo",         "english": "Madam / Mrs.",           "type": "vocabulary", "notes": "Respectful address for older woman"},
-    {"id": "f008", "luganda": "Embwa",          "english": "Dog",                    "type": "vocabulary", "notes": ""},
-    {"id": "f009", "luganda": "Embuzi",         "english": "Goat",                   "type": "vocabulary", "notes": ""},
-    {"id": "f010", "luganda": "Enkoko",         "english": "Hen / Chicken",          "type": "vocabulary", "notes": ""},
-    {"id": "f011", "luganda": "Enjovu",         "english": "Elephant",               "type": "vocabulary", "notes": ""},
-    {"id": "f012", "luganda": "Empologoma",     "english": "Lion",                   "type": "vocabulary", "notes": ""},
-    {"id": "f013", "luganda": "Erinnya lyange", "english": "My name is",             "type": "phrase",     "notes": "Follow with your name"},
-    {"id": "f014", "luganda": "Nkwagala",       "english": "I love you",             "type": "phrase",     "notes": "Used between family and close friends"},
-    {"id": "f015", "luganda": "Mu kitiibwa",    "english": "You are welcome",        "type": "phrase",     "notes": "Response to 'webale'"},
+    {"id": "f001", "luganda": "Oli otya",      "english": "How are you?",       "type": "greeting",   "notes": "Very common casual greeting",            "category": "greeting"},
+    {"id": "f002", "luganda": "Bulungi",        "english": "Fine / Good",         "type": "greeting",   "notes": "Standard reply to 'Oli otya'",           "category": "greeting"},
+    {"id": "f003", "luganda": "Webale nyo",     "english": "Thank you very much", "type": "greeting",   "notes": "'Webale' alone = 'thank you'",           "category": "greeting"},
+    {"id": "f004", "luganda": "Amazzi",         "english": "Water",               "type": "vocabulary", "notes": "",                                       "category": "food_and_drink"},
+    {"id": "f005", "luganda": "Emmere",         "english": "Food",                "type": "vocabulary", "notes": "Food in general",                        "category": "food_and_drink"},
+    {"id": "f006", "luganda": "Ssebo",          "english": "Sir / Mr.",           "type": "vocabulary", "notes": "Respectful address for older man",        "category": "family"},
+    {"id": "f007", "luganda": "Nnyabo",         "english": "Madam / Mrs.",        "type": "vocabulary", "notes": "Respectful address for older woman",      "category": "family"},
+    {"id": "f008", "luganda": "Embwa",          "english": "Dog",                 "type": "vocabulary", "notes": "",                                       "category": "animals"},
+    {"id": "f009", "luganda": "Embuzi",         "english": "Goat",                "type": "vocabulary", "notes": "",                                       "category": "animals"},
+    {"id": "f010", "luganda": "Enkoko",         "english": "Hen / Chicken",       "type": "vocabulary", "notes": "",                                       "category": "animals"},
+    {"id": "f011", "luganda": "Enjovu",         "english": "Elephant",            "type": "vocabulary", "notes": "",                                       "category": "animals"},
+    {"id": "f012", "luganda": "Empologoma",     "english": "Lion",                "type": "vocabulary", "notes": "",                                       "category": "animals"},
+    {"id": "f013", "luganda": "Erinnya lyange", "english": "My name is",          "type": "phrase",     "notes": "Follow with your name",                  "category": "greeting"},
+    {"id": "f014", "luganda": "Nkwagala",       "english": "I love you",          "type": "phrase",     "notes": "Used between family and close friends",   "category": "emotions"},
+    {"id": "f015", "luganda": "Mu kitiibwa",    "english": "You are welcome",     "type": "phrase",     "notes": "Response to 'webale'",                   "category": "greeting"},
 ]
 
 
@@ -197,13 +198,15 @@ def _load_vocabulary_from_chroma(
 
             notes    = str(meta.get("notes") or meta.get("example_sentence_english") or "")
             card_type = str(meta.get("data_type") or meta.get("_collection") or "vocabulary")
+            category  = str(meta.get("category") or "").strip().lower()
 
             cards.append({
-                "id":      entry_id,
-                "luganda": luganda,
-                "english": english,
-                "type":    card_type,
-                "notes":   notes,
+                "id":       entry_id,
+                "luganda":  luganda,
+                "english":  english,
+                "type":     card_type,
+                "notes":    notes,
+                "category": category,
             })
 
         if not cards:
@@ -369,11 +372,12 @@ def get_flash_cards(
 
     flash_cards = [
         FlashCard(
-            id      = str(c.get("id", "")),
-            luganda = str(c.get("luganda", "")),
-            english = str(c.get("english", "")),
-            type    = str(c.get("type", "vocabulary")),
-            notes   = str(c.get("notes", "")),
+            id       = str(c.get("id", "")),
+            luganda  = str(c.get("luganda", "")),
+            english  = str(c.get("english", "")),
+            type     = str(c.get("type", "vocabulary")),
+            notes    = str(c.get("notes", "")),
+            category = str(c.get("category", "")),
         )
         for c in selected
     ]
