@@ -55,10 +55,10 @@
 
   <!-- Main content -->
   <main class="main-content">
-    <div class="container" style="padding-top:32px; padding-bottom:32px;">
+    <div class="container teach-container" style="padding-top:32px; padding-bottom:32px;">
 
       <!-- Page header + mode toggle -->
-      <div style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
+      <div class="teach-header" style="display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:28px;">
         <div>
           <h1 style="font-family:var(--font-display); font-size:22px; font-weight:700; color:var(--text-primary); margin:0;">Teach Mode</h1>
           <p style="font-size:13px; color:var(--text-muted); margin:4px 0 0;">Learn Luganda vocabulary — flash cards or quiz</p>
@@ -308,7 +308,7 @@ function showFlashCard(index) {
   document.getElementById('cardEnglish').textContent = card.english || '—';
   document.getElementById('cardNotes').textContent   = card.notes   || '';
   const cat = (card.category || '').toLowerCase();
-  document.getElementById('cardEmoji').textContent = window.categoryIcon(cat);
+  document.getElementById('cardEmoji').textContent = window.wordIcon(card.english || '', cat);
   document.getElementById('cardType').textContent  = cat
     ? window.categoryLabel(cat)
     : (card.type || 'vocabulary');
