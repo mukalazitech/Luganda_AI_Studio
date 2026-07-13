@@ -1,7 +1,7 @@
 // frontend/app.js
 // Shared JavaScript used by all pages
 
-const API_BASE = 'https://lugandastudio.com/api/v1';
+const API_BASE = '/api/v1';
 
 // ── Direction toggle (used on dashboard + translate page) ──────────────
 
@@ -121,14 +121,12 @@ async function quickTranslate() {
     } else {
       resultEl.innerHTML = `
         <span class="q-translated">${data.translated_text}</span>
-        <span class="q-badge q-badge--${data.match_type}">${data.match_type}</span>
-        <span class="q-source">${data.matched_collection || ''}</span>
       `;
     }
     resultEl.classList.remove('hidden');
 
   } catch (err) {
-    errorEl.textContent = `Error: ${err.message}`;
+    errorEl.textContent = 'Translation is unavailable right now. Please try again.';
     errorEl.classList.remove('hidden');
   }
 }

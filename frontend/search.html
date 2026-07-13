@@ -56,8 +56,8 @@
   <main class="main-content">
     <div class="container" style="padding-top:32px; padding-bottom:32px;">
 
-      <h1 class="page-title">Knowledge Search</h1>
-      <p class="page-sub">Search Luganda vocabulary, phrases, grammar, and proverbs.</p>
+      <h1 class="page-title">Search Luganda</h1>
+      <p class="page-sub">Find vocabulary, phrases, grammar notes, and proverbs.</p>
 
       <!-- SEARCH BOX -->
       <div class="search-box">
@@ -132,7 +132,7 @@
           <div class="state-icon">⚠️</div>
           <div class="state-title">Search Failed</div>
           <div class="state-desc" id="errorDesc">
-            Could not connect to the search API. Please check that the backend server is running.
+            Search is unavailable right now. Please try again in a moment.
           </div>
         </div>
 
@@ -217,24 +217,6 @@
     return 'chip chip-neutral';
   }
 
-  // ── Score → chip class ────────────────────────────────────────────────────
-  function getScoreClass(score) {
-    if (score >= 80) return 'chip chip-success';
-    if (score >= 50) return 'chip chip-amber';
-    return 'chip chip-red';  // CHANGED: use chip-red for low relevance scores
-  }
-
-  // ── Match type → pill CSS class ──────────────────────────────────────────
-  function getMatchPillClass(matchType) {
-    switch ((matchType || '').toLowerCase()) {
-      case 'exact':     return 'chip chip-success';
-      case 'prefix':    return 'chip chip-amber';
-      case 'substring': return 'chip chip-amber';
-      case 'semantic':  return 'chip chip-neutral';
-      default:          return 'chip chip-neutral';
-    }
-  }
-
   // ── Highlight query in text ──────────────────────────────────────────────
   function highlight(text, query) {
     if (!text || !query) return text || '';
@@ -287,30 +269,12 @@
         ? rawTags.split(',').map(t => t.trim()).filter(Boolean)
         : (Array.isArray(rawTags) ? rawTags : []);
 
-      // Score
-      const score      = typeof item.score === 'number' ? item.score : null;
-      const scoreLabel = item.score_label || '';
       const matchType  = item.match_type  || 'semantic';
 
       const typeChipClass = getTypeClass(type);
 
       const tagsHtml   = tags.length
         ? tags.slice(0, 4).map(t => `<span class="chip chip-neutral">${t}</span>`).join('')
-        : '';
-
-      // Score chip: show label + percentage
-      let scoreHtml = '';
-      if (score !== null) {
-        const cls   = getScoreClass(score);
-        const label = scoreLabel || (score >= 80 ? 'Strong match' : score >= 50 ? 'Good match' : 'Related');
-        scoreHtml   = `<span class="${cls}">${label} · ${score}%</span>`;
-      }
-
-      // Match type chip (exact / prefix / semantic)
-      const matchChipClass = getMatchPillClass(matchType);
-      const matchLabel     = matchType.charAt(0).toUpperCase() + matchType.slice(1);
-      const matchChipHtml  = matchType !== 'semantic'
-        ? `<span class="${matchChipClass}">${matchLabel}</span>`
         : '';
 
       // Card border class based on match type
@@ -330,11 +294,9 @@
         </div>
         ${english ? `<div class="result-english">${highlight(english, query)}</div>` : ''}
         ${notes   ? `<div class="result-notes">${notes}</div>` : ''}
-        ${(tagsHtml || scoreHtml || matchChipHtml) ? `
+        ${tagsHtml ? `
           <div class="result-item-footer">
-            ${matchChipHtml}
             ${tagsHtml}
-            ${scoreHtml}
           </div>
         ` : ''}
       `;
@@ -376,7 +338,7 @@
 
       if (!response.ok) {
         const err = await response.json().catch(() => ({}));
-        const msg = err.detail || err.error || `Server error (${response.status})`;
+        const msg = err.detail || err.error || 'Search is unavailable right now.';
         showState('errorState');
         document.getElementById('errorDesc').textContent = msg;
         return;
@@ -399,10 +361,10 @@
       showState('errorState');
       if (err.name === 'TimeoutError' || err.name === 'AbortError') {
         document.getElementById('errorDesc').textContent =
-          'Search request timed out. Please try again.';
+          'Search is taking longer than usual. Please try again.';
       } else {
         document.getElementById('errorDesc').textContent =
-          'Could not connect to the search API. Make sure the FastAPI server is running on port 8000.';
+          'Search is unavailable right now. Please try again in a moment.';
       }
     } finally {
       setSearchLoading(false);

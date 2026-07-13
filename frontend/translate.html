@@ -99,7 +99,7 @@
       </div>
 
       <!-- ACTION ROW -->
-      <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
+      <div class="translate-actions" style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
         <button class="btn-primary" id="translateBtn" onclick="runTranslation()" style="flex:1; min-height:48px;">
           <span class="btn-spinner" style="width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.65s linear infinite;display:none;flex-shrink:0;"></span>
           <span class="btn-icon">⇄</span>
@@ -177,14 +177,14 @@
       <!-- EXPECTED OUTPUT FIELD -->
       <div id="expectedCard" style="display:none;background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:12px;">
         <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border-subtle);">
-          <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">✏ Expected Output</span>
-          <span style="font-size:10px;color:var(--text-muted);">What is the correct translation?</span>
+          <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">✏ Better translation</span>
+          <span style="font-size:10px;color:var(--text-muted);">Help improve this answer</span>
         </div>
         <input
           type="text"
           class="input-field"
           id="expectedInput"
-          placeholder="Type the correct answer here, then click Save Correction…"
+          placeholder="Type the better translation here, then save it…"
           oninput="onExpectedChange()"
           onkeydown="handleExpectedKey(event)"
           style="border:none; border-radius:0; margin:0;"
@@ -197,7 +197,7 @@
             onclick="submitWithExpected()"
             disabled
             style="font-size:11px;padding:6px 14px;min-height:unset;"
-          >Save Correction →</button>
+          >Save Answer →</button>
         </div>
       </div>
 
@@ -208,7 +208,7 @@
             Session Summary
             <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--text-muted);border:1px solid var(--border-subtle);border-radius:20px;padding:2px 8px;margin-left:8px;vertical-align:middle;">
               <span style="width:4px;height:4px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
-              Saved locally
+              Session only
             </span>
           </span>
           <button onclick="clearSession()" style="display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:4px;border:1px solid var(--danger,#c9503e);background:transparent;color:var(--danger,#c9503e);font-size:11px;font-weight:500;cursor:pointer;">⊘ Clear Session</button>
@@ -271,7 +271,7 @@
    CONSTANTS
 ───────────────────────────────────────────────── */
 const STORAGE_KEY   = 'luganda_studio_session_v1';
-const FEEDBACK_URL  = '/api/v1/feedback/';
+const FEEDBACK_URL  = '/api/v1/feedback';
 
 /* ─────────────────────────────────────────────────
    STATE
@@ -586,7 +586,7 @@ async function submitWithExpected() {
     });
 
     if (response.ok) {
-      if (st) { st.textContent = '✓ Correction saved to server'; st.style.color = 'var(--success,#3daa60)'; }
+      if (st) { st.textContent = '✓ Thanks — saved'; st.style.color = 'var(--success,#3daa60)'; }
       showMascot('celebrate');
       // Update local entry too
       currentEntry.expected = expected;
@@ -595,13 +595,13 @@ async function submitWithExpected() {
     } else {
       const data = await response.json().catch(() => ({}));
       const msg  = data.detail || `Server error (${response.status})`;
-      console.warn('Correction save error:', msg);
-      if (st) { st.textContent = '✗ Server error — saved locally only'; st.style.color = 'var(--danger,#c9503e)'; }
+      console.error('Correction save error:', msg);
+      if (st) { st.textContent = 'Couldn\'t save that yet. Please try again.'; st.style.color = 'var(--danger,#c9503e)'; }
       if (btn) btn.disabled = false;
     }
   } catch (err) {
-    console.warn('Correction save failed:', err);
-    if (st) { st.textContent = '✗ Could not reach server'; st.style.color = 'var(--danger,#c9503e)'; }
+    console.error('Correction save failed:', err);
+    if (st) { st.textContent = 'Connection issue. Please try again.'; st.style.color = 'var(--danger,#c9503e)'; }
     if (btn) btn.disabled = false;
   }
 }
@@ -636,8 +636,8 @@ async function setFeedback(verdict) {
   statusEl.style.color = '';
 
   if (!currentEntry) {
-    statusEl.textContent = '✓ Saved locally';
-    statusEl.style.color = 'var(--success,#3daa60)';
+    statusEl.textContent = 'No active translation to save.';
+    statusEl.style.color = 'var(--danger,#c9503e)';
     return;
   }
 
@@ -667,20 +667,20 @@ async function setFeedback(verdict) {
     });
 
     if (response.ok) {
-      statusEl.textContent = '✓ Saved to server';
+      statusEl.textContent = '✓ Saved';
       statusEl.style.color = 'var(--success,#3daa60)';
     } else {
       const data = await response.json().catch(() => ({}));
       const msg  = data.detail || `Server error (${response.status})`;
-      console.warn('Feedback API error:', msg);
-      statusEl.textContent = '✓ Saved locally · server error';
-      statusEl.style.color = 'var(--success,#3daa60)';
+      console.error('Feedback API error:', msg);
+      statusEl.textContent = 'Couldn\'t save. Try again.';
+      statusEl.style.color = 'var(--danger,#c9503e)';
     }
 
   } catch (err) {
-    console.warn('Feedback API unreachable:', err);
-    statusEl.textContent = '✓ Saved locally · offline';
-    statusEl.style.color = 'var(--success,#3daa60)';
+    console.error('Feedback API unreachable:', err);
+    statusEl.textContent = 'Connection issue. Not saved yet.';
+    statusEl.style.color = 'var(--danger,#c9503e)';
   }
 }
 
@@ -742,9 +742,9 @@ async function runTranslation() {
 
   } catch (err) {
     if (err.name === 'TimeoutError' || err.name === 'AbortError') {
-      showError('Request timed out. The server took too long to respond. Please try again.');
+      showError('This is taking longer than usual. Please try again.');
     } else {
-      showError('We couldn\'t reach the server. Check your connection and try again.');
+      showError('Connection issue. Check your internet and try again.');
     }
   } finally {
     setLoading(false);

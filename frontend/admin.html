@@ -51,8 +51,8 @@
   <main class="main-content">
     <div class="container" style="padding-top:32px; padding-bottom:32px;">
 
-      <h1 class="page-heading">Admin Dashboard</h1>
-      <p class="page-subheading">System status — read-only view. Refresh the page to update.</p>
+      <h1 class="page-heading">Studio Status</h1>
+      <p class="page-subheading">A read-only health view for the Luganda AI Studio owner.</p>
 
       <div id="error" class="admin-error-msg" style="display:none"></div>
       <div id="loading" class="admin-loading">Loading status…</div>
@@ -63,23 +63,23 @@
         <div class="card">
           <div class="admin-card-title">System Health</div>
           <div class="admin-status-row">
-            <span class="admin-status-label">API</span>
+            <span class="admin-status-label">App connection</span>
             <span class="chip chip-success">● Online</span>
           </div>
           <div class="admin-status-row">
-            <span class="admin-status-label">ChromaDB</span>
+            <span class="admin-status-label">Knowledge library</span>
             <span id="chroma-pill"></span>
           </div>
           <div class="admin-status-row">
-            <span class="admin-status-label">OpenRouter key</span>
+            <span class="admin-status-label">Cloud assist</span>
             <span id="or-key-pill"></span>
           </div>
           <div class="admin-status-row">
-            <span class="admin-status-label">TTS dependencies</span>
+            <span class="admin-status-label">Voice playback</span>
             <span id="tts-pill"></span>
           </div>
           <div class="admin-status-row">
-            <span class="admin-status-label">ChromaDB disk usage</span>
+            <span class="admin-status-label">Library storage</span>
             <span id="chroma-disk" class="admin-stat-val"></span>
           </div>
         </div>
@@ -112,15 +112,15 @@
           <div class="admin-stat-row"><span class="admin-status-label">Last export</span><span id="tr-export" class="admin-stat-val"></span></div>
         </div>
 
-        <!-- Card 5: Translation Pipeline -->
+        <!-- Card 5: Translation Support -->
         <div class="card">
-          <div class="admin-card-title">Translation Pipeline</div>
+          <div class="admin-card-title">Translation Support</div>
           <div class="admin-status-row">
-            <span class="admin-status-label">NLLB model loaded</span>
+            <span class="admin-status-label">Local translator</span>
             <span id="nllb-pill"></span>
           </div>
           <div class="admin-status-row">
-            <span class="admin-status-label">OpenRouter last call</span>
+            <span class="admin-status-label">Cloud assist last used</span>
             <span id="or-last" class="admin-stat-val"></span>
           </div>
         </div>
@@ -166,15 +166,15 @@ async function load() {
     document.getElementById('grid').style.display = 'grid';
 
     // System
-    document.getElementById('chroma-pill').outerHTML = '<span id="chroma-pill">' + pill(d.system.chroma_connected, 'Connected', 'Disconnected') + '</span>';
-    document.getElementById('or-key-pill').outerHTML = '<span id="or-key-pill">' + pill(d.system.openrouter_key_set, 'Set', 'Not set') + '</span>';
-    document.getElementById('tts-pill').outerHTML    = '<span id="tts-pill">' + pill(d.system.tts_deps_installed, 'Installed', 'Missing') + '</span>';
+    document.getElementById('chroma-pill').outerHTML = '<span id="chroma-pill">' + pill(d.system.chroma_connected, 'Ready', 'Needs attention') + '</span>';
+    document.getElementById('or-key-pill').outerHTML = '<span id="or-key-pill">' + pill(d.system.openrouter_key_set, 'Ready', 'Unavailable') + '</span>';
+    document.getElementById('tts-pill').outerHTML    = '<span id="tts-pill">' + pill(d.system.tts_deps_installed, 'Ready', 'Unavailable') + '</span>';
     document.getElementById('chroma-disk').textContent = d.system.chroma_disk_mb + ' MB';
 
     // Collections
     const cols = ['vocabulary', 'sentences', 'grammar', 'proverbs'];
     document.getElementById('collections-body').innerHTML = cols.map(c =>
-      '<tr><td>' + c + '</td><td>' + (d.collections[c] ?? '—') + '</td></tr>'
+      '<tr><td>' + label(c) + '</td><td>' + (d.collections[c] ?? '—') + '</td></tr>'
     ).join('');
     document.getElementById('collections-total').textContent = d.collections.total ?? '—';
 
@@ -190,16 +190,22 @@ async function load() {
     document.getElementById('tr-corrections').textContent = d.training.correction_pairs;
     document.getElementById('tr-export').textContent      = d.training.last_export ?? '—';
 
-    // Pipeline
-    document.getElementById('nllb-pill').outerHTML = '<span id="nllb-pill">' + pill(d.pipeline.nllb_loaded, 'Loaded', 'Not loaded') + '</span>';
+    // Translation support
+    document.getElementById('nllb-pill').outerHTML = '<span id="nllb-pill">' + pill(d.pipeline.nllb_loaded, 'Ready', 'Starting when needed') + '</span>';
     document.getElementById('or-last').textContent = fmt(d.pipeline.openrouter_last_call_at);
 
   } catch (err) {
     document.getElementById('loading').style.display = 'none';
     const el = document.getElementById('error');
     el.style.display = 'block';
-    el.textContent = 'Failed to load status: ' + err.message;
+    el.textContent = 'Status is unavailable right now. Please try again.';
   }
+}
+
+function label(value) {
+  return String(value || '')
+    .replace(/_/g, ' ')
+    .replace(/\b\w/g, ch => ch.toUpperCase());
 }
 
 load();

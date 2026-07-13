@@ -53,8 +53,8 @@
 
       <div class="reviews-topbar-row">
         <div>
-          <h1 class="page-heading">Feedback Reviews</h1>
-          <p class="page-subheading">All corrections submitted from the Translate page</p>
+          <h1 class="page-heading">Community Reviews</h1>
+          <p class="page-subheading">Recent translation feedback and suggested improvements</p>
         </div>
         <button class="btn-secondary reviews-refresh-btn" id="btnRefresh" onclick="loadFeedback()">
           <span class="reviews-refresh-icon">↻</span> Refresh
@@ -81,7 +81,7 @@
         </div>
         <div class="reviews-stat-cell">
           <div class="reviews-stat-num rsn-corrected" id="sCorrected">—</div>
-          <div class="reviews-stat-lbl">Has Correction</div>
+          <div class="reviews-stat-lbl">Suggested</div>
         </div>
       </div>
 
@@ -92,7 +92,7 @@
         <button class="filter-chip"                data-filter="correct"   onclick="setFilter('correct')">✓ Correct</button>
         <button class="filter-chip"                data-filter="wrong"     onclick="setFilter('wrong')">✗ Wrong</button>
         <button class="filter-chip"                data-filter="review"    onclick="setFilter('needs_review')">🔁 Needs Review</button>
-        <button class="filter-chip"                data-filter="corrected" onclick="setFilter('corrected')">✏ Has Correction</button>
+        <button class="filter-chip"                data-filter="corrected" onclick="setFilter('corrected')">✏ Suggested</button>
       </div>
 
       <!-- LIST META -->
@@ -104,14 +104,14 @@
       <div class="reviews-state-panel" id="stateLoading">
         <div class="reviews-loading-dots"><span></span><span></span><span></span></div>
         <div class="reviews-state-title">Loading feedback…</div>
-        <div class="reviews-state-sub">Reading corrections from the server</div>
+        <div class="reviews-state-sub">Loading recent translation feedback</div>
       </div>
 
       <!-- ERROR -->
       <div class="reviews-state-panel" id="stateError" style="display:none;">
         <div class="reviews-state-icon">⚠</div>
         <div class="reviews-state-title">Could not load feedback</div>
-        <div class="reviews-state-sub" id="errorMsg">Make sure the backend is running on port 8000.</div>
+        <div class="reviews-state-sub" id="errorMsg">Reviews are unavailable right now. Please try again.</div>
       </div>
 
       <!-- EMPTY -->
@@ -120,7 +120,7 @@
         <div class="reviews-state-title">No feedback yet</div>
         <div class="reviews-state-sub">
           Go to the <a href="translate.html" style="color:var(--lime-dark);">Translate page</a>,
-          run some translations, and rate them. Your feedback will appear here.
+          run a translation, and rate it. Feedback will appear here.
         </div>
       </div>
 
@@ -179,13 +179,6 @@ function formatTimestamp(iso) {
   } catch (e) { return iso; }
 }
 
-function confClass(conf) {
-  if (conf === null || conf === undefined) return '';
-  if (conf >= 0.75) return 'rmc-conf-hi';
-  if (conf >= 0.45) return 'rmc-conf-mid';
-  return 'rmc-conf-low';
-}
-
 /* ─── SHOW / HIDE PANELS ────────────────────────── */
 function showPanel(which) {
   ['stateLoading','stateError','stateEmpty','entriesList'].forEach(id => {
@@ -235,7 +228,7 @@ async function loadFeedback() {
     applyFilter(activeFilter);
 
   } catch (err) {
-    qs('errorMsg').textContent = err.message || 'Could not reach the server.';
+    qs('errorMsg').textContent = 'Reviews are unavailable right now. Please try again.';
     showPanel('stateError');
   } finally {
     btn.classList.remove('spinning');
@@ -329,27 +322,16 @@ function buildCard(entry) {
   const srcLang  = entry.direction === 'en_to_lg' ? '🇬🇧 English' : '🇺🇬 Luganda';
   const tgtLang  = entry.direction === 'en_to_lg' ? '🇺🇬 Luganda' : '🇬🇧 English';
 
-  const conf    = entry.confidence;
-  const confPct = conf !== null && conf !== undefined ? Math.round(conf * 100) : null;
-  const confCls = confClass(conf);
-
   const outputHtml = entry.translated_text
     ? `<div class="rpair-text">${escapeHtml(entry.translated_text)}</div>`
     : `<div class="rpair-text rpt-notfound">not found</div>`;
 
   const correctionHtml = entry.expected_output
     ? `<div class="rcorrection-row">
-         <span class="rcorrection-lbl">Correction:</span>
+         <span class="rcorrection-lbl">Suggested:</span>
          <span class="rcorrection-text">${escapeHtml(entry.expected_output)}</span>
        </div>`
     : '';
-
-  const matchChipHtml = entry.match_type
-    ? `<span class="rmeta-chip">${escapeHtml(entry.match_type)}</span>` : '';
-  const collChipHtml = entry.matched_collection
-    ? `<span class="rmeta-chip">${escapeHtml(entry.matched_collection)}</span>` : '';
-  const confChipHtml = confPct !== null
-    ? `<span class="rmeta-chip ${confCls}">${confPct}% conf</span>` : '';
 
   card.className = `reviews-entry-card ${verdictClass}`;
   card.innerHTML = `
@@ -357,7 +339,6 @@ function buildCard(entry) {
       <div class="rentry-meta">
         <span class="rverdict-badge ${badgeClass}">${badgeLabel}</span>
         <span class="rmeta-chip">${escapeHtml(dirLabel)}</span>
-        ${confChipHtml}${matchChipHtml}${collChipHtml}
       </div>
       <span class="rentry-timestamp">${formatTimestamp(entry.timestamp)}</span>
     </div>
