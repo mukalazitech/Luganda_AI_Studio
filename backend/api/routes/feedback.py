@@ -25,7 +25,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import List, Optional
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
 from pydantic import BaseModel, field_validator
 
 logger = logging.getLogger(__name__)
@@ -110,8 +110,42 @@ class FeedbackResponse(BaseModel):
 
 # ── Route ─────────────────────────────────────────────────────────────────────
 
+def _auto_ingest_correction(record: dict) -> bool:
+    """
+    Best-effort correction ingestion after the API response has been sent.
+
+    The feedback JSONL write is the durable server save. ChromaDB ingestion can
+    load embedding dependencies and take longer, so it must not hold the browser
+    request open long enough for the Translate page to time out.
+    """
+    try:
+        from scripts.process_feedback import ingest_correction, append_training_pair, log_auto_ingestion
+        ingested = ingest_correction(record)
+        append_training_pair(record)
+        log_auto_ingestion(record, ingested)
+        if ingested:
+            logger.info(
+                "Auto-ingested correction into ChromaDB: '%s' -> '%s'",
+                record.get("input_text"),
+                record.get("expected_output"),
+            )
+        else:
+            logger.warning(
+                "Auto-ingestion skipped (duplicate or invalid pair): '%s'",
+                record.get("input_text"),
+            )
+        return ingested
+    except Exception as e:
+        logger.error(
+            "Auto-ingestion failed after feedback save: %s",
+            e,
+            exc_info=True,
+        )
+        return False
+
+
 @router.post(
-    "/",          # CHANGED: was "/feedback" → doubled to /api/v1/feedback/feedback
+    "",          # CHANGED: canonical endpoint is /api/v1/feedback
     response_model=FeedbackResponse,
     summary="Submit translation feedback",
     description=(
@@ -119,7 +153,15 @@ class FeedbackResponse(BaseModel):
         "the feedback log on disk. Verdicts are: correct, wrong, needs_review."
     ),
 )
-def submit_feedback(request: FeedbackRequest) -> FeedbackResponse:
+@router.post(
+    "/",         # CHANGED: keep /api/v1/feedback/ working without relying on redirects
+    response_model=FeedbackResponse,
+    include_in_schema=False,
+)
+def submit_feedback(
+    request: FeedbackRequest,
+    background_tasks: BackgroundTasks,
+) -> FeedbackResponse:
     """
     Save a single feedback record to data/feedback/feedback_log.jsonl.
 
@@ -177,29 +219,16 @@ def submit_feedback(request: FeedbackRequest) -> FeedbackResponse:
             ),
         )
 
-    # ── Auto-ingest corrections into ChromaDB immediately ────────────────────
-    # Only runs when verdict="wrong" and expected_output is provided.
-    # Failures are logged but do NOT block the 200 response — the record
-    # is already safely on disk and can be reprocessed via process_feedback.py.
-    ingested = False
+    # Queue correction ingestion after the response. The feedback record is
+    # already safely on disk; ChromaDB ingestion is best-effort background work.
     if request.verdict == "wrong" and request.expected_output and request.expected_output.strip():
-        try:
-            from scripts.process_feedback import ingest_correction, append_training_pair, log_auto_ingestion
-            ingested = ingest_correction(record)
-            append_training_pair(record)
-            log_auto_ingestion(record, ingested)
-            if ingested:
-                logger.info(f"Auto-ingested correction into ChromaDB: '{request.input_text}' → '{request.expected_output}'")
-            else:
-                logger.warning(f"Auto-ingestion skipped (duplicate or invalid pair): '{request.input_text}'")
-        except Exception as e:
-            logger.error(f"Auto-ingestion failed (record still saved to disk): {e}", exc_info=True)
+        background_tasks.add_task(_auto_ingest_correction, record)
 
     # ── Return confirmation ───────────────────────────────────────────────────
 
     msg = f"Feedback recorded as '{request.verdict}'."
     if request.verdict == "wrong" and request.expected_output:
-        msg += " Correction added to ChromaDB." if ingested else " Correction saved — will be ingested on next process run."
+        msg += " Correction saved to server; ChromaDB ingestion queued."
 
     return FeedbackResponse(
         status="saved",
@@ -227,7 +256,7 @@ class FeedbackListResponse(BaseModel):
 
 
 @router.get(
-    "/",
+    "",
     response_model=FeedbackListResponse,
     summary="Get all feedback records",
     description=(
@@ -235,6 +264,11 @@ class FeedbackListResponse(BaseModel):
         "Optional ?verdict= filter accepts: correct, wrong, needs_review. "
         "Returns newest entries first."
     ),
+)
+@router.get(
+    "/",
+    response_model=FeedbackListResponse,
+    include_in_schema=False,
 )
 def get_feedback(
     verdict: Optional[str] = Query(
