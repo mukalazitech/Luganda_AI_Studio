@@ -28,6 +28,8 @@ from typing import List, Optional
 from fastapi import APIRouter, BackgroundTasks, HTTPException, Query
 from pydantic import BaseModel, field_validator
 
+from backend.core.config import CORRECTION_AUTO_INGEST
+
 logger = logging.getLogger(__name__)
 
 router = APIRouter()
@@ -219,16 +221,24 @@ def submit_feedback(
             ),
         )
 
-    # Queue correction ingestion after the response. The feedback record is
-    # already safely on disk; ChromaDB ingestion is best-effort background work.
-    if request.verdict == "wrong" and request.expected_output and request.expected_output.strip():
+    has_correction = (
+        request.verdict == "wrong"
+        and bool(request.expected_output and request.expected_output.strip())
+    )
+
+    # Queue correction ingestion after the response only when explicitly opted
+    # in. The durable feedback record remains available for human review.
+    if CORRECTION_AUTO_INGEST and has_correction:
         background_tasks.add_task(_auto_ingest_correction, record)
 
     # ── Return confirmation ───────────────────────────────────────────────────
 
     msg = f"Feedback recorded as '{request.verdict}'."
-    if request.verdict == "wrong" and request.expected_output:
-        msg += " Correction saved to server; ChromaDB ingestion queued."
+    if has_correction:
+        if CORRECTION_AUTO_INGEST:
+            msg += " Correction saved to server; ChromaDB ingestion queued."
+        else:
+            msg = "Correction saved for review. Webale nnyo!"
 
     return FeedbackResponse(
         status="saved",

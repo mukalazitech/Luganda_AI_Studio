@@ -29,7 +29,24 @@
 ### Verification and shutdown
 
 - Frontend `node --test`: 12 tests, 12 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo.
-- No backend tests were run for this baseline task.
+- First full backend baseline (`python -m pytest tests/ backend/tests/ -v --tb=short`):
+  175 collected, 172 passed, 3 failed, 0 skipped, 2 warnings in 61.61 seconds.
+- The three pre-existing failures are unrelated to correction ingestion. They all
+  expect `confidence == 0.0` for not-found translations, while the current API
+  returns `None`:
+  - `tests/test_translate_pipeline.py::test_all_tiers_fail_returns_not_found`
+  - `tests/test_translate_pipeline.py::test_not_found_response_has_required_fields`
+  - `tests/test_translate_route.py::test_not_found_status_has_zero_confidence`
+- Correction feedback is now reviewable by default. `CORRECTION_AUTO_INGEST=false`
+  keeps durable suggestions in the isolated feedback log; live Chroma ingestion
+  remains available only as an explicit opt-in.
+- Post-suite data integrity matched the pre-test baseline exactly: feedback 241,
+  auto-ingestion 55, corrections 56, training pairs 30, dataset ingestion log 11;
+  Chroma collections 425 / 2,119 / 28 / 60 / 0 (total 2,632).
+- Task 1.4 observed an aggregate Chroma file-digest change while collection
+  counts and the nine pre-existing dirty tracked Chroma paths remained unchanged;
+  the cause was not conclusively established. This task verified the authoritative
+  collection counts remained 425 / 2,119 / 28 / 60 / 0 after tests.
 - The hidden server was stopped immediately after checks. At 05:30 UTC, launcher PID `6040` and uvicorn PID `10468` were both absent, and no process was listening on port `8000`.
 
 ## Completed Features (as of 2026-05-11)

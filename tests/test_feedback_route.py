@@ -39,6 +39,11 @@ def feedback_log_path(tmp_path, monkeypatch):
 
     monkeypatch.setattr(fb, "FEEDBACK_DIR", tmp_path)
     monkeypatch.setattr(fb, "FEEDBACK_FILE", tmp_path / "feedback_log.jsonl")
+
+    def reject_real_ingestion(_record):
+        pytest.fail("Feedback tests must never call real correction ingestion")
+
+    monkeypatch.setattr(fb, "_auto_ingest_correction", reject_real_ingestion)
     return str(tmp_path / "feedback_log.jsonl")
 
 
@@ -195,6 +200,67 @@ def test_feedback_includes_timestamp(client, feedback_log_path):
 # ────────────────────────────────────────────────────────────────────────────
 # ChromaDB Ingestion: Corrections auto-update the database
 # ────────────────────────────────────────────────────────────────────────────
+
+def test_correction_is_saved_for_review_when_auto_ingest_is_off(
+    client, monkeypatch
+):
+    """Default-off corrections stay durable without mutating ChromaDB."""
+    from backend.api.routes import feedback
+
+    ingestion_calls = []
+    monkeypatch.setattr(
+        feedback, "_auto_ingest_correction", ingestion_calls.append
+    )
+
+    response = client.post(
+        "/api/v1/feedback",
+        json=_payload(verdict="wrong", expected_output="omwenge"),
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "saved"
+    assert ingestion_calls == []
+    assert "review" in response.json()["message"].lower()
+
+
+def test_correction_auto_ingest_can_be_enabled(client, monkeypatch):
+    """Opt-in mode queues one complete correction record."""
+    from backend.api.routes import feedback
+
+    ingestion_calls = []
+    monkeypatch.setattr(feedback, "CORRECTION_AUTO_INGEST", True)
+    monkeypatch.setattr(
+        feedback, "_auto_ingest_correction", ingestion_calls.append
+    )
+
+    response = client.post(
+        "/api/v1/feedback",
+        json=_payload(
+            input_text="beer",
+            direction="en_to_lg",
+            translated_text="amazzi",
+            verdict="wrong",
+            expected_output="omwenge",
+        ),
+    )
+
+    assert response.status_code == 200
+    assert response.json()["status"] == "saved"
+    assert "ChromaDB ingestion queued" in response.json()["message"]
+    assert len(ingestion_calls) == 1
+    assert ingestion_calls[0]["input_text"] == "beer"
+    assert ingestion_calls[0]["direction"] == "en_to_lg"
+    assert ingestion_calls[0]["translated_text"] == "amazzi"
+    assert ingestion_calls[0]["verdict"] == "wrong"
+    assert ingestion_calls[0]["expected_output"] == "omwenge"
+
+
+def test_correction_auto_ingest_config_defaults_to_false():
+    """Live Chroma correction ingestion is opt-in by default."""
+    from backend.core.config import CORRECTION_AUTO_INGEST
+
+    assert CORRECTION_AUTO_INGEST is False
+
 
 def test_correction_with_wrong_verdict_creates_training_pair(client):
     """When user provides correction (verdict=wrong), it's recorded for training."""

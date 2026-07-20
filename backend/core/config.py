@@ -50,6 +50,11 @@ HARVEST_SCHEDULER_ENABLED = (
     os.getenv("HARVEST_SCHEDULER_ENABLED", "false").lower() == "true"
 )
 
+# Corrections remain reviewable suggestions unless live ingestion is opted in.
+CORRECTION_AUTO_INGEST = (
+    os.getenv("CORRECTION_AUTO_INGEST", "false").lower() == "true"
+)
+
 # ─── Chat Settings ────────────────────────────────────────────
 CHAT_MAX_HISTORY = 10
 CHAT_CONTEXT_RESULTS = 5
