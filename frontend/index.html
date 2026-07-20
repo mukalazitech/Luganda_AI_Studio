@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Luganda AI Studio</title>
-  <script>(function(){const t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+  <script src="/app/theme.js"></script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#F7F0E6" />
   <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
@@ -132,22 +132,6 @@
 </nav>
 
 <script>
-function setTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem('theme', t);
-  updateThemeUI();
-}
-function toggleTheme() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  setTheme(isDark ? 'light' : 'dark');
-}
-function updateThemeUI() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  ['btnLight','heroLight'].forEach(id => document.getElementById(id)?.classList.toggle('active', !isDark));
-  ['btnDark','heroDark'].forEach(id   => document.getElementById(id)?.classList.toggle('active', isDark));
-  const mb = document.getElementById('mobileThemeBtn');
-  if (mb) mb.textContent = isDark ? '☀' : '🌙';
-}
 updateThemeUI();
 
 // Load stats from /api/v1/knowledge/status — show one friendly combined total.

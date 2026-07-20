@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Translate — Luganda AI Studio</title>
-  <script>(function(){const t=localStorage.getItem('theme');if(t==='dark')document.documentElement.setAttribute('data-theme','dark');})()</script>
+  <script src="/app/theme.js"></script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#E8E6DE" />
   <!-- CHANGED: PWA meta tags for iOS support -->
@@ -1027,24 +1027,6 @@ if ('serviceWorker' in navigator) {
 </script>
 
 <script>
-function setTheme(t) {
-  document.documentElement.setAttribute('data-theme', t);
-  localStorage.setItem('theme', t);
-  updateThemeUI();
-}
-function toggleTheme() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  setTheme(isDark ? 'light' : 'dark');
-}
-function updateThemeUI() {
-  const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
-  const btnLight = document.getElementById('btnLight');
-  const btnDark  = document.getElementById('btnDark');
-  const mobileBtn = document.getElementById('mobileThemeBtn');
-  if (btnLight) btnLight.classList.toggle('active', !isDark);
-  if (btnDark)  btnDark.classList.toggle('active', isDark);
-  if (mobileBtn) mobileBtn.textContent = isDark ? '☀' : '🌙';
-}
 updateThemeUI();
 </script>
 
