@@ -5,6 +5,12 @@
 html { font-size: 16px; scroll-behavior: smooth; }
 .hidden { display: none !important; }
 
+.icon {
+  width: 1.25em;
+  height: 1.25em;
+  vertical-align: -0.25em;
+}
+
 /* ── Tokens: Light mode (default) ───────────────────────────────────── */
 :root {
   --bg:             #F7F0E6;
@@ -297,6 +303,11 @@ a:hover { text-decoration: underline; }
 }
 
 .bnav-item:hover { text-decoration: none; }
+
+.bnav-item .icon {
+  width: 22px;
+  height: 22px;
+}
 
 .bnav-item.active {
   color: var(--lime-dark);
