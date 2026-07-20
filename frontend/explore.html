@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Explore — Luganda AI Studio</title>
+  <script src="/app/theme.js"></script>
+  <link rel="manifest" href="/app/manifest.json" />
+  <meta name="theme-color" content="#F7F0E6" />
+  <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Luganda AI" />
+  <link rel="apple-touch-icon" href="/app/icons/icon-192.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/app/styles.css" />
+  <style>
+    .explore-wrap{max-width:1040px;margin:auto;padding:40px 24px 48px}.explore-hero{display:grid;grid-template-columns:1.2fr .8fr;gap:28px;align-items:end;margin-bottom:32px}.eyebrow{color:var(--lime);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.75rem}.explore-title{font-size:clamp(2.3rem,6vw,4.6rem);line-height:.98;margin:10px 0 14px;letter-spacing:-.055em}.explore-lede{max-width:590px;color:var(--text-secondary);font-size:1.05rem;line-height:1.65}.search-form{display:flex;gap:10px;background:var(--bg-card);border:1px solid var(--border);padding:10px;border-radius:18px;box-shadow:var(--shadow-card)}.search-form input{min-width:0;flex:1;min-height:44px;border:0;background:transparent;color:var(--text-primary);font:inherit;padding:0 10px;outline:none}.search-form:focus-within{outline:3px solid var(--lime-glow);border-color:var(--border-focus)}.search-form button{min-height:44px;white-space:nowrap}.collection-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.collection-card{position:relative;display:grid;grid-template-columns:72px 1fr auto;gap:18px;align-items:center;min-width:0;padding:24px;color:var(--text-primary);background:var(--bg-card);border:1px solid var(--border);border-radius:20px;text-decoration:none;box-shadow:var(--shadow-card);transition:transform var(--transition),border-color var(--transition)}.collection-card:hover{transform:translateY(-3px);border-color:var(--lime)}.collection-card:focus-visible{outline:3px solid var(--lime-glow);outline-offset:3px}.medallion{width:72px;height:72px;display:grid;place-items:center;border-radius:50%;background:var(--card-medallion-bg);font-size:2rem}.collection-card h2{font-size:1.25rem;margin:0 0 5px}.collection-card p{margin:0;color:var(--text-secondary);line-height:1.45}.count{align-self:start;min-width:48px;padding:6px 10px;border-radius:999px;background:var(--lime-bg);color:var(--lime);text-align:center;font-weight:800}.arrow{position:absolute;right:22px;bottom:17px;color:var(--text-muted)}.connection{margin:16px 0 0;padding:12px 16px;min-height:44px;border-radius:12px;background:var(--amber-bg);color:var(--text-secondary)}
+    @media(max-width:760px){.explore-wrap{padding:28px 16px 108px}.explore-hero{grid-template-columns:1fr}.collection-grid{grid-template-columns:1fr}.collection-card{grid-template-columns:60px minmax(0,1fr) auto;padding:18px}.medallion{width:60px;height:60px}.search-form{flex-wrap:wrap}.search-form button{width:100%}}@media(max-width:340px){.collection-card{grid-template-columns:52px minmax(0,1fr);gap:12px}.medallion{width:52px;height:52px}.count{grid-column:2;justify-self:start}.arrow{display:none}}
+  </style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">Luganda <span>AI</span></div>
+    <nav class="sidebar-nav">
+      <a href="index.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg>Home</a>
+      <a href="translate.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg>Translate</a>
+      <a href="learn.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg>Learn</a>
+      <a href="explore.html" class="sidebar-link active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg>Explore</a>
+      <a href="search.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-search"></use></svg>Search</a>
+      <a href="chat.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg>Chat</a>
+    </nav>
+    <div class="sidebar-footer"><div class="theme-pill"><button class="theme-pill-btn" id="btnLight" onclick="setTheme('light')">☀ Light</button><button class="theme-pill-btn" id="btnDark" onclick="setTheme('dark')">🌙 Dark</button></div><div class="sidebar-version">v1.1 · Luganda AI Studio</div></div>
+  </aside>
+  <header class="mobile-topbar"><span class="mobile-topbar-title">Explore</span><button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" aria-label="Switch theme">☀</button></header>
+  <main class="main-content"><div class="explore-wrap">
+    <section class="explore-hero"><div><div class="eyebrow">Mu Luganda · In Luganda</div><h1 class="explore-title">Wander through the language.</h1><p class="explore-lede">Open a collection to discover the wisdom, patterns, and everyday words that make Luganda feel alive.</p></div>
+      <form class="search-form" id="exploreSearch"><label class="sr-only" for="exploreQuery">Search Luganda</label><input id="exploreQuery" type="search" placeholder="Search any word or idea…" autocomplete="off" /><button class="btn-primary" type="submit">Search</button></form>
+    </section>
+    <div class="collection-grid">
+      <a class="collection-card" href="proverbs.html"><span class="medallion" aria-hidden="true">🌿</span><span><h2>Proverbs</h2><p>Carry generations of Kiganda wisdom in a few memorable words.</p></span><span class="count" id="proverbsCount" aria-label="Loading proverb count">—</span><span class="arrow" aria-hidden="true">→</span></a>
+      <a class="collection-card" href="grammar.html"><span class="medallion" aria-hidden="true">✦</span><span><h2>Grammar</h2><p>See the useful patterns that hold Luganda sentences together.</p></span><span class="count" id="grammarCount" aria-label="Loading grammar count">—</span><span class="arrow" aria-hidden="true">→</span></a>
+      <a class="collection-card" href="phrases.html"><span class="medallion" aria-hidden="true">💬</span><span><h2>Phrases</h2><p>Hear and practise language for ordinary conversations.</p></span><span class="count" id="phrasesCount" aria-label="Loading phrase count">—</span><span class="arrow" aria-hidden="true">→</span></a>
+      <a class="collection-card" href="library.html"><span class="medallion" aria-hidden="true">📚</span><span><h2>Word Library</h2><p>Browse useful vocabulary organised by real-life categories.</p></span><span class="count" id="vocabularyCount" aria-label="Loading vocabulary count">—</span><span class="arrow" aria-hidden="true">→</span></a>
+    </div>
+    <p class="connection" id="connectionStatus" role="status" hidden>The local library is resting. You can still open every collection and try again there.</p>
+  </div></main>
+</div>
+<nav class="bottom-nav"><div class="bottom-nav-inner">
+  <a href="index.html" class="bnav-item" data-page="index"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg><span class="bnav-label">Home</span></a>
+  <a href="translate.html" class="bnav-item" data-page="translate"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg><span class="bnav-label">Translate</span></a>
+  <a href="learn.html" class="bnav-item" data-page="learn"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg><span class="bnav-label">Learn</span></a>
+  <a href="explore.html" class="bnav-item active" data-page="explore" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg><span class="bnav-label">Explore</span></a>
+</div></nav>
+<script>
+  document.getElementById('exploreSearch').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const query = document.getElementById('exploreQuery').value.trim();
+    if (query) location.href = `search.html?q=${encodeURIComponent(query)}`;
+  });
+  const counts = [
+    ['/api/v1/library/proverbs?count_only=true', 'proverbsCount', 'proverbs'],
+    ['/api/v1/library/grammar?count_only=true', 'grammarCount', 'grammar sections'],
+    ['/api/v1/library/phrases?count_only=true', 'phrasesCount', 'phrases'],
+    ['/api/v1/library/vocabulary?count_only=true', 'vocabularyCount', 'words'],
+  ];
+  Promise.allSettled(counts.map(async ([url, id, label]) => {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('Library unavailable');
+    const data = await response.json();
+    const node = document.getElementById(id);
+    node.textContent = Number.isFinite(data.count) ? String(data.count) : '—';
+    node.setAttribute('aria-label', `${node.textContent} ${label}`);
+  })).then((results) => {
+    if (results.some((result) => result.status === 'rejected')) document.getElementById('connectionStatus').hidden = false;
+  });
+</script>
+</body>
+</html>

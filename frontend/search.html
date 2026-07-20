@@ -371,6 +371,15 @@
     }
   }
 
+  // CHANGED: accept query handoffs from the Explore hub.
+  document.addEventListener('DOMContentLoaded', () => {
+    const query = new URLSearchParams(location.search).get('q')?.trim();
+    if (query) {
+      document.getElementById('searchInput').value = query;
+      runSearch();
+    }
+  });
+
   // Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
