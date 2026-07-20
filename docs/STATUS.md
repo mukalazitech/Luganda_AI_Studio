@@ -5,6 +5,33 @@
 
 ---
 
+## 2026-07 pilot baseline
+
+> Local-only runtime baseline captured 2026-07-20 at 05:29 UTC from `C:\tmp\Luganda_AI_Studio-balanced-pilot`. This is not deployed-state evidence. The server used the canonical `D:\projects\Luganda_AI_Studio\venv\Scripts\python.exe` interpreter (`Python 3.11.9`) and ran without reload on `127.0.0.1:8000`.
+
+### Runtime responses
+
+- Health response from `GET /api/v1/health`: `{"status":"ok","app_name":"Luganda AI Studio","version":"1.0.0","message":"Luganda AI Studio backend is running."}`
+- Authoritative Chroma runtime counts from `GET /api/v1/knowledge/status`: `{"collections":{"vocabulary":425,"sentences":2119,"grammar":28,"proverbs":60,"documents":0},"total_documents":2632}`. These are live local Chroma collection counts, not JSON file counts.
+
+| Route | HTTP | Validation |
+|---|---:|---|
+| `/api/v1/health` | 200 | Valid JSON; 114-character response |
+| `/api/v1/knowledge/status` | 200 | Valid JSON; 115-character response |
+| `/app/index.html` | 200 | Valid non-empty HTML; 7,596 characters |
+| `/app/translate.html` | 200 | Valid non-empty HTML; 49,454 characters |
+| `/app/search.html` | 200 | Valid non-empty HTML; 16,634 characters |
+| `/app/teach.html` | 200 | Valid non-empty HTML; 30,732 characters |
+| `/app/reviews.html` | 200 | Valid non-empty HTML; 14,887 characters |
+| `/app/admin.html` | 200 | Valid non-empty HTML; 10,777 characters |
+| `/app/chat.html` | 200 | Valid non-empty HTML; 18,247 characters |
+
+### Verification and shutdown
+
+- Frontend `node --test`: 12 tests, 12 passed, 0 failed, 0 cancelled, 0 skipped, 0 todo.
+- No backend tests were run for this baseline task.
+- The hidden server was stopped immediately after checks. At 05:30 UTC, launcher PID `6040` and uvicorn PID `10468` were both absent, and no process was listening on port `8000`.
+
 ## Completed Features (as of 2026-05-11)
 
 | Feature | Notes |
