@@ -45,6 +45,11 @@ OPENROUTER_MODEL = os.getenv("OPENROUTER_MODEL", "google/gemma-2-9b-it:free")  #
 OPENROUTER_TIMEOUT_SECONDS = float(os.getenv("OPENROUTER_TIMEOUT_SECONDS", "8"))  # CHANGED: new for OpenRouter
 OPENROUTER_DAILY_LIMIT_USD = float(os.getenv("OPENROUTER_DAILY_LIMIT_USD", "0.10"))  # CHANGED: new for OpenRouter
 
+# The in-process nightly harvest+ingest loop mutates ChromaDB. It is opt-in.
+HARVEST_SCHEDULER_ENABLED = (
+    os.getenv("HARVEST_SCHEDULER_ENABLED", "false").lower() == "true"
+)
+
 # ─── Chat Settings ────────────────────────────────────────────
 CHAT_MAX_HISTORY = 10
 CHAT_CONTEXT_RESULTS = 5

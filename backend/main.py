@@ -12,6 +12,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
 from backend.api.routes import health, knowledge, translate, teach, feedback, chat, tts, admin, stt
+from backend.core.config import HARVEST_SCHEDULER_ENABLED
 
 logger = logging.getLogger("luganda.scheduler")
 
@@ -76,17 +77,23 @@ async def _nightly_harvest_loop() -> None:
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    task = asyncio.create_task(_nightly_harvest_loop())
-    logger.info("Scheduler: nightly harvest task started")
+    task = None
+    if HARVEST_SCHEDULER_ENABLED:
+        task = asyncio.create_task(_nightly_harvest_loop())
+        logger.info("Scheduler: nightly harvest task started")
+    else:
+        logger.info("Scheduler: nightly harvest task disabled")
+    app.state.harvest_task = task
     try:
         yield
     finally:
-        task.cancel()
-        try:
-            await task
-        except asyncio.CancelledError:
-            pass
-        logger.info("Scheduler: nightly harvest task stopped")
+        if task is not None:
+            task.cancel()
+            try:
+                await task
+            except asyncio.CancelledError:
+                pass
+            logger.info("Scheduler: nightly harvest task stopped")
 
 
 app = FastAPI(
