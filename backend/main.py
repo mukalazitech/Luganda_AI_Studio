@@ -11,7 +11,7 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from pathlib import Path
 
-from backend.api.routes import health, knowledge, translate, teach, feedback, chat, tts, admin, stt
+from backend.api.routes import health, knowledge, translate, teach, feedback, chat, tts, admin, stt, library
 from backend.core.config import HARVEST_SCHEDULER_ENABLED
 
 logger = logging.getLogger("luganda.scheduler")
@@ -122,6 +122,7 @@ app.include_router(chat.router,       prefix="/api/v1/chat",       tags=["Chat"]
 app.include_router(tts.router,        prefix="/api/v1/tts",        tags=["TTS"])
 app.include_router(stt.router,        prefix="/api/v1/stt",        tags=["STT"])
 app.include_router(admin.router,      prefix="/api/v1/admin",      tags=["Admin"])
+app.include_router(library.router,    prefix="/api/v1/library",    tags=["Library"])
 
 # ─── Frontend Static Files ────────────────────────────────────
 frontend_path = Path(__file__).resolve().parent.parent / "frontend"
