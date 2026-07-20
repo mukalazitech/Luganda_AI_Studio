@@ -8,33 +8,36 @@ html { font-size: 16px; scroll-behavior: smooth; }
 /* ── Tokens: Light mode (default) ───────────────────────────────────── */
 :root {
   --bg:             #F7F0E6;
-  --bg-card:        #FFF8EF;
-  --bg-card-hover:  #F5EAD8;
-  --bg-input:       #FFFFFF;
-  --border:         #E2D5C3;
-  --border-focus:   #C1440E;
+  --bg-card:        #FFFAF2;
+  --bg-card-hover:  #F0E7D8;
+  --bg-input:       #FFFDF8;
+  --border:         #DED4C4;
+  --border-focus:   #356844;
 
-  --lime:           #C1440E;
-  --lime-dim:       #A83A0C;
-  --lime-dark:      #8C2E08;
-  --lime-glow:      rgba(193, 68, 14, 0.20);
-  --lime-bg:        rgba(193, 68, 14, 0.08);
+  --lime:           #356844;
+  --lime-dim:       #2C5938;
+  --lime-dark:      #234A30;
+  --lime-glow:      rgba(53, 104, 68, 0.20);
+  --lime-bg:        rgba(53, 104, 68, 0.10);
 
-  --text-primary:   #2C1810;
-  --text-secondary: #7A5A48;
-  --text-muted:     #B09070;
-  --text-on-lime:   #F7F0E6;
+  --text-primary:   #182A20;
+  --text-secondary: #4F5C52;
+  --text-muted:     #62685F;
+  --text-on-lime:   #FFF8EF;
 
-  --green:          #2E7D32;
-  --red:            #C62828;
-  --red-bg:         #FFEBEE;
-  --red-border:     #EF9A9A;
-  --success:        #2E7D32;
-  --success-bg:     #E8F5E9;
-  --success-border: #A5D6A7;
-  --amber:          #E8A87C;
-  --amber-bg:       #FDF3E8;
-  --amber-border:   #DEBA96;
+  --green:          #2F6D42;
+  --red:            #A33A32;
+  --red-bg:         #FBE8E3;
+  --red-border:     #D99A8B;
+  --success:        var(--green);
+  --danger:         var(--red);
+  --success-bg:     #E7F0E6;
+  --success-border: #9DBB99;
+  --amber:          #A84B25;
+  --amber-bg:       #F5DFD2;
+  --amber-border:   #DCA989;
+  --icon-accent:    #C35A27;
+  --card-medallion-bg: #E7EDCF;
 
   --font-display:   'Figtree', sans-serif;
   --font-body:      'DM Sans', sans-serif;
@@ -53,33 +56,42 @@ html { font-size: 16px; scroll-behavior: smooth; }
   /* CHANGED: CSS variable aliases for translate.html */
   --border-subtle:  var(--border);
   --surface:        var(--bg-card);
-  --accent:         var(--lime);
+  --accent:         var(--icon-accent);
 }
 
 /* ── Tokens: Dark mode ───────────────────────────────────────────────── */
 [data-theme="dark"] {
-  --bg:             #1C1208;
-  --bg-card:        #261A0E;
-  --bg-card-hover:  #301F10;
-  --bg-input:       #1C1208;
-  --border:         #3A2818;
-  --border-focus:   #E8824A;
+  --bg:             #221A14;
+  --bg-card:        #2B2118;
+  --bg-card-hover:  #35291F;
+  --bg-input:       #271E17;
+  --border:         #4B3A2D;
+  --border-focus:   #9AC06A;
 
-  --text-primary:   #F5EDD8;
-  --text-secondary: #A08060;
-  --text-muted:     #6A5040;
-  --text-on-lime:   #1C1208;
+  --lime:           #9AC06A;
+  --lime-dim:       #88AE5A;
+  --lime-dark:      #B2D183;
+  --lime-glow:      rgba(154, 192, 106, 0.24);
+  --lime-bg:        rgba(154, 192, 106, 0.14);
 
-  --green:          #3FB950;
-  --red:            #F85149;
-  --red-bg:         #1E0A0A;
-  --red-border:     #5C1A1A;
-  --success:        #3FB950;
-  --success-bg:     #091A0F;
-  --success-border: #1A4A28;
-  --amber:          #F0A500;
-  --amber-bg:       #1C1205;
-  --amber-border:   #7A5212;
+  --text-primary:   #F7F1E7;
+  --text-secondary: #CDC4B8;
+  --text-muted:     #AEA69A;
+  --text-on-lime:   #221A14;
+
+  --green:          #8FBE75;
+  --red:            #F08A78;
+  --red-bg:         #3A211C;
+  --red-border:     #744338;
+  --success:        var(--green);
+  --danger:         var(--red);
+  --success-bg:     #243325;
+  --success-border: #456345;
+  --amber:          #EF8A52;
+  --amber-bg:       #4A2C21;
+  --amber-border:   #7E4A34;
+  --icon-accent:    #EF8A52;
+  --card-medallion-bg: #303C2D;
 
   --shadow-card:    0 1px 4px rgba(0,0,0,0.35), 0 4px 16px rgba(0,0,0,0.3);
   --shadow-modal:   0 8px 40px rgba(0,0,0,0.55);
@@ -87,7 +99,7 @@ html { font-size: 16px; scroll-behavior: smooth; }
   /* CHANGED: CSS variable aliases for translate.html */
   --border-subtle:  var(--border);
   --surface:        var(--bg-card);
-  --accent:         var(--lime);
+  --accent:         var(--icon-accent);
 }
 
 /* ── Base ────────────────────────────────────────────────────────────── */
