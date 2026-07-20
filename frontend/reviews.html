@@ -24,20 +24,18 @@
   <!-- Sidebar (desktop) -->
   <aside class="sidebar">
     <div class="sidebar-brand">Luganda <span>AI</span></div>
+    <div class="sidebar-internal-label"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-settings"></use></svg>Studio internal</div>
     <nav class="sidebar-nav">
-      <a href="index.html"     class="sidebar-link">⌂ Home</a>
-      <a href="translate.html" class="sidebar-link">⇄ Translate</a>
-      <a href="search.html"    class="sidebar-link">◎ Search</a>
-      <a href="teach.html"     class="sidebar-link">📖 Teach</a>
-      <a href="reviews.html"   class="sidebar-link active">★ Reviews</a>
-      <a href="admin.html"     class="sidebar-link">⚙ Admin</a>
+      <a href="reviews.html" class="sidebar-link active"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-correct"></use></svg>Reviews</a>
+      <a href="admin.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-settings"></use></svg>Admin</a>
+      <a href="index.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-back"></use></svg>Back to app</a>
     </nav>
     <div class="sidebar-footer">
       <div class="theme-pill">
         <button class="theme-pill-btn" id="btnLight" onclick="setTheme('light')">☀ Light</button>
         <button class="theme-pill-btn" id="btnDark"  onclick="setTheme('dark')">🌙 Dark</button>
       </div>
-      <div class="sidebar-version">v1.0 · Luganda AI Studio</div>
+      <div class="sidebar-version">v1.1 · Luganda AI Studio</div>
     </div>
   </aside>
 
@@ -135,16 +133,6 @@
     </div><!-- /.container -->
   </main><!-- /.main-content -->
 </div><!-- /.app-shell -->
-
-<!-- Bottom nav (mobile) — reviews is secondary, no active tab -->
-<nav class="bottom-nav">
-  <div class="bottom-nav-inner">
-    <a href="index.html"     class="bnav-item" data-page="index"><span class="bnav-icon">⌂</span><span class="bnav-label">Home</span></a>
-    <a href="translate.html" class="bnav-item" data-page="translate"><span class="bnav-icon">⇄</span><span class="bnav-label">Translate</span></a>
-    <a href="search.html"    class="bnav-item" data-page="search"><span class="bnav-icon">◎</span><span class="bnav-label">Search</span></a>
-    <a href="teach.html"     class="bnav-item" data-page="teach"><span class="bnav-icon">📖</span><span class="bnav-label">Teach</span></a>
-  </div>
-</nav>
 
 <script>
 'use strict';
