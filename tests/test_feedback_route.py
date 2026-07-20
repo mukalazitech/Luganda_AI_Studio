@@ -19,6 +19,8 @@ FeedbackResponse returns status="saved" (not "success").
 
 import json
 import os
+from pathlib import Path
+
 import pytest
 from fastapi.testclient import TestClient
 from backend.main import app
@@ -30,10 +32,14 @@ def client():
         yield c
 
 
-@pytest.fixture
-def feedback_log_path():
-    """Path to feedback log file."""
-    return "data/feedback/feedback_log.jsonl"
+@pytest.fixture(autouse=True)
+def feedback_log_path(tmp_path, monkeypatch):
+    """Route every feedback test to an isolated temporary log."""
+    from backend.api.routes import feedback as fb
+
+    monkeypatch.setattr(fb, "FEEDBACK_DIR", tmp_path)
+    monkeypatch.setattr(fb, "FEEDBACK_FILE", tmp_path / "feedback_log.jsonl")
+    return str(tmp_path / "feedback_log.jsonl")
 
 
 # ── Minimal valid payload ─────────────────────────────────────────────────────
@@ -60,6 +66,36 @@ def test_feedback_correct_verdict_returns_200(client):
     assert response.status_code == 200
     data = response.json()
     assert data["status"] == "saved"
+
+
+def test_feedback_tests_do_not_touch_real_log(
+    client, feedback_log_path, tmp_path
+):
+    """Feedback tests write only to their temporary log."""
+    temp_log = Path(feedback_log_path)
+    real_log = Path("data/feedback/feedback_log.jsonl").resolve()
+
+    assert temp_log == tmp_path / "feedback_log.jsonl"
+
+    real_lines_before = len(real_log.read_text(encoding="utf-8").splitlines())
+    temp_lines_before = (
+        len(temp_log.read_text(encoding="utf-8").splitlines())
+        if temp_log.exists()
+        else 0
+    )
+
+    response = client.post(
+        "/api/v1/feedback", json=_payload(verdict="correct")
+    )
+
+    assert response.status_code == 200
+    assert temp_log.exists()
+    temp_lines_after = len(
+        temp_log.read_text(encoding="utf-8").splitlines()
+    )
+    real_lines_after = len(real_log.read_text(encoding="utf-8").splitlines())
+    assert temp_lines_after == temp_lines_before + 1
+    assert real_lines_after == real_lines_before
 
 
 def test_feedback_wrong_verdict_returns_200(client):
@@ -113,7 +149,7 @@ def test_feedback_saved_to_jsonl_file(client, feedback_log_path):
     """Feedback is appended to feedback_log.jsonl."""
     lines_before = 0
     if os.path.exists(feedback_log_path):
-        with open(feedback_log_path, "r") as f:
+        with open(feedback_log_path, "r", encoding="utf-8") as f:
             lines_before = sum(1 for _ in f)
 
     response = client.post("/api/v1/feedback", json=_payload())
@@ -121,10 +157,10 @@ def test_feedback_saved_to_jsonl_file(client, feedback_log_path):
 
     lines_after = 0
     if os.path.exists(feedback_log_path):
-        with open(feedback_log_path, "r") as f:
+        with open(feedback_log_path, "r", encoding="utf-8") as f:
             lines_after = sum(1 for _ in f)
 
-    assert lines_after >= lines_before
+    assert lines_after == lines_before + 1
 
 
 def test_feedback_jsonl_has_valid_json(client, feedback_log_path):
@@ -132,15 +168,15 @@ def test_feedback_jsonl_has_valid_json(client, feedback_log_path):
     response = client.post("/api/v1/feedback", json=_payload())
     assert response.status_code == 200
 
-    if os.path.exists(feedback_log_path):
-        with open(feedback_log_path, "r") as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    try:
-                        json.loads(line)
-                    except json.JSONDecodeError:
-                        pytest.fail(f"Invalid JSON in feedback log: {line}")
+    assert os.path.exists(feedback_log_path)
+    with open(feedback_log_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    assert len(lines) == 1
+    for line in lines:
+        try:
+            json.loads(line)
+        except json.JSONDecodeError:
+            pytest.fail(f"Invalid JSON in feedback log: {line.strip()}")
 
 
 def test_feedback_includes_timestamp(client, feedback_log_path):
@@ -148,12 +184,12 @@ def test_feedback_includes_timestamp(client, feedback_log_path):
     response = client.post("/api/v1/feedback", json=_payload())
     assert response.status_code == 200
 
-    if os.path.exists(feedback_log_path):
-        with open(feedback_log_path, "r") as f:
-            lines = f.readlines()
-            if lines:
-                last_entry = json.loads(lines[-1].strip())
-                assert "timestamp" in last_entry or "created_at" in last_entry
+    assert os.path.exists(feedback_log_path)
+    with open(feedback_log_path, "r", encoding="utf-8") as f:
+        lines = f.readlines()
+    assert len(lines) == 1
+    last_entry = json.loads(lines[0])
+    assert "timestamp" in last_entry or "created_at" in last_entry
 
 
 # ────────────────────────────────────────────────────────────────────────────
