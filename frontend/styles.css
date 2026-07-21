@@ -974,12 +974,18 @@ textarea.input-field { resize: vertical; min-height: 100px; }
 .home-contribution-mascot {
   align-self: end;
   margin: 0;
+  overflow: hidden;
+  padding: 18px 14px 0;
+  background: var(--card-medallion-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 50% 50% var(--radius-lg) var(--radius-lg);
 }
 
 .home-contribution-mascot .mascot-img {
   width: clamp(125px, 17vw, 178px);
   max-width: 24vw;
-  border-radius: var(--radius) var(--radius) 0 0;
+  border-radius: var(--radius);
+  display: block;
 }
 
 .home-tools-section {
