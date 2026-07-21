@@ -89,4 +89,15 @@
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', updateThemeUI, { once: true });
   }
+
+  // Single service-worker registration for every page that loads theme.js —
+  // i.e. all learner pages, including the newer ones (explore, proverbs, grammar,
+  // phrases, library, learn) that never registered it before. This replaces the
+  // per-page registration snippets. CACHE_NAME and the fetch handler are unchanged.
+  if ('serviceWorker' in navigator) {
+    global.addEventListener('load', () => {
+      navigator.serviceWorker.register('/app/service-worker.js', { scope: '/app/' })
+        .catch(() => {});
+    });
+  }
 })(typeof window !== 'undefined' ? window : globalThis);

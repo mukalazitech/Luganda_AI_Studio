@@ -362,12 +362,7 @@ function showMore() {
 /* ─── BOOT ──────────────────────────────────────── */
 loadFeedback();
 
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/app/service-worker.js', { scope: '/app/' })
-      .catch(err => console.warn('SW registration failed:', err));
-  });
-}
+// Service worker is registered once from the shared theme.js.
 
 updateThemeUI();
 </script>
