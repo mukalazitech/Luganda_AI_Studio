@@ -1,0 +1,57 @@
+{
+  "metadata": { "title": "Beginner Path", "version": 1, "created": "2026-07-21" },
+  "lessons": [
+    {
+      "id": "lesson_greetings",
+      "title": "Greetings",
+      "icon": "phrases",
+      "steps": [
+        { "ref_type": "sentence", "ref": "gr_001", "mode": "show" },
+        { "ref_type": "sentence", "ref": "gr_002", "mode": "show" },
+        { "ref_type": "sentence", "ref": "gr_003", "mode": "choice" },
+        { "ref_type": "sentence", "ref": "gr_004", "mode": "show" },
+        { "ref_type": "sentence", "ref": "gr_005", "mode": "choice" }
+      ]
+    },
+    {
+      "id": "lesson_family",
+      "title": "Family words",
+      "icon": "library",
+      "steps": [
+        { "ref_type": "vocabulary", "ref": "family:Maama", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "family:Taata", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "family:Mwana", "mode": "choice" },
+        { "ref_type": "vocabulary", "ref": "family:Mulenzi", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "family:Muwala", "mode": "choice" },
+        { "ref_type": "vocabulary", "ref": "family:Kojja", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "family:Senga", "mode": "choice" }
+      ]
+    },
+    {
+      "id": "lesson_numbers",
+      "title": "Counting",
+      "icon": "library",
+      "steps": [
+        { "ref_type": "vocabulary", "ref": "numbers:Emu", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "numbers:Bbiri", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "numbers:Ssatu", "mode": "choice" },
+        { "ref_type": "vocabulary", "ref": "numbers:Nnya", "mode": "show" },
+        { "ref_type": "vocabulary", "ref": "numbers:Ttaano", "mode": "choice" },
+        { "ref_type": "vocabulary", "ref": "numbers:Kkumi", "mode": "choice" }
+      ]
+    },
+    {
+      "id": "lesson_everyday",
+      "title": "Everyday needs",
+      "icon": "phrases",
+      "steps": [
+        { "ref_type": "sentence", "ref": "dl_001", "mode": "show" },
+        { "ref_type": "sentence", "ref": "dl_003", "mode": "show" },
+        { "ref_type": "sentence", "ref": "dl_004", "mode": "choice" },
+        { "ref_type": "sentence", "ref": "dl_006", "mode": "show" },
+        { "ref_type": "sentence", "ref": "dl_009", "mode": "choice" },
+        { "ref_type": "sentence", "ref": "dl_013", "mode": "choice" }
+      ]
+    }
+  ]
+}
