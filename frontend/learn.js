@@ -86,6 +86,7 @@ if (typeof document !== 'undefined') {
         const chosen = document.querySelector(`.setup-option[data-group="${group}"].selected`);
         if (chosen) localStorage.setItem(key, chosen.dataset.value);
       });
+      if (typeof sendEvent === 'function') sendEvent('onboarding_completed');
       renderPath();
       show('path');
     });
@@ -121,6 +122,7 @@ if (typeof document !== 'undefined') {
   // ── Player ──────────────────────────────────────────────────
   function startLesson(lesson) {
     state.current = { lesson, index: 0, results: [] };
+    if (typeof sendEvent === 'function') sendEvent('lesson_started', lesson.id);
     show('player');
     renderStep();
   }
@@ -233,6 +235,7 @@ if (typeof document !== 'undefined') {
     const done = readLessonState();
     done[lesson.id] = { completed: true, correct: score.correct, wrong: score.wrong };
     writeLessonState(done);
+    if (typeof sendEvent === 'function') sendEvent('lesson_completed', lesson.id);
 
     const line = document.getElementById('summary-score');
     if (line) line.textContent = `${score.correct} of ${score.seen} right.`;
@@ -289,7 +292,9 @@ if (typeof document !== 'undefined') {
     }
 
     renderPath();
-    show(hasSetup() ? 'path' : 'setup');
+    const startAt = hasSetup() ? 'path' : 'setup';
+    if (startAt === 'setup' && typeof sendEvent === 'function') sendEvent('onboarding_started');
+    show(startAt);
   }
 
   document.addEventListener('DOMContentLoaded', init);

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Translate — Luganda AI Studio</title>
   <script src="/app/theme.js"></script>
+  <script src="/app/pilot-events.js"></script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#E8E6DE" />
   <!-- CHANGED: PWA meta tags for iOS support -->
@@ -588,6 +589,7 @@ async function submitWithExpected() {
     if (response.ok) {
       if (st) { st.textContent = '✓ Thanks — saved'; st.style.color = 'var(--success,#3daa60)'; }
       showMascot('celebrate');
+      sendEvent('correction_submitted');
       // Update local entry too
       currentEntry.expected = expected;
       currentEntry.verdict  = currentFeedback || 'wrong';
@@ -951,6 +953,18 @@ if ('serviceWorker' in navigator) {
 }
 
 /* ─────────────────────────────────────────────────
+   ANONYMOUS PILOT SIGNALS — identifiers only
+───────────────────────────────────────────────── */
+sendEvent('tool_opened', 'translate');
+let _correctionStartedSent = false;
+document.addEventListener('focusin', (e) => {
+  if (!_correctionStartedSent && e.target && e.target.id === 'expectedInput') {
+    _correctionStartedSent = true;
+    sendEvent('correction_started');
+  }
+});
+
+/* ─────────────────────────────────────────────────
    TTS — SPEAKER BUTTON
 ───────────────────────────────────────────────── */
 (function () {
@@ -966,6 +980,7 @@ if ('serviceWorker' in navigator) {
 
   btn.addEventListener('click', function () {
     if (!_ttsLugandaText) return;
+    sendEvent('tool_opened', 'listen');
     _playTTS(_ttsLugandaText, btn);
   });
 

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Search — Luganda AI Studio</title>
   <script src="/app/theme.js"></script>
+  <script src="/app/pilot-events.js"></script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#E8E6DE" />
   <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
@@ -373,6 +374,7 @@
 
   // CHANGED: accept query handoffs from the Explore hub.
   document.addEventListener('DOMContentLoaded', () => {
+    sendEvent('tool_opened', 'search');
     const query = new URLSearchParams(location.search).get('q')?.trim();
     if (query) {
       document.getElementById('searchInput').value = query;

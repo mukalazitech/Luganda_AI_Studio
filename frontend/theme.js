@@ -54,6 +54,10 @@
       // Theme switching still works when browser storage is unavailable.
     }
     applyTheme(theme);
+    // Anonymous pilot signal — target is the theme name only.
+    if (typeof global.sendEvent === 'function') {
+      global.sendEvent('theme_changed', theme);
+    }
   }
 
   function toggleTheme() {

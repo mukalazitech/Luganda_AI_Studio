@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Chat — Luganda AI Studio</title>
   <script src="/app/theme.js"></script>
+  <script src="/app/pilot-events.js"></script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#F7F0E6" />
   <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
@@ -100,6 +101,7 @@
 
   // ── On load: prefill from Translate handoff, check chat status ──
   window.addEventListener('load', () => {
+    sendEvent('tool_opened', 'chat');
     const prefill = sessionStorage.getItem('chat.prefill');
     if (prefill) {
       const input = document.getElementById('messageInput');

@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Luganda AI Studio</title>
   <script src="/app/theme.js"></script>
+  <script src="/app/pilot-events.js"></script>
   <link rel="manifest" href="/app/manifest.json" />
   <meta name="theme-color" content="#F7F0E6" />
   <link rel="icon" type="image/svg+xml" href="/app/favicon.svg" />
@@ -104,7 +105,7 @@
           <h2 id="collectionsTitle">Choose a path into the language.</h2>
         </div>
         <div class="home-collection-grid">
-          <a href="proverbs.html" class="home-collection-card">
+          <a href="proverbs.html" class="home-collection-card" data-pev="proverbs">
             <span class="home-collection-medallion"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-proverbs"></use></svg></span>
             <span class="home-collection-copy">
               <span class="home-collection-name">Proverbs</span>
@@ -112,7 +113,7 @@
             </span>
             <span class="home-collection-arrow" aria-hidden="true">→</span>
           </a>
-          <a href="grammar.html" class="home-collection-card">
+          <a href="grammar.html" class="home-collection-card" data-pev="grammar">
             <span class="home-collection-medallion"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-grammar"></use></svg></span>
             <span class="home-collection-copy">
               <span class="home-collection-name">Grammar</span>
@@ -120,7 +121,7 @@
             </span>
             <span class="home-collection-arrow" aria-hidden="true">→</span>
           </a>
-          <a href="phrases.html" class="home-collection-card">
+          <a href="phrases.html" class="home-collection-card" data-pev="phrases">
             <span class="home-collection-medallion"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-phrases"></use></svg></span>
             <span class="home-collection-copy">
               <span class="home-collection-name">Everyday Phrases</span>
@@ -128,7 +129,7 @@
             </span>
             <span class="home-collection-arrow" aria-hidden="true">→</span>
           </a>
-          <a href="library.html" class="home-collection-card">
+          <a href="library.html" class="home-collection-card" data-pev="library">
             <span class="home-collection-medallion"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-library"></use></svg></span>
             <span class="home-collection-copy">
               <span class="home-collection-name">Word Library</span>
@@ -157,9 +158,9 @@
           <h2 id="toolsTitle">Use Luganda as you learn it.</h2>
         </div>
         <div class="home-tools-row">
-          <a href="translate.html" class="home-tool-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg><span>Translate</span></a>
-          <a href="translate.html" class="home-tool-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-listen"></use></svg><span>Listen</span></a>
-          <a href="chat.html" class="home-tool-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg><span>Chat</span></a>
+          <a href="translate.html" class="home-tool-link" data-tool="translate"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg><span>Translate</span></a>
+          <a href="translate.html" class="home-tool-link" data-tool="listen"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-listen"></use></svg><span>Listen</span></a>
+          <a href="chat.html" class="home-tool-link" data-tool="chat"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg><span>Chat</span></a>
         </div>
       </section>
 
@@ -253,6 +254,14 @@ fetchJSON('/api/v1/teach/progress')
   fetchJSON(url)
     .then(data => renderCount(elementId, countFromResponse(data)))
     .catch(() => {});
+});
+
+// Anonymous pilot signals — curated slugs only, never learner input.
+document.querySelectorAll('[data-pev]').forEach((el) => {
+  el.addEventListener('click', () => sendEvent('home_destination_opened', el.dataset.pev));
+});
+document.querySelectorAll('[data-tool]').forEach((el) => {
+  el.addEventListener('click', () => sendEvent('tool_opened', el.dataset.tool));
 });
 </script>
 </body>

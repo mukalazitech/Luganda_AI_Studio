@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Proverbs — Luganda AI Studio</title>
-<script src="/app/theme.js"></script><link rel="manifest" href="/app/manifest.json"/><meta name="theme-color" content="#F7F0E6"/><link rel="icon" href="/app/favicon.svg" type="image/svg+xml"/>
+<script src="/app/theme.js"></script><script src="/app/pilot-events.js"></script><link rel="manifest" href="/app/manifest.json"/><meta name="theme-color" content="#F7F0E6"/><link rel="icon" href="/app/favicon.svg" type="image/svg+xml"/>
 <meta name="apple-mobile-web-app-capable" content="yes"/><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="default"/><meta name="apple-mobile-web-app-title" content="Luganda AI"/><link rel="apple-touch-icon" href="/app/icons/icon-192.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="/app/styles.css"/>
 <style>
@@ -25,4 +25,5 @@ function renderProverbs(theme='all'){
 function renderFilters(){const filters=document.getElementById('filters');filters.replaceChildren();const themes=[...new Set(allProverbs.map(item=>valueText(item.theme).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));['all',...themes].forEach((theme,index)=>{const button=document.createElement('button');button.type='button';button.className=`filter${index===0?' active':''}`;button.textContent=theme==='all'?'All':theme;button.setAttribute('aria-pressed',String(index===0));button.addEventListener('click',()=>{filters.querySelectorAll('button').forEach(node=>{node.classList.remove('active');node.setAttribute('aria-pressed','false')});button.classList.add('active');button.setAttribute('aria-pressed','true');renderProverbs(theme)});filters.append(button)})}
 async function loadProverbs(){try{const response=await fetch('/api/v1/library/proverbs');if(!response.ok)throw new Error('unavailable');const data=await response.json();allProverbs=Array.isArray(data.entries)?data.entries:[];document.getElementById('total').textContent=String(allProverbs.length);renderFilters();renderProverbs()}catch(error){const state=document.getElementById('state');state.hidden=false;state.textContent='Cannot load proverbs. Check the app is running, then try again.'}}
 loadProverbs();
+sendEvent('collection_opened','proverbs');
 </script></body></html>
