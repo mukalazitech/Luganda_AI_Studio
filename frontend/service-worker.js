@@ -1,10 +1,12 @@
 /* ============================================================
    Luganda AI Studio — Service Worker
-   Strategy: Cache-first for UI shell assets.
+   Strategy: Network-first for HTML documents (falls back to cache
+             offline, so learners always see the latest page).
+             Cache-first for static assets (JS, CSS, icons, fonts).
              Network-first for API calls (never cache these).
    ============================================================ */
 
-const CACHE_NAME = 'luganda-studio-v1';
+const CACHE_NAME = 'luganda-studio-v2';
 
 // UI shell assets to cache on install
 const PRECACHE_ASSETS = [
@@ -14,9 +16,16 @@ const PRECACHE_ASSETS = [
   '/app/teach.html',
   '/app/chat.html',
   '/app/reviews.html',
+  '/app/explore.html',
+  '/app/proverbs.html',
+  '/app/grammar.html',
+  '/app/phrases.html',
+  '/app/library.html',
+  '/app/theme.js',
   '/app/manifest.json',
   '/app/icons/icon-192.svg',
   '/app/icons/icon-512.svg',
+  '/app/assets/icons.svg',
 ];
 
 // ── Install — pre-cache the UI shell ──────────────────────────
@@ -55,7 +64,26 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // Cache-first for everything else (HTML, CSS, JS, fonts, icons)
+  // Network-first for HTML documents — always show the latest page;
+  // fall back to cache only when the network is unavailable.
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request).then(response => {
+        if (response && response.status === 200 && response.type === 'basic') {
+          const toCache = response.clone();
+          caches.open(CACHE_NAME).then(cache => {
+            cache.put(event.request, toCache);
+          });
+        }
+        return response;
+      }).catch(() => {
+        return caches.match(event.request).then(cached => cached || caches.match('/app/index.html'));
+      })
+    );
+    return;
+  }
+
+  // Cache-first for everything else (CSS, JS, fonts, icons)
   event.respondWith(
     caches.match(event.request).then(cached => {
       if (cached) {
@@ -80,10 +108,8 @@ self.addEventListener('fetch', event => {
 
         return response;
       }).catch(() => {
-        // Network failed — return offline page if we have it
-        if (event.request.destination === 'document') {
-          return caches.match('/app/index.html');
-        }
+        // Network failed and not in cache — nothing more we can do
+        return undefined;
       });
     })
   );
