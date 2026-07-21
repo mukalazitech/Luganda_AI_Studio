@@ -97,3 +97,37 @@ def test_unknown_library_collection_returns_404(client):
     response = client.get("/api/v1/library/recipes")
 
     assert response.status_code == 404
+
+
+def test_lessons_route_returns_lessons(client):
+    response = client.get("/api/v1/library/lessons")
+
+    assert response.status_code == 200
+    payload = response.json()
+    assert len(payload["lessons"]) >= 4
+
+
+def test_lessons_route_is_not_shadowed_by_the_collection_catch_all(client):
+    """Regression guard: "/lessons" must stay declared above "/{collection}".
+
+    If it is ever moved below, the catch-all matches first and this returns
+    404 "Library collection not found" instead of the lesson payload.
+    """
+    response = client.get("/api/v1/library/lessons")
+
+    assert response.status_code == 200
+    assert "lessons" in response.json()
+
+
+def test_every_lesson_step_resolves_to_a_curated_entry(client):
+    """No invented content: each ref must exist in the library API itself."""
+    lessons = client.get("/api/v1/library/lessons").json()["lessons"]
+    phrase_ids = {e["id"] for e in client.get("/api/v1/library/phrases").json()["entries"]}
+    vocab_keys = {e["key"] for e in client.get("/api/v1/library/vocabulary").json()["entries"]}
+
+    for lesson in lessons:
+        for step in lesson["steps"]:
+            if step["ref_type"] == "sentence":
+                assert step["ref"] in phrase_ids, f"unknown sentence {step['ref']}"
+            else:
+                assert step["ref"] in vocab_keys, f"unknown vocab {step['ref']}"

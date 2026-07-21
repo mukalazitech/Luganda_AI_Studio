@@ -1,0 +1,83 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Learn — Luganda AI Studio</title><script src="/app/theme.js"></script><link rel="manifest" href="/app/manifest.json"/><meta name="theme-color" content="#F7F0E6"/><link rel="icon" href="/app/favicon.svg" type="image/svg+xml"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="default"/><meta name="apple-mobile-web-app-title" content="Luganda AI"/><link rel="apple-touch-icon" href="/app/icons/icon-192.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="/app/styles.css"/>
+<style>.page{max-width:760px;margin:auto;padding:40px 24px 54px}.head{margin-bottom:26px}.kicker{color:var(--lime);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.head h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:8px 0 12px;letter-spacing:-.045em}.head p{max-width:640px;color:var(--text-secondary);line-height:1.6}
+.card{border:1px solid var(--border);border-radius:18px;background:var(--bg-card);box-shadow:var(--shadow-card);padding:24px}
+.setup-q{margin:0 0 8px;font-weight:800}.setup-group{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:22px}
+.setup-option{min-height:44px;padding:10px 16px;border-radius:999px;border:1px solid var(--border);background:transparent;color:var(--text-secondary);font:inherit;font-weight:600;cursor:pointer}
+.setup-option:hover{border-color:var(--lime)}.setup-option.selected{background:var(--lime-bg);border-color:var(--lime);color:var(--text-primary)}
+.setup-actions{display:flex;align-items:center;gap:18px;flex-wrap:wrap}.setup-skip{color:var(--text-muted);min-height:44px;display:inline-flex;align-items:center}
+.lesson-list{display:grid;gap:14px}
+.lesson-card{width:100%;text-align:left;min-height:72px;padding:18px 20px;border:1px solid var(--border);border-radius:18px;background:var(--bg-card);box-shadow:var(--shadow-card);cursor:pointer;display:flex;flex-direction:column;gap:4px;font:inherit}
+.lesson-card:hover{border-color:var(--lime)}.lesson-card.done{border-color:var(--lime)}
+.lesson-title{font-weight:800;font-size:1.08rem}.lesson-meta{color:var(--text-muted);font-size:.88rem}
+.bar-track{height:6px;border-radius:999px;background:var(--border);overflow:hidden;margin:14px 0 6px}.bar-fill{height:100%;background:var(--lime);width:0;transition:width .25s ease}
+.player-progress{color:var(--text-muted);font-size:.85rem;font-weight:600}
+.step-luganda{font:800 1.6rem/1.35 var(--font-display);margin:18px 0 10px;overflow-wrap:anywhere}
+.step-english{font-size:1.15rem;color:var(--text-secondary);margin:0 0 12px}
+.step-prompt{color:var(--text-muted);font-weight:600;margin:0 0 14px}
+.step-note{margin:12px 0 0;padding:12px 14px;border-radius:12px;background:var(--lime-bg);color:var(--text-secondary);line-height:1.5}
+.step-verdict{margin:16px 0 0;font-weight:700}
+.choice-group{display:grid;gap:10px}
+.choice{min-height:56px;padding:14px 18px;border-radius:14px;border:1px solid var(--border);background:transparent;color:var(--text-primary);font:inherit;font-weight:600;text-align:left;cursor:pointer}
+.choice:hover:not([disabled]){border-color:var(--lime)}.choice[disabled]{cursor:default;opacity:.75}
+.choice.right{border-color:var(--lime);background:var(--lime-bg);opacity:1}.choice.wrong{border-color:#c2453d}
+.step-continue{margin-top:20px;min-height:48px}
+.player-error{padding:20px;border:1px dashed var(--border);border-radius:14px;color:var(--text-secondary);text-align:center}
+.summary-card{text-align:center}.summary-mascot img{max-width:150px;height:auto}
+#summary-score{font:800 1.5rem/1.3 var(--font-display);margin:12px 0}
+section[hidden]{display:none}
+@media(max-width:680px){.page{padding:28px 16px 108px}.step-luganda{font-size:1.35rem}}</style></head><body><div class="app-shell"><aside class="sidebar"><div class="sidebar-brand">Luganda <span>AI</span></div><nav class="sidebar-nav"><a href="index.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg>Home</a><a href="translate.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg>Translate</a><a href="learn.html" class="sidebar-link active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg>Learn</a><a href="explore.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg>Explore</a><a href="search.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-search"></use></svg>Search</a><a href="chat.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg>Chat</a></nav><div class="sidebar-footer"><div class="theme-pill"><button class="theme-pill-btn" id="btnLight" onclick="setTheme('light')">☀ Light</button><button class="theme-pill-btn" id="btnDark" onclick="setTheme('dark')">🌙 Dark</button></div><div class="sidebar-version">v1.1 · Luganda AI Studio</div></div></aside><header class="mobile-topbar"><span class="mobile-topbar-title">Learn</span><button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" aria-label="Switch theme">☀</button></header><main class="main-content"><div class="page">
+
+<section id="setup" hidden>
+  <header class="head"><div class="kicker">Beginner path</div><h1>Set your pace.</h1><p>Three quick questions so the path fits you. You can skip this and start straight away.</p></header>
+  <div class="card">
+    <p class="setup-q" id="q-goal">Why are you learning Luganda?</p>
+    <div class="setup-group" role="group" aria-labelledby="q-goal">
+      <button type="button" class="setup-option" data-group="goal" data-value="family">Talk with family</button>
+      <button type="button" class="setup-option" data-group="goal" data-value="work">Work and business</button>
+      <button type="button" class="setup-option" data-group="goal" data-value="culture">Understand the culture</button>
+      <button type="button" class="setup-option" data-group="goal" data-value="curious">Just curious</button>
+    </div>
+    <p class="setup-q" id="q-focus">What matters most right now?</p>
+    <div class="setup-group" role="group" aria-labelledby="q-focus">
+      <button type="button" class="setup-option" data-group="focus" data-value="speaking">Speaking</button>
+      <button type="button" class="setup-option" data-group="focus" data-value="understanding">Understanding others</button>
+      <button type="button" class="setup-option" data-group="focus" data-value="reading">Reading and writing</button>
+    </div>
+    <p class="setup-q" id="q-minutes">How long do you want to practise?</p>
+    <div class="setup-group" role="group" aria-labelledby="q-minutes">
+      <button type="button" class="setup-option" data-group="minutes" data-value="5">5 minutes</button>
+      <button type="button" class="setup-option" data-group="minutes" data-value="10">10 minutes</button>
+      <button type="button" class="setup-option" data-group="minutes" data-value="20">20 minutes</button>
+    </div>
+    <div class="setup-actions">
+      <button type="button" class="btn-primary" id="setup-save">Start learning</button>
+      <a href="#" class="setup-skip">Skip for now</a>
+    </div>
+  </div>
+</section>
+
+<section id="path" hidden>
+  <header class="head"><div class="kicker">Beginner path</div><h1>Learn</h1><p>Short lessons built from the phrases and words already in the library. Take them in any order.</p></header>
+  <div class="lesson-list" id="lesson-list"></div>
+</section>
+
+<section id="player" hidden>
+  <div class="card">
+    <div class="player-progress" id="player-progress" role="status">Step 1 of 1</div>
+    <div class="bar-track"><div class="bar-fill" id="player-bar"></div></div>
+    <div id="player-stage"></div>
+  </div>
+</section>
+
+<section id="summary" hidden>
+  <div class="card summary-card">
+    <div class="summary-mascot" id="summary-mascot" data-mascot-character="kintu" data-mascot-state="celebrate"></div>
+    <p id="summary-score">0 of 0 right.</p>
+    <p>Well done. Come back tomorrow to keep your streak going.</p>
+    <button type="button" class="btn-primary" id="summary-back">Back to lessons</button>
+  </div>
+</section>
+
+</div></main></div>
+<nav class="bottom-nav"><div class="bottom-nav-inner"><a href="index.html" class="bnav-item" data-page="index"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg><span class="bnav-label">Home</span></a><a href="translate.html" class="bnav-item" data-page="translate"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg><span class="bnav-label">Translate</span></a><a href="learn.html" class="bnav-item active" data-page="learn" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg><span class="bnav-label">Learn</span></a><a href="explore.html" class="bnav-item" data-page="explore"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg><span class="bnav-label">Explore</span></a></div></nav>
+<script src="/app/streak.js"></script><script src="/app/mascot.js"></script><script src="/app/learn.js"></script></body></html>

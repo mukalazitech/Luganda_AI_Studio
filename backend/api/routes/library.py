@@ -1,11 +1,24 @@
 """GET-only learner library routes backed by curated JSON files."""
 
+import json
+
 from fastapi import APIRouter, HTTPException
 
+from backend.core.config import DATASETS_DIR
 from backend.services.library import service
 
 
 router = APIRouter()
+
+
+# Declared above the "/{collection}" catch-all below: FastAPI matches routes in
+# declaration order, so moving this down would shadow it into a 404.
+@router.get("/lessons")
+def get_lessons():
+    path = DATASETS_DIR / "lessons" / "beginner_path.json"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Lessons not found")
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
 @router.get("/grammar")
