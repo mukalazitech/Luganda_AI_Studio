@@ -1,19 +1,123 @@
 <!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/><title>Grammar — Luganda AI Studio</title><script src="/app/theme.js"></script><link rel="manifest" href="/app/manifest.json"/><meta name="theme-color" content="#F7F0E6"/><link rel="icon" href="/app/favicon.svg" type="image/svg+xml"/><meta name="apple-mobile-web-app-capable" content="yes"/><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="default"/><meta name="apple-mobile-web-app-title" content="Luganda AI"/><link rel="apple-touch-icon" href="/app/icons/icon-192.svg"/><link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="/app/styles.css"/>
-<style>.page{max-width:980px;margin:auto;padding:40px 24px 54px}.head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:26px}.head h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:7px 0 11px;letter-spacing:-.045em}.kicker{color:var(--lime);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.head p{max-width:640px;color:var(--text-secondary);line-height:1.6;margin:0}.practice{min-height:44px}.sections{display:grid;gap:16px}.grammar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-card);min-width:0}.grammar-card h2{font-size:1.35rem;margin:0 0 8px}.intro{color:var(--text-secondary);line-height:1.55;margin:0 0 16px}.note{padding:12px 14px;background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:8px;color:var(--text-secondary)}.item-list,.nested-list{margin:0;padding-left:22px;display:grid;gap:8px}.definition{display:grid;grid-template-columns:minmax(110px,.34fr) minmax(0,1fr);gap:12px;padding:10px 0;border-top:1px solid var(--border)}.definition dt{font-weight:800;overflow-wrap:anywhere}.definition dd{margin:0;color:var(--text-secondary);min-width:0;overflow-wrap:anywhere}.nested-group{display:grid;gap:8px}.nested-label{font-weight:800}.state{padding:36px 20px;border:1px dashed var(--border);background:var(--bg-card);border-radius:18px;text-align:center;color:var(--text-secondary)}.state[hidden]{display:none}@media(max-width:680px){.page{padding:28px 16px 108px}.head{grid-template-columns:1fr}.practice{justify-self:start}.definition{grid-template-columns:1fr;gap:4px}}</style></head><body><div class="app-shell"><aside class="sidebar"><div class="sidebar-brand">Luganda <span>AI</span></div><nav class="sidebar-nav"><a href="index.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg>Home</a><a href="translate.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg>Translate</a><a href="learn.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg>Learn</a><a href="explore.html" class="sidebar-link active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg>Explore</a><a href="search.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-search"></use></svg>Search</a><a href="chat.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg>Chat</a></nav><div class="sidebar-footer"><div class="theme-pill"><button class="theme-pill-btn" id="btnLight" onclick="setTheme('light')">☀ Light</button><button class="theme-pill-btn" id="btnDark" onclick="setTheme('dark')">🌙 Dark</button></div><div class="sidebar-version">v1.1 · Luganda AI Studio</div></div></aside><header class="mobile-topbar"><span class="mobile-topbar-title">Grammar</span><button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" aria-label="Switch theme">☀</button></header><main class="main-content"><div class="page"><header class="head"><div><div class="kicker"><a href="explore.html">Explore</a> · Empandiika</div><h1>Grammar patterns</h1><p>Read each pattern at your own pace, then take the words into a practice session.</p></div><a class="btn-primary practice" href="teach.html">Practice these words</a></header><div class="state" id="state" role="status">Loading grammar…</div><div class="sections" id="sections"></div></div></main></div>
+<style>.page{max-width:980px;margin:auto;padding:40px 24px 54px}.head{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;margin-bottom:26px}.head h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:7px 0 11px;letter-spacing:-.045em}.kicker{color:var(--lime);font-weight:800;letter-spacing:.12em;text-transform:uppercase;font-size:.78rem}.head p{max-width:640px;color:var(--text-secondary);line-height:1.6;margin:0}.practice{min-height:44px}.sections{display:grid;gap:16px}.grammar-card{background:var(--bg-card);border:1px solid var(--border);border-radius:18px;box-shadow:var(--shadow-card);overflow:hidden;min-width:0}.grammar-card>summary{list-style:none;cursor:pointer;padding:18px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:56px}.grammar-card>summary::-webkit-details-marker{display:none}.grammar-card>summary::after{content:'+';font-size:1.5rem;line-height:1;color:var(--lime);flex:none}.grammar-card[open]>summary::after{content:'\2212'}.grammar-card>summary:focus-visible{outline:3px solid var(--lime-glow);outline-offset:-4px}.card-heading{display:grid;gap:3px;min-width:0}.card-title{font-weight:800;font-size:1.2rem;line-height:1.25}.card-summary{color:var(--text-muted);font-size:.9rem;line-height:1.4}.card-body{border-top:1px solid var(--border);padding:18px 20px;display:grid;gap:16px;min-width:0}.card-body>.intro{margin:0;color:var(--text-secondary);line-height:1.6}.entry{display:grid;gap:10px;min-width:0;padding-bottom:16px;border-bottom:1px solid var(--border)}.entry:last-child{border-bottom:0;padding-bottom:0}.entry-title{font-size:1.05rem;margin:0;line-height:1.3}.teach{margin:0;color:var(--text-secondary);line-height:1.6}.note{margin:0;padding:12px 14px;background:var(--amber-bg);border-left:3px solid var(--amber);border-radius:8px;color:var(--text-secondary);line-height:1.55}.examples{border:1px solid var(--border);border-radius:12px;background:var(--bg);overflow:hidden}.examples>summary{list-style:none;cursor:pointer;padding:11px 14px;min-height:44px;display:flex;align-items:center;color:var(--lime);font-weight:700;font-size:.92rem}.examples>summary::-webkit-details-marker{display:none}.examples>summary::before{content:'\25B8';margin-right:8px;font-size:.8rem}.examples[open]>summary::before{content:'\25BE'}.examples>summary:focus-visible{outline:3px solid var(--lime-glow);outline-offset:-4px}.ex-group{padding:0 14px 14px;min-width:0}.ex-group:first-of-type{padding-top:4px}.ex-label{margin:0 0 7px;font-weight:700;font-size:.82rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em}.table-wrap{overflow-x:auto;max-width:100%;border:1px solid var(--border);border-radius:10px}.ex-table{border-collapse:collapse;width:100%;font-size:.92rem}.ex-table th,.ex-table td{text-align:left;padding:9px 12px;border-bottom:1px solid var(--border);vertical-align:top;overflow-wrap:anywhere}.ex-table th{background:var(--lime-bg);color:var(--text-primary);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap}.ex-table tr:last-child td{border-bottom:0}.plain-list{margin:0;padding-left:20px;display:grid;gap:6px;color:var(--text-secondary);line-height:1.5}.nested-block{display:grid;gap:8px;padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--bg-card);min-width:0}.nested-line{margin:0;color:var(--text-secondary);line-height:1.55;overflow-wrap:anywhere}.nested-key{font-weight:700;color:var(--text-primary)}.state{padding:36px 20px;border:1px dashed var(--border);background:var(--bg-card);border-radius:18px;text-align:center;color:var(--text-secondary)}.state[hidden]{display:none}@media(max-width:680px){.page{padding:28px 16px 108px}.head{grid-template-columns:1fr}.practice{justify-self:start}}</style></head><body><div class="app-shell"><aside class="sidebar"><div class="sidebar-brand">Luganda <span>AI</span></div><nav class="sidebar-nav"><a href="index.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg>Home</a><a href="translate.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg>Translate</a><a href="learn.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg>Learn</a><a href="explore.html" class="sidebar-link active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg>Explore</a><a href="search.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-search"></use></svg>Search</a><a href="chat.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg>Chat</a></nav><div class="sidebar-footer"><div class="theme-pill"><button class="theme-pill-btn" id="btnLight" onclick="setTheme('light')">☀ Light</button><button class="theme-pill-btn" id="btnDark" onclick="setTheme('dark')">🌙 Dark</button></div><div class="sidebar-version">v1.1 · Luganda AI Studio</div></div></aside><header class="mobile-topbar"><span class="mobile-topbar-title">Grammar</span><button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" aria-label="Switch theme">☀</button></header><main class="main-content"><div class="page"><header class="head"><div><div class="kicker"><a href="explore.html">Explore</a> · Empandiika</div><h1>Grammar patterns</h1><p>Read each pattern at your own pace, then take the words into a practice session.</p></div><a class="btn-primary practice" href="teach.html">Practice these words</a></header><div class="state" id="state" role="status">Loading grammar…</div><div class="sections" id="sections"></div></div></main></div>
 <nav class="bottom-nav"><div class="bottom-nav-inner"><a href="index.html" class="bnav-item" data-page="index"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg><span class="bnav-label">Home</span></a><a href="translate.html" class="bnav-item" data-page="translate"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg><span class="bnav-label">Translate</span></a><a href="learn.html" class="bnav-item" data-page="learn"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg><span class="bnav-label">Learn</span></a><a href="explore.html" class="bnav-item active" data-page="explore" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg><span class="bnav-label">Explore</span></a></div></nav>
 <script>
-function labelFor(key){return String(key).replace(/_/g,' ').replace(/\b\w/g,char=>char.toUpperCase())}
-function primitive(value){return value===null||['string','number','boolean'].includes(typeof value)}
-function renderNested(value){
- if(primitive(value)){const span=document.createElement('span');span.textContent=value==null?'':String(value);return span}
- if(Array.isArray(value)){const list=document.createElement('ul');list.className='nested-list';value.forEach(entry=>{const item=document.createElement('li');item.append(renderNested(entry));list.append(item)});return list}
- const group=document.createElement('div');group.className='nested-group';Object.entries(value).forEach(([key,nested])=>{const row=document.createElement('div');const label=document.createElement('div');label.className='nested-label';label.textContent=labelFor(key);row.append(label,renderNested(nested));group.append(row)});return group
+// Hand-written section titles and one-line summaries, plus the display order
+// (sounds, then words, then verbs). The API returns sections in file order, so
+// we re-order here. Any section id not listed keeps its API title as a fallback.
+const SECTION_META={
+ 'vowels:rules':{order:1,title:'Vowels and their sounds',summary:'The five Luganda vowels and how each one is pronounced.'},
+ 'consonants:rules':{order:2,title:'Consonants and their sounds',summary:'How Luganda consonants work, including the ones English does not use.'},
+ 'word_classes:word_classes':{order:3,title:'The eight word classes',summary:'Every Luganda word belongs to one of eight classes. Here is how to tell them apart.'},
+ 'word_classes:question_words':{order:4,title:'Asking questions',summary:'The words you need to ask who, what, where and when.'},
+ 'verb_tenses:tenses':{order:5,title:'Verb tenses',summary:'How a verb changes to show when something happens.'},
+ 'verb_tenses:tense_summary_table':{order:6,title:'All tenses at a glance',summary:'One verb, okulya (to eat), shown in every tense side by side.'},
+ 'verb_tenses:subject_prefixes':{order:7,title:'Who is doing the action',summary:'The prefix on a verb changes depending on who is speaking or acting.'}
+};
+// Plumbing fields never shown to learners.
+const HIDDEN_FIELDS=new Set(['rule_id','tense_id','class_id','id','needs_review']);
+// Fields used to build an entry heading, so they are not repeated in the body.
+const TITLE_FIELDS=new Set(['rule_name','luganda_name','english_name','name','title']);
+// Friendly captions for example groups; '' means no caption is needed.
+const EXAMPLE_LABELS={examples:'',entries:'',rows:'',sentence_examples:'In a sentence',sentence_example:'In a sentence',exceptions:'Exceptions',consonant_vowel_table:'Consonant and vowel chart',letter_sounds:'Letter names and sounds',combinations:'Common combinations',agreement_pattern:'Agreement pattern'};
+
+function labelFor(key){return String(key).replace(/_/g,' ').replace(/\b\w/g,ch=>ch.toUpperCase());}
+// Presentation-only: keep em dashes out of visible copy without touching the data.
+function plain(value){return String(value==null?'':value).replace(/\s*—\s*/g,' - ');}
+function isPrimitive(v){return v===null||['string','number','boolean'].includes(typeof v);}
+function contentEntries(obj){return Object.entries(obj).filter(([k,v])=>{if(HIDDEN_FIELDS.has(k))return false;if(v===null||v===undefined)return false;if(typeof v==='string'&&v.trim()==='')return false;if(Array.isArray(v)&&v.length===0)return false;return true;});}
+function isFlatObject(v){return v&&typeof v==='object'&&!Array.isArray(v)&&contentEntries(v).every(([,val])=>isPrimitive(val));}
+function isTabular(arr){return Array.isArray(arr)&&arr.length>0&&arr.every(isFlatObject);}
+function exampleLabel(key){return key in EXAMPLE_LABELS?EXAMPLE_LABELS[key]:labelFor(key);}
+
+function renderTable(rows){
+ const cols=[];rows.forEach(r=>Object.keys(r).forEach(k=>{if(!HIDDEN_FIELDS.has(k)&&!cols.includes(k))cols.push(k);}));
+ const wrap=document.createElement('div');wrap.className='table-wrap';
+ const table=document.createElement('table');table.className='ex-table';
+ const thead=document.createElement('thead');const htr=document.createElement('tr');
+ cols.forEach(c=>{const th=document.createElement('th');th.scope='col';th.textContent=labelFor(c);htr.append(th);});
+ thead.append(htr);table.append(thead);
+ const tbody=document.createElement('tbody');
+ rows.forEach(r=>{const tr=document.createElement('tr');cols.forEach(c=>{const td=document.createElement('td');td.textContent=(r[c]===null||r[c]===undefined)?'':plain(r[c]);tr.append(td);});tbody.append(tr);});
+ table.append(tbody);wrap.append(table);return wrap;
 }
-function renderItems(items,card){
- if(!Array.isArray(items))return;const primitives=items.every(primitive);
- if(primitives){const list=document.createElement('ul');list.className='item-list';items.forEach(value=>{const item=document.createElement('li');item.textContent=value==null?'':String(value);list.append(item)});card.append(list);return}
- const definitions=document.createElement('dl');items.forEach((item,index)=>{if(primitive(item)){const row=document.createElement('div');row.className='definition';const term=document.createElement('dt');term.textContent=`Item ${index+1}`;const desc=document.createElement('dd');desc.textContent=String(item??'');row.append(term,desc);definitions.append(row);return}Object.entries(item).forEach(([key,value])=>{const row=document.createElement('div');row.className='definition';const term=document.createElement('dt');term.textContent=labelFor(key);const desc=document.createElement('dd');desc.append(renderNested(value));row.append(term,desc);definitions.append(row)})});card.append(definitions)
+function renderObjectBlock(obj){
+ if(isPrimitive(obj)){const p=document.createElement('p');p.className='teach';p.textContent=plain(obj);return p;}
+ const block=document.createElement('div');block.className='nested-block';
+ contentEntries(obj).forEach(([k,v])=>{
+  if(isPrimitive(v)){const p=document.createElement('p');p.className='nested-line';const key=document.createElement('span');key.className='nested-key';key.textContent=labelFor(k)+': ';p.append(key,document.createTextNode(plain(v)));block.append(p);}
+  else if(Array.isArray(v)){block.append(renderValueNode(v));}
+  else{block.append(renderObjectBlock(v));}
+ });
+ return block;
 }
-function renderSections(sections){const root=document.getElementById('sections');root.replaceChildren();sections.forEach(section=>{const card=document.createElement('article');card.className='grammar-card';const title=document.createElement('h2');title.textContent=String(section.title||'Grammar section');card.append(title);if(section.introduction){const intro=document.createElement('p');intro.className='intro';intro.textContent=String(section.introduction);card.append(intro)}renderItems(section.items,card);if(section.important_note){const note=document.createElement('p');note.className='note';note.textContent=String(section.important_note);card.append(note)}root.append(card)})}
-async function loadGrammar(){const state=document.getElementById('state');try{const response=await fetch('/api/v1/library/grammar');if(!response.ok)throw new Error('unavailable');const data=await response.json();const sections=Array.isArray(data.sections)?data.sections:[];if(!sections.length){state.textContent='No grammar sections are available yet.';return}state.hidden=true;renderSections(sections)}catch(error){state.textContent='Grammar is unavailable — is the local server running?'}}loadGrammar();
+function renderValueNode(value){
+ if(Array.isArray(value)){
+  if(value.every(isPrimitive)){const ul=document.createElement('ul');ul.className='plain-list';value.forEach(v=>{const li=document.createElement('li');li.textContent=plain(v);ul.append(li);});return ul;}
+  if(isTabular(value))return renderTable(value);
+  const frag=document.createDocumentFragment();value.forEach(el=>frag.append(renderValueNode(el)));return frag;
+ }
+ if(value&&typeof value==='object')return isFlatObject(value)?renderTable([value]):renderObjectBlock(value);
+ const p=document.createElement('p');p.className='teach';p.textContent=plain(value);return p;
+}
+function exampleGroup(key,node){
+ const wrap=document.createElement('div');wrap.className='ex-group';
+ const label=exampleLabel(key);
+ if(label){const cap=document.createElement('p');cap.className='ex-label';cap.textContent=label;wrap.append(cap);}
+ wrap.append(node);return wrap;
+}
+function entryTitle(entry){
+ if(entry.rule_name)return plain(entry.rule_name);
+ if(entry.luganda_name&&entry.english_name)return plain(entry.luganda_name)+' · '+plain(entry.english_name);
+ if(entry.english_name)return plain(entry.english_name);
+ if(entry.luganda_name)return plain(entry.luganda_name);
+ if(entry.name)return plain(entry.name);
+ if(entry.title)return plain(entry.title);
+ return '';
+}
+function hasEntryTitle(entry){return !!(entry&&typeof entry==='object'&&!Array.isArray(entry)&&(entry.rule_name||entry.luganda_name||entry.english_name||entry.name||entry.title));}
+
+function renderEntry(entry){
+ const block=document.createElement('article');block.className='entry';
+ const h=document.createElement('h3');h.className='entry-title';h.textContent=entryTitle(entry)||'Pattern';block.append(h);
+ const examples=[];const notes=[];
+ contentEntries(entry).forEach(([k,v])=>{
+  if(TITLE_FIELDS.has(k))return;
+  if(k==='important_note'){notes.push(plain(v));return;}
+  if(isPrimitive(v)){const p=document.createElement('p');p.className='teach';p.textContent=plain(v);block.append(p);return;}
+  examples.push(exampleGroup(k,renderValueNode(v)));
+ });
+ notes.forEach(n=>{const box=document.createElement('p');box.className='note';box.textContent=n;block.append(box);});
+ if(examples.length){const det=document.createElement('details');det.className='examples';const sum=document.createElement('summary');sum.textContent='See examples';det.append(sum);examples.forEach(node=>det.append(node));block.append(det);}
+ return block;
+}
+function renderSectionBody(section,body){
+ const items=Array.isArray(section.items)?section.items:[];
+ const meta=SECTION_META[section.id]||{};
+ const intro=plain(section.introduction);
+ if(intro&&intro!==(meta.summary||'')){const p=document.createElement('p');p.className='intro';p.textContent=intro;body.append(p);}
+ if(items.length&&items.every(it=>!hasEntryTitle(it))){
+  if(isTabular(items))body.append(renderTable(items));
+  else items.forEach(it=>body.append(renderValueNode(it)));
+ }else{
+  items.forEach(it=>{if(hasEntryTitle(it))body.append(renderEntry(it));else body.append(renderValueNode(it));});
+ }
+ if(section.important_note){const note=document.createElement('p');note.className='note';note.textContent=plain(section.important_note);body.append(note);}
+}
+function renderSections(sections){
+ const ordered=[...sections].sort((a,b)=>((SECTION_META[a.id]||{}).order??999)-((SECTION_META[b.id]||{}).order??999));
+ const root=document.getElementById('sections');root.replaceChildren();
+ ordered.forEach((section,index)=>{
+  const meta=SECTION_META[section.id]||{};
+  const card=document.createElement('details');card.className='grammar-card';card.open=index===0;
+  const summary=document.createElement('summary');
+  const heading=document.createElement('span');heading.className='card-heading';
+  const title=document.createElement('span');title.className='card-title';title.textContent=meta.title||plain(section.title)||'Grammar section';heading.append(title);
+  if(meta.summary){const desc=document.createElement('span');desc.className='card-summary';desc.textContent=meta.summary;heading.append(desc);}
+  summary.append(heading);card.append(summary);
+  const bodyEl=document.createElement('div');bodyEl.className='card-body';renderSectionBody(section,bodyEl);card.append(bodyEl);
+  root.append(card);
+ });
+}
+async function loadGrammar(){const state=document.getElementById('state');try{const response=await fetch('/api/v1/library/grammar');if(!response.ok)throw new Error('unavailable');const data=await response.json();const sections=Array.isArray(data.sections)?data.sections:[];if(!sections.length){state.textContent='No grammar sections are available yet.';return;}state.hidden=true;renderSections(sections);}catch(error){state.hidden=false;state.textContent='Cannot load grammar. Check the app is running, then try again.';}}loadGrammar();
 </script></body></html>
