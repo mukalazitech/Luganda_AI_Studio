@@ -9,7 +9,7 @@ const { PRIMARY, TOOLS, INTERNAL } = require('../nav-spec.js');
 const FRONTEND_DIR = path.resolve(__dirname, '..');
 const LEARNER_PAGE_CANDIDATES = [
   'index', 'translate', 'search', 'teach', 'learn',
-  'explore', 'proverbs', 'grammar', 'phrases', 'library',
+  'explore', 'proverbs', 'grammar', 'phrases', 'library', 'chat',
 ];
 const LEARNER_PAGES = LEARNER_PAGE_CANDIDATES.filter((page) =>
   fs.existsSync(path.join(FRONTEND_DIR, `${page}.html`))
