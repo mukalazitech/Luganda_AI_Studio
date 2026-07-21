@@ -6,7 +6,10 @@
              Network-first for API calls (never cache these).
    ============================================================ */
 
-const CACHE_NAME = 'luganda-studio-v2';
+// Bump on every release that changes a cache-first asset (JS, CSS, icons).
+// HTML is network-first so pages refresh on their own, but static assets are
+// served from cache until the name changes and activate drops the old one.
+const CACHE_NAME = 'luganda-studio-v3';
 
 // UI shell assets to cache on install
 const PRECACHE_ASSETS = [
@@ -21,11 +24,19 @@ const PRECACHE_ASSETS = [
   '/app/grammar.html',
   '/app/phrases.html',
   '/app/library.html',
+  '/app/learn.html',
+  '/app/styles.css',
   '/app/theme.js',
+  '/app/learn.js',
+  '/app/pilot-events.js',
+  '/app/streak.js',
+  '/app/mascot.js',
+  '/app/category-icons.js',
   '/app/manifest.json',
   '/app/icons/icon-192.svg',
   '/app/icons/icon-512.svg',
   '/app/assets/icons.svg',
+  '/app/assets/characters/kintu/celebrate.png',
 ];
 
 // ── Install — pre-cache the UI shell ──────────────────────────
