@@ -29,6 +29,9 @@ IMPORTED_DATASETS_DIR = DATA_DIR / "datasets"
 FEEDBACK_DIR = DATA_DIR / "feedback"
 TRAINING_DIR = DATA_DIR / "training"
 
+# ─── Pilot: anonymous events ─────────────────────────────────
+EVENTS_DIR = DATA_DIR / "events"
+
 # ─── Phase 2: Audio / STT ─────────────────────────────────────
 AUDIO_DIR        = DATA_DIR / "audio"
 AUDIO_REC_DIR    = AUDIO_DIR / "recordings"
