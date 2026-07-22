@@ -90,3 +90,19 @@ htmlcov/
 .coverage
 .pytest_cache/
 .worktrees/
+
+# --- Local Claude Code settings (machine-specific) ---
+.claude/settings.local.json
+
+# --- Superpowers brainstorm/session state (ephemeral, not source) ---
+.superpowers/brainstorm/
+.superpowers/sdd/
+
+# --- Runtime event data ---
+data/events/
+
+# --- ChromaDB backup snapshots (regenerable, not source) ---
+data/chromadb.backup-*/
+
+# --- Character/UI reference assets not yet part of the build ---
+assets/
