@@ -1,0 +1,17 @@
+# Normalize line endings so Windows checkouts don't show CRLF-only diffs.
+* text=auto eol=lf
+
+# Windows batch scripts need CRLF to run reliably in cmd.exe
+*.bat text eol=crlf
+
+# Binary files — never touch line endings
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.svg binary
+*.wav binary
+*.bin binary
+*.sqlite3 binary
+*.pt binary
+*.pth binary
+*.safetensors binary
