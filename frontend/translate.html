@@ -110,6 +110,9 @@
         <button class="btn-secondary" id="micBtn" style="min-height:48px; white-space:nowrap;" title="Speak Luganda">🎙 Speak</button>
       </div>
 
+      <!-- MIC STATUS (spoken-input feedback) -->
+      <div id="micStatus" role="status" aria-live="polite" style="display:none;font-size:13px;margin:-8px 0 16px;padding:8px 12px;border-radius:8px;line-height:1.4;"></div>
+
       <!-- KEYBOARD HINT -->
       <div style="font-size:10px;color:var(--text-muted);text-align:right;margin-bottom:20px;letter-spacing:0.02em;">
         Press <kbd style="font-family:inherit;font-size:9px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:3px;padding:1px 5px;color:var(--text-muted);">Ctrl</kbd>+<kbd style="font-family:inherit;font-size:9px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:3px;padding:1px 5px;color:var(--text-muted);">Enter</kbd> to translate
@@ -1043,13 +1046,38 @@ updateThemeUI();
 ───────────────────────────────────────────────── */
 (function () {
   var micBtn       = document.getElementById('micBtn');
+  var statusEl     = document.getElementById('micStatus');
   var mediaRecorder = null;
   var audioChunks  = [];
   var isRecording  = false;
 
+  // Show a plain-language message to the user instead of only logging to console.
+  // tone: 'info' | 'error' | 'ok' — controls the colour.
+  function showStatus(msg, tone) {
+    if (!statusEl) return;
+    var colors = {
+      info:  { fg: 'var(--text-muted)', bg: 'var(--surface)',       bd: 'var(--border-subtle)' },
+      error: { fg: 'var(--red)',        bg: 'rgba(200,40,40,0.08)',  bd: 'var(--red)' },
+      ok:    { fg: 'var(--green, #2f6b3a)', bg: 'rgba(47,107,58,0.08)', bd: 'var(--green, #2f6b3a)' }
+    };
+    var c = colors[tone] || colors.info;
+    statusEl.textContent = msg;
+    statusEl.style.color = c.fg;
+    statusEl.style.background = c.bg;
+    statusEl.style.border = '1px solid ' + c.bd;
+    statusEl.style.display = 'block';
+  }
+  function hideStatus() { if (statusEl) statusEl.style.display = 'none'; }
+
   if (!navigator.mediaDevices || !window.MediaRecorder) {
     if (micBtn) micBtn.style.display = 'none';
     return;
+  }
+
+  // Mic requires a secure context (https or localhost). If it isn't, say so
+  // instead of failing silently when getUserMedia is undefined.
+  if (!window.isSecureContext) {
+    showStatus('Voice input needs a secure (https) connection. Open the site over https and try again.', 'error');
   }
 
   micBtn.addEventListener('click', function () {
@@ -1061,27 +1089,47 @@ updateThemeUI();
   });
 
   function startRecording() {
+    hideStatus();
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then(function (stream) {
         audioChunks = [];
         mediaRecorder = new MediaRecorder(stream);
         mediaRecorder.ondataavailable = function (e) {
-          if (e.data.size > 0) audioChunks.push(e.data);
+          if (e.data && e.data.size > 0) audioChunks.push(e.data);
         };
         mediaRecorder.onstop = function () {
           stream.getTracks().forEach(function (t) { t.stop(); });
+
+          // Guard: nothing captured (button tapped too fast, or mic muted).
+          var totalBytes = audioChunks.reduce(function (n, b) { return n + b.size; }, 0);
+          if (audioChunks.length === 0 || totalBytes < 1024) {
+            showStatus('Didn’t catch any sound. Hold Speak, say the word clearly, then tap again to stop.', 'error');
+            resetMicBtn();
+            return;
+          }
+
           // Browser records in WebM/OGG — decode via Web Audio API then re-encode as WAV
           var rawBlob = new Blob(audioChunks);
           rawBlob.arrayBuffer().then(function (arrayBuf) {
             var ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
             ctx.decodeAudioData(arrayBuf, function (audioBuffer) {
               ctx.close();
+              if (!audioBuffer || audioBuffer.length < 1600) { // < ~0.1s of audio
+                showStatus('That was too short to hear. Try holding Speak a little longer.', 'error');
+                resetMicBtn();
+                return;
+              }
               var wavBytes = audioBufferToWav(audioBuffer);
               sendAudio(wavBytes);
             }, function (err) {
               console.error('Audio decode failed:', err);
+              showStatus('Couldn’t read the recording. Please try again.', 'error');
               resetMicBtn();
             });
+          }).catch(function (err) {
+            console.error('Audio read failed:', err);
+            showStatus('Couldn’t read the recording. Please try again.', 'error');
+            resetMicBtn();
           });
         };
         mediaRecorder.start();
@@ -1089,9 +1137,18 @@ updateThemeUI();
         micBtn.textContent = '🔴 Recording…';
         micBtn.style.borderColor = 'var(--red)';
         micBtn.style.color = 'var(--red)';
+        showStatus('Listening… tap Speak again when you’re done.', 'info');
       })
       .catch(function (err) {
         console.error('Mic access denied:', err);
+        var msg = 'Microphone blocked. Allow mic access for this site, then try again.';
+        if (err && err.name === 'NotFoundError') {
+          msg = 'No microphone found on this device.';
+        } else if (err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')) {
+          msg = 'Microphone permission was denied. Tap the 🔒 in the address bar, allow the mic, then try again. (Incognito often blocks it.)';
+        }
+        showStatus(msg, 'error');
+        resetMicBtn();
       });
   }
 
@@ -1104,6 +1161,7 @@ updateThemeUI();
     micBtn.style.borderColor = '';
     micBtn.style.color = '';
     micBtn.disabled = true;
+    showStatus('Transcribing…', 'info');
   }
 
   // Encode an AudioBuffer as a 16kHz mono 16-bit WAV ArrayBuffer
@@ -1156,18 +1214,27 @@ updateThemeUI();
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ audio: base64, source: 'translate' }),
     })
-      .then(function (res) { return res.json(); })
-      .then(function (data) {
-        if (data.text) {
+      .then(function (res) {
+        return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+      })
+      .then(function (r) {
+        var data = r.data || {};
+        if (r.ok && data.text) {
           document.getElementById('inputText').value = data.text;
           onInputChange();
-        } else {
+          showStatus('Heard: “' + data.text + '”', 'ok');
+        } else if (r.ok) {
           console.error('STT returned no text:', data);
+          showStatus('Couldn’t make out any words. Speak clearly and try again.', 'error');
+        } else {
+          console.error('STT error response:', data);
+          showStatus(data.detail || 'Transcription failed. Please try again.', 'error');
         }
         resetMicBtn();
       })
       .catch(function (err) {
         console.error('STT error:', err);
+        showStatus('Couldn’t reach the transcription service. Check your connection and try again.', 'error');
         resetMicBtn();
       });
   }

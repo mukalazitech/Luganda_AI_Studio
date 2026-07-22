@@ -37,15 +37,21 @@ this dataset).
 - **proverbs** (`entries[]` with `luganda`/`english`/`theme`/`meaning`): `notes` = `meaning`
   (theme folded into the same notes string, e.g. `"[hardwork] Whatever you plant..."`).
 - **grammar** — three distinct internal shapes require separate handling:
-  - `rules[]` (consonants.json, vowels.json): for each rule, emit one row per item in the
-    rule's `examples[]` (luganda_example/english_meaning, or equivalent key names found per
-    file), `notes` = rule's `explanation`, `category` = `grammar_<rule's source category>`.
+  - `rules[]` (consonants.json, vowels.json): **one row per rule, not per example** — the
+    `examples[]` sub-structures are inconsistent across rules (some use `luganda_example`/
+    `english_meaning`, others `single_form`/`double_form` with no clean English gloss), so
+    per-example flattening would silently mismap or drop data. Instead: `luganda` =
+    `rule_name`, `english` = `explanation`, `notes` = `explanation` (same text — `english`
+    holds the rule statement itself since there's no separate short gloss), `category` =
+    `grammar_consonants` or `grammar_vowels`.
   - `tenses[]` (verb_tenses.json): for each tense, flatten both `examples[]`
     (`luganda_infinitive` or `everyday_form` → english_everyday) and `sentence_examples[]`
-    (`luganda`/`english` directly), `notes` = tense's `description`.
+    (`luganda`/`english` directly), `notes` = tense's `description`, `category` =
+    `grammar_verb_tenses`.
   - `word_classes[]` + `question_words.entries[]` (word_classes.json): flatten each word
-    class's `examples[]` (luganda/english), `notes` = class's `description`; question_words
-    entries map directly (luganda/english/`example` as notes).
+    class's `examples[]` (luganda/english), `notes` = class's `description`, `category` =
+    `grammar_word_classes`; question_words entries map directly (luganda/english/`example` as
+    notes), `category` = `grammar_question_words`.
 - Any row-producing step where the expected key is missing on a given record is skipped (not
   fatal) — logged as a count in the export summary, mirroring `export_dataset.py`'s style.
 

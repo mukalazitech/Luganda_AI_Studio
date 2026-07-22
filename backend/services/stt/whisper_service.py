@@ -1,7 +1,13 @@
 # backend/services/stt/whisper_service.py
 
 """
-Luganda speech-to-text using sulaimank/whisper-small-luganda-400hr-all.
+Luganda speech-to-text using Gemmar/luganda-agr-asr-whisper-small-stage1.
+
+Open (ungated) whisper-small fallback. The original pick
+(sulaimank/whisper-small-luganda-400hr-all) is a gated repo that 403s without
+an HF token on the server; this model is Apache-2.0, needs no token, and is a
+genuine whisper-small (~240MB) so CPU inference stays fast. It is fine-tuned on
+Luganda agricultural speech (~35% WER on farming audio), which suits the pilot.
 
 - Lazy-loaded on first request (same pattern as mms_tts_service.py)
 - Accepts raw WAV bytes, returns transcribed text + confidence
@@ -15,11 +21,11 @@ from typing import Optional, Tuple
 
 logger = logging.getLogger(__name__)
 
-MODEL_NAME = "sulaimank/whisper-small-luganda-400hr-all"
+MODEL_NAME = "Gemmar/luganda-agr-asr-whisper-small-stage1"
 
 
 class WhisperSTTService:
-    """Lazy-loaded wrapper around sulaimank/whisper-small-luganda-400hr-all."""
+    """Lazy-loaded wrapper around Gemmar/luganda-agr-asr-whisper-small-stage1."""
 
     def __init__(self) -> None:
         self._model = None
