@@ -9,7 +9,7 @@
 // Bump on every release that changes a cache-first asset (JS, CSS, icons).
 // HTML is network-first so pages refresh on their own, but static assets are
 // served from cache until the name changes and activate drops the old one.
-const CACHE_NAME = 'luganda-studio-v3';
+const CACHE_NAME = 'luganda-studio-v4';
 
 // UI shell assets to cache on install
 const PRECACHE_ASSETS = [
