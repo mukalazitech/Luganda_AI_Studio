@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -47,7 +47,7 @@
 
   <!-- Mobile topbar -->
   <header class="mobile-topbar">
-    <span class="mobile-topbar-title">Translate</span>
+    <span class="mobile-topbar-title" id="topbarTitle">Translate</span>
     <div style="display:flex;align-items:center;">
       <span class="streak-pill" id="streakPill">🔥 0</span>
       <button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" title="Toggle theme">☀</button>
@@ -56,199 +56,233 @@
 
   <!-- Main content -->
   <main class="main-content">
-    <div class="container" style="padding-top:32px; padding-bottom:32px;">
+    <div class="container" style="padding-top:24px; padding-bottom:32px; max-width:640px; margin:0 auto;">
 
-      <!-- DIRECTION TOGGLE -->
-      <div class="direction-toggle" style="margin-bottom:24px;">
-        <button class="dir-btn active" id="btnEnLg" onclick="setDirection('en-lg')">
-          <span>🇬🇧</span>
-          English
-          <span>→</span>
-          <span>🇺🇬</span>
-          Luganda
-        </button>
-        <button class="dir-btn" id="btnLgEn" onclick="setDirection('lg-en')">
-          <span>🇺🇬</span>
-          Luganda
-          <span>→</span>
-          <span>🇬🇧</span>
-          English
-        </button>
+      <!-- ══════════ MODE TABS ══════════ -->
+      <div class="mode-tabs" role="tablist" aria-label="Choose what you want to do">
+        <button class="mode-tab active" id="tabTranslate" role="tab" aria-selected="true" onclick="setMode('translate')">⇄ Translate</button>
+        <button class="mode-tab"        id="tabSpeak"     role="tab" aria-selected="false" onclick="setMode('speak')">🎙 Speak Luganda</button>
       </div>
 
-      <!-- INPUT CARD -->
-      <div class="card" style="margin-bottom:12px; overflow:hidden; padding:0;">
-        <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-bottom:1px solid var(--border-subtle);">
-          <div style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.04em; text-transform:uppercase;" id="inputLangLabel">
-            🇬🇧 English
-          </div>
-          <button style="display:flex;align-items:center;justify-content:center;width:24px;height:24px;border:1px solid var(--border-subtle);border-radius:4px;background:transparent;color:var(--text-muted);font-size:12px;cursor:pointer;" title="Clear input" onclick="clearInput()">✕</button>
-        </div>
-        <textarea
-          class="input-field"
-          id="inputText"
-          placeholder="Type or paste text to translate…"
-          maxlength="1000"
-          oninput="onInputChange()"
-          onkeydown="handleKey(event)"
-          rows="5"
-          style="border:none; border-radius:0; margin:0; min-height:130px;"
-        ></textarea>
-        <div style="display:flex;align-items:center;justify-content:flex-end;padding:6px 16px;border-top:1px solid var(--border-subtle);">
-          <span style="font-size:10px; color:var(--text-muted); font-variant-numeric:tabular-nums;" id="charCounter">0 / 1000</span>
-        </div>
-      </div>
+      <!-- ════════════════ TRANSLATE MODE ════════════════ -->
+      <section id="modeTranslate">
 
-      <!-- ACTION ROW -->
-      <div class="translate-actions" style="display:flex;align-items:center;gap:12px;margin-bottom:12px;">
-        <button class="btn-primary" id="translateBtn" onclick="runTranslation()" style="flex:1; min-height:48px;">
-          <span class="btn-spinner" style="width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.65s linear infinite;display:none;flex-shrink:0;"></span>
-          <span class="btn-icon">⇄</span>
-          <span id="btnLabel">Translate</span>
-        </button>
-        <button class="btn-secondary" onclick="clearAll()" style="min-height:48px; white-space:nowrap;">Clear all</button>
-        <button class="btn-secondary" id="micBtn" style="min-height:48px; white-space:nowrap;" title="Speak Luganda">🎙 Speak</button>
-      </div>
+        <!-- ─────── COMPOSE VIEW ─────── -->
+        <div id="viewCompose">
 
-      <!-- MIC STATUS (spoken-input feedback) -->
-      <div id="micStatus" role="status" aria-live="polite" style="display:none;font-size:13px;margin:-8px 0 16px;padding:8px 12px;border-radius:8px;line-height:1.4;"></div>
-
-      <!-- KEYBOARD HINT -->
-      <div style="font-size:10px;color:var(--text-muted);text-align:right;margin-bottom:20px;letter-spacing:0.02em;">
-        Press <kbd style="font-family:inherit;font-size:9px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:3px;padding:1px 5px;color:var(--text-muted);">Ctrl</kbd>+<kbd style="font-family:inherit;font-size:9px;background:var(--surface);border:1px solid var(--border-subtle);border-radius:3px;padding:1px 5px;color:var(--text-muted);">Enter</kbd> to translate
-      </div>
-
-      <!-- OUTPUT CARD -->
-      <div class="card" id="outputCard" style="margin-bottom:12px; overflow:hidden; padding:0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 16px;border-bottom:1px solid var(--border-subtle);min-height:42px;">
-          <span style="font-size:11px;font-weight:600;letter-spacing:0.05em;text-transform:uppercase;color:var(--text-muted);" id="outputLabel">Output</span>
-          <div style="display:flex;align-items:center;gap:8px;">
-            <div id="translateMascot" class="mascot-slot mascot-slot-sm" data-character="kintu" data-state="thinking" style="display:none;"></div>
-            <button style="display:none;padding:3px 10px;border-radius:4px;border:1px solid var(--border-subtle);background:transparent;color:var(--text-muted);font-size:11px;cursor:pointer;" id="copyBtn" onclick="copyResult()">Copy</button>
-          </div>
-        </div>
-
-        <div style="padding:20px 16px;" id="outputBody">
-          <!-- IDLE -->
-          <div id="stateIdle" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:32px 16px;text-align:center;">
-            <div style="font-size:28px;opacity:0.4;">🇺🇬</div>
-            <div style="font-size:13px;color:var(--text-muted);line-height:1.6;max-width:260px;">
-              Your translation will appear here.<br>
-              Enter text above and press Translate.
+          <!-- Swap bar: From ⇄ To -->
+          <div class="swap-bar">
+            <div class="swap-lang">
+              <span class="swap-role">From</span>
+              <span class="swap-name" id="fromName">🇬🇧 English</span>
+            </div>
+            <button class="swap-btn" id="swapBtn" onclick="swapDirection()" title="Swap languages" aria-label="Swap languages">⇄</button>
+            <div class="swap-lang">
+              <span class="swap-role">To</span>
+              <span class="swap-name" id="toName">🇺🇬 Luganda</span>
             </div>
           </div>
+
+          <!-- Input card -->
+          <div class="card" style="margin-bottom:12px; overflow:hidden; padding:0;">
+            <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-bottom:1px solid var(--border-subtle);">
+              <span style="font-size:11px; font-weight:600; color:var(--text-muted); letter-spacing:0.04em; text-transform:uppercase;" id="inputLangLabel">🇬🇧 English</span>
+              <button style="border:none;background:transparent;color:var(--text-muted);font-size:12px;font-weight:600;cursor:pointer;padding:4px 6px;min-height:32px;" title="Clear text" onclick="clearAll()">Clear</button>
+            </div>
+            <textarea
+              class="input-field"
+              id="inputText"
+              placeholder="Type or speak a full sentence…"
+              maxlength="1000"
+              oninput="onInputChange()"
+              onkeydown="handleKey(event)"
+              rows="5"
+              style="border:none; border-radius:0; margin:0; min-height:130px;"
+            ></textarea>
+            <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; padding:8px 12px; border-top:1px solid var(--border-subtle);">
+              <button class="mic-inline" id="micInline" title="Speak Luganda" style="display:none;">🎙 <span id="micInlineLabel">Speak Luganda</span></button>
+              <span style="font-size:10px; color:var(--text-muted); font-variant-numeric:tabular-nums; margin-left:auto;" id="charCounter">0 / 1000</span>
+            </div>
+          </div>
+
+          <!-- Mic status (spoken-input feedback) -->
+          <div id="micStatus" role="status" aria-live="polite" style="display:none;font-size:13px;margin:0 0 12px;padding:8px 12px;border-radius:8px;line-height:1.4;"></div>
+
+          <!-- Translate button -->
+          <button class="btn-primary" id="translateBtn" onclick="runTranslation()" style="width:100%; min-height:52px; font-size:16px; justify-content:center;">
+            <span class="btn-spinner" style="width:15px;height:15px;border:2px solid rgba(255,255,255,0.3);border-top-color:white;border-radius:50%;animation:spin 0.65s linear infinite;display:none;flex-shrink:0;"></span>
+            <span class="btn-icon">⇄</span>
+            <span id="btnLabel">Translate</span>
+          </button>
+          <div id="composeHint" style="display:none; font-size:12px; color:var(--red); text-align:center; margin-top:8px;"></div>
+          <div style="font-size:11px; color:var(--text-muted); text-align:center; margin-top:10px;">Translates single words and full sentences.</div>
+
+        </div><!-- /viewCompose -->
+
+        <!-- ─────── RESULT VIEW ─────── -->
+        <div id="viewResult" style="display:none;">
+
+          <button class="back-btn" onclick="backToCompose()">← Translate another</button>
+
           <!-- LOADING -->
-          <div id="stateLoading" style="display:none;flex-direction:column;align-items:center;gap:16px;padding:32px 16px;text-align:center;">
-            <div style="display:flex;gap:8px;align-items:center;">
-              <span style="width:7px;height:7px;background:var(--accent);border-radius:50%;animation:bounce-dot 1.1s ease-in-out infinite;display:inline-block;"></span>
-              <span style="width:7px;height:7px;background:var(--accent);border-radius:50%;animation:bounce-dot 1.1s ease-in-out 0.15s infinite;display:inline-block;"></span>
-              <span style="width:7px;height:7px;background:var(--accent);border-radius:50%;animation:bounce-dot 1.1s ease-in-out 0.30s infinite;display:inline-block;"></span>
+          <div id="stateLoading" style="display:none; flex-direction:column; align-items:center; gap:16px; padding:44px 16px; text-align:center;">
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="width:8px;height:8px;background:var(--accent);border-radius:50%;animation:bounce-dot 1.1s ease-in-out infinite;display:inline-block;"></span>
+              <span style="width:8px;height:8px;background:var(--accent);border-radius:50%;animation:bounce-dot 1.1s ease-in-out 0.15s infinite;display:inline-block;"></span>
+              <span style="width:8px;height:8px;background:var(--accent);border-radius:50%;animation:bounce-dot 1.1s ease-in-out 0.30s infinite;display:inline-block;"></span>
             </div>
-            <div style="font-size:12px;color:var(--text-muted);letter-spacing:0.04em;">Searching the knowledge base…</div>
+            <div style="font-size:13px; color:var(--text-muted); letter-spacing:0.02em;">Translating…</div>
           </div>
+
           <!-- SUCCESS -->
           <div id="stateSuccess" style="display:none;">
-            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:16px;">
-              <div style="font-size:22px;font-weight:600;color:var(--text-primary);line-height:1.5;flex:1;" id="resultText"></div>
-              <button class="tts-btn" id="ttsBtnTranslate" style="display:none;" title="Speak Luganda" aria-label="Listen to Luganda">🔊 Listen</button>
+            <div class="result-original">
+              <div class="result-caption" id="origCaption">You entered · English</div>
+              <div class="result-source-text" id="origText"></div>
             </div>
-            <div style="display:flex;flex-wrap:wrap;gap:8px;" id="chipsRow"></div>
-          </div>
-          <!-- ERROR -->
-          <div id="stateError" style="display:none;">
-            <div style="font-size:14px;color:var(--danger,#c9503e);line-height:1.65;" id="errorText"></div>
-          </div>
+            <div class="card" style="padding:18px 16px; margin-bottom:12px;">
+              <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:12px;">
+                <span class="result-caption" id="transCaption">Luganda</span>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <div id="translateMascot" class="mascot-slot mascot-slot-sm" data-character="kintu" data-state="happy" style="display:none;"></div>
+                  <button class="tts-btn" id="ttsBtnTranslate" style="display:none;" title="Listen in Luganda" aria-label="Listen in Luganda">🔊 Listen</button>
+                </div>
+              </div>
+              <div class="result-translation" id="resultText"></div>
+              <div style="margin-top:16px;">
+                <button class="btn-secondary" id="copyBtn" onclick="copyResult()" style="min-height:44px;">⧉ Copy</button>
+              </div>
+            </div>
+            <!-- correction -->
+            <div class="card" style="padding:14px 16px;">
+              <div class="correct-row">
+                <span style="font-size:13px; font-weight:600; color:var(--text-secondary); margin-right:2px;">Is this correct?</span>
+                <button class="feedback-btn" id="fbCorrect" onclick="markCorrect()">👍 Yes</button>
+                <button class="feedback-btn" id="fbWrong"   onclick="openFix()">✏️ No, fix it</button>
+                <span style="margin-left:auto; font-size:11px; color:var(--text-muted); font-style:italic;" id="feedbackStatus"></span>
+              </div>
+              <div id="expectedCard" style="display:none; margin-top:12px;">
+                <input
+                  type="text"
+                  class="input-field"
+                  id="expectedInput"
+                  placeholder="Type the correct translation…"
+                  oninput="onExpectedChange()"
+                  onkeydown="handleExpectedKey(event)"
+                  style="margin:0 0 10px;"
+                />
+                <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+                  <button class="btn-primary" id="btnSaveCorrection" onclick="submitWithExpected()" disabled style="min-height:44px;">Save correction</button>
+                  <span style="font-size:11px; font-style:italic; color:var(--text-muted);" id="correctionStatus"></span>
+                </div>
+              </div>
+            </div>
+          </div><!-- /stateSuccess -->
+
           <!-- NOT FOUND -->
           <div id="stateNotFound" style="display:none;">
-            <div style="font-size:14px;color:var(--warning,#d99b2a);line-height:1.65;" id="notFoundText">
-              We don't know this word yet — but you can teach us!
-              Try a simpler word or phrase, or type the correct translation
-              below and we'll add it to the dictionary for everyone.
+            <div class="result-original">
+              <div class="result-caption" id="nfOrigCaption">You entered</div>
+              <div class="result-source-text" id="nfOrigText"></div>
+            </div>
+            <div class="card" style="padding:18px 16px;">
+              <div style="font-size:14px; color:var(--warning,#d99b2a); line-height:1.6; margin-bottom:14px;" id="notFoundText">
+                We don't know this one yet — but you can teach us! Type the correct translation and we'll add it for everyone.
+              </div>
+              <input
+                type="text"
+                class="input-field"
+                id="nfExpectedInput"
+                placeholder="Know it? Type the correct translation…"
+                oninput="onExpectedChange()"
+                onkeydown="handleExpectedKey(event)"
+                style="margin:0 0 10px;"
+              />
+              <button class="btn-primary" id="nfSaveBtn" onclick="submitWithExpected()" disabled style="min-height:44px;">Add translation</button>
+              <span style="display:block; margin-top:8px; font-size:11px; font-style:italic; color:var(--text-muted);" id="nfCorrectionStatus"></span>
+            </div>
+          </div>
+
+          <!-- ERROR -->
+          <div id="stateError" style="display:none;">
+            <div class="card" style="padding:18px 16px;">
+              <div style="font-size:14px; color:var(--danger,#c9503e); line-height:1.6;" id="errorText"></div>
+              <button class="btn-secondary" onclick="backToCompose()" style="margin-top:14px; min-height:44px;">← Try again</button>
+            </div>
+          </div>
+
+        </div><!-- /viewResult -->
+      </section><!-- /modeTranslate -->
+
+      <!-- ════════════════ SPEAK LUGANDA MODE (dictation only) ════════════════ -->
+      <section id="modeSpeak" style="display:none;">
+        <div class="speak-panel">
+          <button class="mic-big" id="micBig" title="Tap to speak Luganda" aria-label="Tap to speak Luganda">🎙</button>
+          <div class="speak-status" id="speakStatus">Tap the mic and speak in Luganda</div>
+          <div style="font-size:12px; color:var(--text-muted); max-width:300px; line-height:1.5;">
+            Speak and the app writes your Luganda down. Edit it a little, then copy and paste it anywhere.
+          </div>
+        </div>
+
+        <div class="card" id="speakResultCard" style="display:none; padding:0; overflow:hidden; margin-top:8px;">
+          <div style="display:flex; align-items:center; justify-content:space-between; padding:10px 16px; border-bottom:1px solid var(--border-subtle);">
+            <span class="result-caption">🇺🇬 Your Luganda text</span>
+            <span style="font-size:10px; color:var(--text-muted);">Edit if needed</span>
+          </div>
+          <textarea
+            class="input-field"
+            id="speakText"
+            rows="4"
+            placeholder="Your spoken Luganda will appear here…"
+            oninput="onSpeakChange()"
+            style="border:none; border-radius:0; margin:0; min-height:110px;"
+          ></textarea>
+          <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; padding:10px 12px; border-top:1px solid var(--border-subtle);">
+            <button class="btn-primary"   id="copyLugandaBtn" onclick="copyLuganda()"  style="min-height:44px;">⧉ Copy</button>
+            <button class="btn-secondary" id="speakAgainBtn"  onclick="speakAgain()"   style="min-height:44px;">🎙 Speak again</button>
+            <button class="btn-secondary" onclick="translateThis()" style="min-height:44px;">⇄ Translate this</button>
+            <span style="margin-left:auto; font-size:11px; font-style:italic; color:var(--text-muted); align-self:center;" id="speakCopyStatus"></span>
+          </div>
+        </div>
+      </section>
+
+      <!-- ════════════════ DEVELOPER / QA PANELS (hidden; ?dev=1 to reveal) ════════════════ -->
+      <div id="devPanels" style="display:none;">
+        <div class="card" id="summaryCard" style="display:none;margin-top:32px;overflow:hidden;padding:0;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border-subtle);">
+            <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">Session Summary</span>
+            <button onclick="clearSession()" style="display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:4px;border:1px solid var(--danger,#c9503e);background:transparent;color:var(--danger,#c9503e);font-size:11px;font-weight:500;cursor:pointer;">⊘ Clear Session</button>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);">
+            <div style="padding:16px 20px;border-right:1px solid var(--border-subtle);text-align:center;">
+              <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--text-primary);" id="statTotal">0</div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Total</div>
+            </div>
+            <div style="padding:16px 20px;border-right:1px solid var(--border-subtle);text-align:center;">
+              <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--success,#3daa60);" id="statCorrect">0</div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Correct</div>
+            </div>
+            <div style="padding:16px 20px;border-right:1px solid var(--border-subtle);text-align:center;">
+              <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--danger,#c9503e);" id="statWrong">0</div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Wrong</div>
+            </div>
+            <div style="padding:16px 20px;text-align:center;">
+              <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--warning,#d99b2a);" id="statCorrected">0</div>
+              <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Corrected</div>
             </div>
           </div>
         </div>
 
-        <!-- FEEDBACK ROW -->
-        <div id="feedbackSection" style="display:none;border-top:1px solid var(--border-subtle);padding:12px 16px;align-items:center;gap:8px;flex-wrap:wrap;">
-          <span style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);flex-shrink:0;margin-right:4px;">Rate:</span>
-          <button class="feedback-btn" id="fbCorrect" onclick="setFeedback('correct')">✓ Correct</button>
-          <button class="feedback-btn" id="fbWrong"   onclick="setFeedback('wrong')">✗ Wrong</button>
-          <button class="feedback-btn" id="fbReview"  onclick="setFeedback('review')">🔁 Review</button>
-          <span style="margin-left:auto;font-size:10px;color:var(--text-muted);font-style:italic;white-space:nowrap;transition:opacity 0.3s ease;" id="feedbackStatus"></span>
-        </div>
-      </div>
-
-      <!-- EXPECTED OUTPUT FIELD -->
-      <div id="expectedCard" style="display:none;background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-bottom:12px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--border-subtle);">
-          <span style="font-size:10px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">✏ Better translation</span>
-          <span style="font-size:10px;color:var(--text-muted);">Help improve this answer</span>
-        </div>
-        <input
-          type="text"
-          class="input-field"
-          id="expectedInput"
-          placeholder="Type the better translation here, then save it…"
-          oninput="onExpectedChange()"
-          onkeydown="handleExpectedKey(event)"
-          style="border:none; border-radius:0; margin:0;"
-        />
-        <div style="display:flex;align-items:center;justify-content:flex-end;gap:12px;padding:8px 16px;border-top:1px solid var(--border-subtle);">
-          <span style="font-size:10px;font-style:italic;color:var(--text-muted);flex:1;transition:color 0.3s ease;" id="correctionStatus"></span>
-          <button
-            class="btn-secondary"
-            id="btnSaveCorrection"
-            onclick="submitWithExpected()"
-            disabled
-            style="font-size:11px;padding:6px 14px;min-height:unset;"
-          >Save Answer →</button>
-        </div>
-      </div>
-
-      <!-- SESSION SUMMARY CARD (developer/QA view — hidden from normal users) -->
-      <div class="card dev-only-hidden" id="summaryCard" style="display:none;margin-top:32px;overflow:hidden;padding:0;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 20px;border-bottom:1px solid var(--border-subtle);">
-          <span style="font-size:11px;font-weight:700;letter-spacing:0.08em;text-transform:uppercase;color:var(--text-secondary);">
-            Session Summary
-            <span style="display:inline-flex;align-items:center;gap:4px;font-size:9px;color:var(--text-muted);border:1px solid var(--border-subtle);border-radius:20px;padding:2px 8px;margin-left:8px;vertical-align:middle;">
-              <span style="width:4px;height:4px;background:var(--accent);border-radius:50%;display:inline-block;"></span>
-              Session only
-            </span>
-          </span>
-          <button onclick="clearSession()" style="display:inline-flex;align-items:center;gap:4px;padding:4px 12px;border-radius:4px;border:1px solid var(--danger,#c9503e);background:transparent;color:var(--danger,#c9503e);font-size:11px;font-weight:500;cursor:pointer;">⊘ Clear Session</button>
-        </div>
-        <div style="display:grid;grid-template-columns:repeat(4,1fr);">
-          <div style="padding:16px 20px;border-right:1px solid var(--border-subtle);text-align:center;">
-            <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--text-primary);" id="statTotal">0</div>
-            <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Total</div>
-          </div>
-          <div style="padding:16px 20px;border-right:1px solid var(--border-subtle);text-align:center;">
-            <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--success,#3daa60);" id="statCorrect">0</div>
-            <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Correct</div>
-          </div>
-          <div style="padding:16px 20px;border-right:1px solid var(--border-subtle);text-align:center;">
-            <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--danger,#c9503e);" id="statWrong">0</div>
-            <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Wrong</div>
-          </div>
-          <div style="padding:16px 20px;text-align:center;">
-            <div style="font-size:26px;font-weight:600;line-height:1.1;margin-bottom:4px;color:var(--warning,#d99b2a);" id="statCorrected">0</div>
-            <div style="font-size:10px;font-weight:600;letter-spacing:0.07em;text-transform:uppercase;color:var(--text-muted);">Corrected</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- SESSION HISTORY (developer/QA view — hidden from normal users) -->
-      <div id="historyPanel" class="dev-only-hidden" style="display:none;background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-top:16px;">
-        <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-subtle);">
-          <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-primary);">
-            History
-            <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--bg);border:1px solid var(--border-subtle);color:var(--text-muted);" id="historyCount">0</span>
-          </div>
-          <div style="display:flex;gap:8px;">
+        <div id="historyPanel" style="display:none;background:var(--surface);border:1px solid var(--border-subtle);border-radius:12px;overflow:hidden;margin-top:16px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-subtle);">
+            <div style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-primary);">
+              History
+              <span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:var(--bg);border:1px solid var(--border-subtle);color:var(--text-muted);" id="historyCount">0</span>
+            </div>
             <button class="btn-secondary" onclick="exportHistory()" style="font-size:11px;padding:5px 12px;min-height:unset;">⬇ Export JSON</button>
           </div>
+          <div style="max-height:380px;overflow-y:auto;" id="historyList"></div>
         </div>
-        <div style="max-height:380px;overflow-y:auto;" id="historyList"></div>
       </div>
 
     </div><!-- /.container -->
@@ -271,233 +305,128 @@
 <script>
 'use strict';
 
-/* ─────────────────────────────────────────────────
-   CONSTANTS
-───────────────────────────────────────────────── */
-const STORAGE_KEY   = 'luganda_studio_session_v1';
-const FEEDBACK_URL  = '/api/v1/feedback';
+/* ─── CONSTANTS ─── */
+const STORAGE_KEY  = 'luganda_studio_session_v1';
+const FEEDBACK_URL = '/api/v1/feedback';
 
-/* ─────────────────────────────────────────────────
-   STATE
-───────────────────────────────────────────────── */
-let currentDirection = 'en-lg';
+/* ─── STATE ─── */
+let currentMode      = 'translate';   // 'translate' | 'speak'
+let currentView      = 'compose';     // 'compose'   | 'result'
+let currentDirection = 'en-lg';       // 'en-lg'     | 'lg-en'
 let lastResult       = '';
 let currentFeedback  = null;
 let currentEntry     = null;
 let isLoading        = false;
+let sessionHistory   = [];
+let _speakEventSent  = false;
 
-let sessionHistory = [];
-
-/* ─────────────────────────────────────────────────
-   HELPERS
-───────────────────────────────────────────────── */
+/* ─── HELPERS ─── */
 function qs(id) { return document.getElementById(id); }
 
-function escapeHtml(str) {
-  if (!str) return '';
-  return str
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-/* ─────────────────────────────────────────────────
-   LOCALSTORAGE — persist & restore
-───────────────────────────────────────────────── */
+/* ─── LOCALSTORAGE ─── */
 function persistSession() {
-  try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionHistory));
-  } catch (e) {
-    console.warn('localStorage write failed:', e);
-  }
+  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(sessionHistory)); }
+  catch (e) { console.warn('localStorage write failed:', e); }
 }
-
 function restoreSession() {
   try {
     const raw = localStorage.getItem(STORAGE_KEY);
     if (!raw) return;
     const parsed = JSON.parse(raw);
-    if (Array.isArray(parsed) && parsed.length > 0) {
-      sessionHistory = parsed;
-    }
-  } catch (e) {
-    console.warn('localStorage read failed, starting fresh:', e);
-    sessionHistory = [];
-  }
+    if (Array.isArray(parsed) && parsed.length > 0) sessionHistory = parsed;
+  } catch (e) { console.warn('localStorage read failed:', e); sessionHistory = []; }
 }
 
-/* ─────────────────────────────────────────────────
-   DIRECTION TOGGLE
-───────────────────────────────────────────────── */
-function setDirection(dir) {
-  currentDirection = dir;
-  qs('btnEnLg').classList.toggle('active', dir === 'en-lg');
-  qs('btnLgEn').classList.toggle('active', dir === 'lg-en');
-
-  if (dir === 'en-lg') {
-    qs('inputLangLabel').innerHTML = '🇬🇧 English';
-    qs('inputText').placeholder    = 'Type or paste text to translate…';
-  } else {
-    qs('inputLangLabel').innerHTML = '🇺🇬 Luganda';
-    qs('inputText').placeholder    = 'Wandiika mu Luganda wano…';
-  }
-
-  resetOutput();
+/* ─── MASCOT ─── */
+function showMascot(state) {
+  const slot = qs('translateMascot');
+  if (!slot) return;
+  slot.style.display = '';
+  if (window.setMascot) setMascot('translateMascot', 'kintu', state);
 }
 
-/* ─────────────────────────────────────────────────
-   CHAR COUNTER
-───────────────────────────────────────────────── */
+/* ─── MODE + VIEW STATE MACHINE ─── */
+function setMode(mode) {
+  currentMode = mode;
+  const isT = mode === 'translate';
+  qs('tabTranslate').classList.toggle('active', isT);
+  qs('tabSpeak').classList.toggle('active', !isT);
+  qs('tabTranslate').setAttribute('aria-selected', isT ? 'true' : 'false');
+  qs('tabSpeak').setAttribute('aria-selected', !isT ? 'true' : 'false');
+  qs('modeTranslate').style.display = isT ? '' : 'none';
+  qs('modeSpeak').style.display     = isT ? 'none' : '';
+  qs('topbarTitle').textContent     = isT ? 'Translate' : 'Speak Luganda';
+  if (isT) showView(currentView);
+  else if (!_speakEventSent && window.sendEvent) { _speakEventSent = true; sendEvent('tool_opened', 'speak'); }
+  window.scrollTo(0, 0);
+}
+
+function showView(view) {
+  currentView = view;
+  qs('viewCompose').style.display = view === 'compose' ? '' : 'none';
+  qs('viewResult').style.display  = view === 'result'  ? '' : 'none';
+  try { window.scrollTo({ top: 0, behavior: 'smooth' }); } catch (e) { window.scrollTo(0, 0); }
+}
+function backToCompose() { showView('compose'); }
+
+/* ─── DIRECTION (swap bar) ─── */
+function applyDirection() {
+  const enFirst = currentDirection === 'en-lg';
+  qs('fromName').textContent       = enFirst ? '🇬🇧 English' : '🇺🇬 Luganda';
+  qs('toName').textContent         = enFirst ? '🇺🇬 Luganda' : '🇬🇧 English';
+  qs('inputLangLabel').textContent = enFirst ? '🇬🇧 English' : '🇺🇬 Luganda';
+  qs('inputText').placeholder      = enFirst ? 'Type or speak a full sentence…' : 'Wandiika oba yogera mu Luganda…';
+  // The mic uses a Luganda speech model — only offer it when the source IS Luganda.
+  const mic = qs('micInline');
+  if (mic) mic.style.display = enFirst ? 'none' : 'inline-flex';
+}
+function swapDirection() {
+  currentDirection = currentDirection === 'en-lg' ? 'lg-en' : 'en-lg';
+  const b = qs('swapBtn');
+  if (b) { b.classList.add('spin'); setTimeout(() => b.classList.remove('spin'), 340); }
+  applyDirection();
+  if (currentView === 'result') showView('compose');
+}
+
+/* ─── CHAR COUNTER / HINT ─── */
 function onInputChange() {
   const len = qs('inputText').value.length;
   const el  = qs('charCounter');
   el.textContent = `${len} / 1000`;
   el.classList.toggle('near-limit', len >= 850 && len < 1000);
   el.classList.toggle('at-limit',   len >= 1000);
+  const hint = qs('composeHint');
+  if (hint) hint.style.display = 'none';
 }
 
-/* ─────────────────────────────────────────────────
-   KEYBOARD SHORTCUT
-───────────────────────────────────────────────── */
+/* ─── KEYBOARD SHORTCUT ─── */
 function handleKey(e) {
-  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
-    e.preventDefault();
-    runTranslation();
-  }
+  if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') { e.preventDefault(); runTranslation(); }
 }
 
-/* ─────────────────────────────────────────────────
-   CLEAR HELPERS
-───────────────────────────────────────────────── */
-function clearInput() {
+/* ─── CLEAR ─── */
+function clearAll() {
   qs('inputText').value = '';
   onInputChange();
-}
-
-function clearAll() {
-  clearInput();
-  qs('expectedInput').value = '';
+  const ei = qs('expectedInput');   if (ei)  ei.value  = '';
+  const nf = qs('nfExpectedInput'); if (nf)  nf.value  = '';
   currentFeedback = null;
   currentEntry    = null;
   lastResult      = '';
-  resetOutput();
-  hideExpected();
+  hideFix();
+  showView('compose');
 }
 
-/* ─────────────────────────────────────────────────
-   CLEAR SESSION (with confirmation)
-───────────────────────────────────────────────── */
-function clearSession() {
-  if (!confirm(
-    'Clear the full session?\n\n' +
-    'This will delete all translations, verdicts, and expected outputs ' +
-    'from this browser. This cannot be undone.\n\n' +
-    'Export first if you want to keep the data.'
-  )) return;
-
-  sessionHistory = [];
-  currentEntry   = null;
-
-  try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
-
-  clearAll();
-  renderSummary();
-  renderHistory();
-}
-
-/* ─────────────────────────────────────────────────
-   OUTPUT STATE MACHINE
-───────────────────────────────────────────────── */
-const OUTPUT_STATES = ['stateIdle','stateLoading','stateSuccess','stateError','stateNotFound'];
-
-function showOutputState(which) {
-  OUTPUT_STATES.forEach(id => {
+/* ─── RESULT STATE MACHINE ─── */
+const RESULT_STATES = ['stateLoading', 'stateSuccess', 'stateError', 'stateNotFound'];
+function showResultState(which) {
+  RESULT_STATES.forEach(id => {
     const el = qs(id);
     if (el) el.style.display = (id === which) ? (id === 'stateLoading' ? 'flex' : '') : 'none';
   });
 }
 
-function setOutputCard(stateClass, labelText, labelClass, showCopy) {
-  qs('outputLabel').textContent = labelText;
-  qs('copyBtn').style.display   = showCopy ? '' : 'none';
-}
-
-function resetOutput() {
-  setOutputCard('state-idle', 'Output', '', false);
-  showOutputState('stateIdle');
-  const fb = qs('feedbackSection');
-  if (fb) fb.style.display = 'none';
-  qs('chipsRow').innerHTML         = '';
-  qs('feedbackStatus').textContent = '';
-  qs('feedbackStatus').style.color = '';
-  ['fbCorrect','fbWrong','fbReview'].forEach(id => { const el = qs(id); if (el) el.className = 'feedback-btn'; });
-  qs('copyBtn').classList.remove('copied');
-  const slot = qs('translateMascot');
-  if (slot) slot.style.display = 'none';
-}
-
-function showMascot(state) {
-  const slot = qs('translateMascot');
-  if (!slot) return;
-  slot.style.display = '';
-  setMascot('translateMascot', 'kintu', state);
-}
-
-function showLoading() {
-  setOutputCard('state-loading', 'Translating…', 'lbl-loading', false);
-  showOutputState('stateLoading');
-  const fb = qs('feedbackSection');
-  if (fb) fb.style.display = 'none';
-  showMascot('thinking');
-}
-
-function showSuccess(text, meta) {
-  lastResult = text;
-  setOutputCard('state-success', '✓ Translation', 'lbl-success', true);
-  showOutputState('stateSuccess');
-  qs('resultText').textContent = text;
-
-  const row = qs('chipsRow');
-  const dirLabel = currentDirection === 'en-lg' ? 'EN → LG' : 'LG → EN';
-  const dirChip = document.createElement('span');
-  dirChip.className = 'chip chip-neutral';
-  dirChip.textContent = dirLabel;
-  row.replaceChildren(dirChip);
-  // Developer metadata (confidence/match_type/matched_collection) intentionally
-  // not rendered for normal users — keeps this screen feeling like an app, not a QA tool.
-
-  currentFeedback = null;
-  ['fbCorrect','fbWrong','fbReview'].forEach(id => { const el = qs(id); if (el) el.className = 'feedback-btn'; });
-  qs('feedbackStatus').textContent = '';
-  qs('feedbackStatus').style.color = '';
-  const fb = qs('feedbackSection');
-  if (fb) fb.style.display = 'flex';
-  showMascot('happy');
-}
-
-function showError(msg) {
-  setOutputCard('state-error', '✕ Error', 'lbl-error', false);
-  showOutputState('stateError');
-  qs('errorText').textContent = msg;
-  const fb = qs('feedbackSection');
-  if (fb) fb.style.display = 'none';
-  const slot = qs('translateMascot');
-  if (slot) slot.style.display = 'none';
-}
-
-function showNotFound(msg) {
-  setOutputCard('state-not-found', '◌ Not Found', 'lbl-notfound', false);
-  showOutputState('stateNotFound');
-  if (msg) qs('notFoundText').textContent = msg;
-  const fb = qs('feedbackSection');
-  if (fb) fb.style.display = 'none';
-  showMascot('oops');
-}
-
-/* ─────────────────────────────────────────────────
-   LOADING TOGGLE
-───────────────────────────────────────────────── */
+/* ─── LOADING BUTTON ─── */
 function setLoading(loading) {
   isLoading = loading;
   const btn = qs('translateBtn');
@@ -510,75 +439,124 @@ function setLoading(loading) {
   if (icon) icon.style.display = loading ? 'none' : '';
 }
 
-/* ─────────────────────────────────────────────────
-   EXPECTED OUTPUT
-───────────────────────────────────────────────── */
-function hideExpected() {
-  const el = qs('expectedCard');
-  if (el) el.style.display = 'none';
+/* ─── ORIGINAL / RESULT RENDER ─── */
+function setOriginal(text) {
+  const enFirst = currentDirection === 'en-lg';
+  const srcLang = enFirst ? 'English' : 'Luganda';
+  const tgtLang = enFirst ? 'Luganda' : 'English';
+  qs('origCaption').textContent   = 'You entered · ' + srcLang;
+  qs('origText').textContent      = text;
+  qs('transCaption').textContent  = tgtLang;
+  qs('nfOrigCaption').textContent = 'You entered · ' + srcLang;
+  qs('nfOrigText').textContent    = text;
 }
 
-function showExpected() {
+function showSuccess(text) {
+  lastResult = text;
+  showResultState('stateSuccess');
+  qs('resultText').textContent = text;
+  const copy = qs('copyBtn');
+  copy.style.display = '';
+  copy.textContent = '⧉ Copy';
+  copy.classList.remove('copied');
+  currentFeedback = null;
+  qs('fbCorrect').className = 'feedback-btn';
+  qs('fbWrong').className   = 'feedback-btn';
+  qs('feedbackStatus').textContent = '';
+  qs('feedbackStatus').style.color = '';
+  hideFix();
+  showMascot('happy');
+}
+
+function showNotFound(msg) {
+  showResultState('stateNotFound');
+  if (msg) qs('notFoundText').textContent = msg;
+  qs('nfExpectedInput').value = '';
+  const b = qs('nfSaveBtn'); if (b) b.disabled = true;
+  qs('nfCorrectionStatus').textContent = '';
+  const slot = qs('translateMascot'); if (slot) slot.style.display = 'none';
+}
+
+function showError(msg) {
+  showResultState('stateError');
+  qs('errorText').textContent = msg;
+  const slot = qs('translateMascot'); if (slot) slot.style.display = 'none';
+}
+
+/* ─── FIX FIELD (success correction) ─── */
+function showFix() {
+  const el = qs('expectedCard'); if (el) el.style.display = 'block';
   qs('expectedInput').value = '';
-  const el = qs('expectedCard');
-  if (el) el.style.display = 'block';
+  const btn = qs('btnSaveCorrection'); if (btn) btn.disabled = true;
+  qs('correctionStatus').textContent = '';
+  if (!_correctionStartedSent && window.sendEvent) { _correctionStartedSent = true; sendEvent('correction_started'); }
+}
+function hideFix() {
+  const el = qs('expectedCard'); if (el) el.style.display = 'none';
+}
+
+/* ─── CORRECTION BUTTONS ─── */
+function markCorrect() { setFeedback('correct'); }
+
+function openFix() {
+  currentFeedback = 'wrong';
+  qs('fbCorrect').className = 'feedback-btn';
+  qs('fbWrong').className   = 'feedback-btn selected-wrong';
+  if (currentEntry) { currentEntry.verdict = 'wrong'; upsertHistory(currentEntry); }
+  showMascot('oops');
+  showFix();
+  qs('expectedInput').focus();
+}
+
+/* Which "expected" field is active — success card vs not-found card */
+function _isState(id) { const el = qs(id); return el && el.style.display !== 'none'; }
+function _activeExpectedEls() {
+  if (_isState('stateNotFound')) {
+    return { input: qs('nfExpectedInput'), btn: qs('nfSaveBtn'), status: qs('nfCorrectionStatus') };
+  }
+  return { input: qs('expectedInput'), btn: qs('btnSaveCorrection'), status: qs('correctionStatus') };
 }
 
 function onExpectedChange() {
-  const val = qs('expectedInput').value.trim();
-  if (currentEntry) {
-    currentEntry.expected = val;
-    upsertHistory(currentEntry);
-  }
-  // CHANGED: enable Save Correction button only when there is text
-  const btn = qs('btnSaveCorrection');
+  const { input, btn, status } = _activeExpectedEls();
+  const val = input.value.trim();
+  if (currentEntry) { currentEntry.expected = val; upsertHistory(currentEntry); }
   if (btn) btn.disabled = (val.length === 0);
-  // Clear any previous status when user edits
-  const st = qs('correctionStatus');
-  if (st && val.length > 0) { st.textContent = ''; st.style.color = ''; }
+  if (status && val.length > 0) { status.textContent = ''; status.style.color = ''; }
 }
 
-// CHANGED: allow Enter key to submit the correction from the expected input field
 function handleExpectedKey(e) {
-  if (e.key === 'Enter') {
-    e.preventDefault();
-    submitWithExpected();
-  }
+  if (e.key === 'Enter') { e.preventDefault(); submitWithExpected(); }
 }
 
-// CHANGED: re-submit feedback to the server with the expected output included
 async function submitWithExpected() {
-  const expected = qs('expectedInput').value.trim();
+  const { input, btn, status } = _activeExpectedEls();
+  const expected = input.value.trim();
   if (!expected) return;
 
-  const btn = qs('btnSaveCorrection');
-  const st  = qs('correctionStatus');
-
   if (btn) btn.disabled = true;
-  if (st)  { st.textContent = 'Saving…'; st.style.color = ''; }
+  if (status) { status.textContent = 'Saving…'; status.style.color = ''; }
 
   if (!currentEntry) {
-    if (st) { st.textContent = 'No active translation to correct.'; st.style.color = 'var(--danger,#c9503e)'; }
+    if (status) { status.textContent = 'No active translation to correct.'; status.style.color = 'var(--danger,#c9503e)'; }
     if (btn) btn.disabled = false;
     return;
   }
 
-  // Use the current verdict if set, otherwise default to 'wrong'
-  const verdictMap = { correct: 'correct', wrong: 'wrong', review: 'needs_review' };
-  const apiVerdict = verdictMap[currentFeedback] || 'wrong';
-
+  const verdictMap   = { correct: 'correct', wrong: 'wrong', review: 'needs_review' };
+  const apiVerdict   = verdictMap[currentFeedback] || 'wrong';
   const directionMap = { 'en-lg': 'en_to_lg', 'lg-en': 'lg_to_en' };
   const apiDirection = directionMap[currentEntry.direction] || currentEntry.direction;
 
   const payload = {
-    input_text:         currentEntry.input         || '',
+    input_text:         currentEntry.input      || '',
     direction:          apiDirection,
-    translated_text:    currentEntry.output        || '',
+    translated_text:    currentEntry.output     || '',
     verdict:            apiVerdict,
     expected_output:    expected,
-    match_type:         currentEntry.match_type    || null,
-    confidence:         currentEntry.confidence    || null,
-    matched_collection: currentEntry.collection    || null,
+    match_type:         currentEntry.match_type || null,
+    confidence:         currentEntry.confidence || null,
+    matched_collection: currentEntry.collection || null,
   };
 
   try {
@@ -588,51 +566,43 @@ async function submitWithExpected() {
       body:    JSON.stringify(payload),
       signal:  AbortSignal.timeout(8000),
     });
-
     if (response.ok) {
-      if (st) { st.textContent = '✓ Thanks — saved'; st.style.color = 'var(--success,#3daa60)'; }
+      if (status) { status.textContent = '✓ Thanks — saved'; status.style.color = 'var(--success,#3daa60)'; }
       showMascot('celebrate');
-      sendEvent('correction_submitted');
-      // Update local entry too
+      if (window.sendEvent) sendEvent('correction_submitted');
       currentEntry.expected = expected;
       currentEntry.verdict  = currentFeedback || 'wrong';
       upsertHistory(currentEntry);
     } else {
       const data = await response.json().catch(() => ({}));
-      const msg  = data.detail || `Server error (${response.status})`;
-      console.error('Correction save error:', msg);
-      if (st) { st.textContent = 'Couldn\'t save that yet. Please try again.'; st.style.color = 'var(--danger,#c9503e)'; }
+      console.error('Correction save error:', data.detail || response.status);
+      if (status) { status.textContent = "Couldn't save that yet. Please try again."; status.style.color = 'var(--danger,#c9503e)'; }
       if (btn) btn.disabled = false;
     }
   } catch (err) {
     console.error('Correction save failed:', err);
-    if (st) { st.textContent = 'Connection issue. Please try again.'; st.style.color = 'var(--danger,#c9503e)'; }
+    if (status) { status.textContent = 'Connection issue. Please try again.'; status.style.color = 'var(--danger,#c9503e)'; }
     if (btn) btn.disabled = false;
   }
 }
 
-/* ─────────────────────────────────────────────────
-   FEEDBACK
-───────────────────────────────────────────────── */
+/* ─── FEEDBACK (👍 Yes) ─── */
 async function setFeedback(verdict) {
   currentFeedback = verdict;
 
   const map = {
     correct: { id: 'fbCorrect', cls: 'feedback-btn selected-correct' },
     wrong:   { id: 'fbWrong',   cls: 'feedback-btn selected-wrong'   },
-    review:  { id: 'fbReview',  cls: 'feedback-btn selected-review'  },
   };
-
   Object.values(map).forEach(({ id }) => { const el = qs(id); if (el) el.className = 'feedback-btn'; });
-  const activeEl = qs(map[verdict].id);
+  const activeEl = map[verdict] ? qs(map[verdict].id) : null;
   if (activeEl) activeEl.className = map[verdict].cls;
 
-  if (verdict === 'correct') showMascot('celebrate');
-  else if (verdict === 'wrong' || verdict === 'review') showMascot('oops');
+  if (verdict === 'correct') { hideFix(); showMascot('celebrate'); }
 
   if (currentEntry) {
     currentEntry.verdict  = verdict;
-    currentEntry.expected = qs('expectedInput').value.trim();
+    currentEntry.expected = qs('expectedInput') ? qs('expectedInput').value.trim() : '';
     upsertHistory(currentEntry);
   }
 
@@ -648,19 +618,18 @@ async function setFeedback(verdict) {
 
   const directionMap = { 'en-lg': 'en_to_lg', 'lg-en': 'lg_to_en' };
   const apiDirection = directionMap[currentEntry.direction] || currentEntry.direction;
-
-  const verdictMap = { correct: 'correct', wrong: 'wrong', review: 'needs_review' };
-  const apiVerdict = verdictMap[verdict] || verdict;
+  const verdictMap   = { correct: 'correct', wrong: 'wrong', review: 'needs_review' };
+  const apiVerdict   = verdictMap[verdict] || verdict;
 
   const payload = {
-    input_text:         currentEntry.input         || '',
+    input_text:         currentEntry.input      || '',
     direction:          apiDirection,
-    translated_text:    currentEntry.output        || '',
+    translated_text:    currentEntry.output     || '',
     verdict:            apiVerdict,
-    expected_output:    currentEntry.expected      || null,
-    match_type:         currentEntry.match_type    || null,
-    confidence:         currentEntry.confidence    || null,
-    matched_collection: currentEntry.collection    || null,
+    expected_output:    currentEntry.expected   || null,
+    match_type:         currentEntry.match_type || null,
+    confidence:         currentEntry.confidence || null,
+    matched_collection: currentEntry.collection || null,
   };
 
   try {
@@ -670,18 +639,15 @@ async function setFeedback(verdict) {
       body:    JSON.stringify(payload),
       signal:  AbortSignal.timeout(8000),
     });
-
     if (response.ok) {
-      statusEl.textContent = '✓ Saved';
+      statusEl.textContent = '✓ Saved — thank you';
       statusEl.style.color = 'var(--success,#3daa60)';
     } else {
       const data = await response.json().catch(() => ({}));
-      const msg  = data.detail || `Server error (${response.status})`;
-      console.error('Feedback API error:', msg);
-      statusEl.textContent = 'Couldn\'t save. Try again.';
+      console.error('Feedback API error:', data.detail || response.status);
+      statusEl.textContent = "Couldn't save. Try again.";
       statusEl.style.color = 'var(--danger,#c9503e)';
     }
-
   } catch (err) {
     console.error('Feedback API unreachable:', err);
     statusEl.textContent = 'Connection issue. Not saved yet.';
@@ -689,15 +655,15 @@ async function setFeedback(verdict) {
   }
 }
 
-/* ─────────────────────────────────────────────────
-   RUN TRANSLATION
-───────────────────────────────────────────────── */
+/* ─── RUN TRANSLATION ─── */
 async function runTranslation() {
   if (isLoading) return;
 
   const inputText = qs('inputText').value.trim();
   if (!inputText) {
-    showError('Please enter some text before translating.');
+    const hint = qs('composeHint');
+    if (hint) { hint.textContent = 'Please type or speak something first.'; hint.style.display = 'block'; }
+    qs('inputText').focus();
     return;
   }
 
@@ -705,8 +671,9 @@ async function runTranslation() {
   const payload   = { text: inputText, direction };
 
   setLoading(true);
-  showLoading();
-  hideExpected();
+  showView('result');
+  showResultState('stateLoading');
+  hideFix();
   currentEntry    = null;
   currentFeedback = null;
 
@@ -717,7 +684,6 @@ async function runTranslation() {
       body:    JSON.stringify(payload),
       signal:  AbortSignal.timeout(20000),
     });
-
     const data = await response.json();
 
     if (!response.ok) {
@@ -726,9 +692,10 @@ async function runTranslation() {
       return;
     }
 
+    setOriginal(inputText);
+
     if (data.status === 'not_found' || !data.translated_text) {
       showNotFound(data.message || null);
-      showExpected();
       currentEntry = buildEntry(inputText, null, data);
       upsertHistory(currentEntry);
       return;
@@ -738,12 +705,7 @@ async function runTranslation() {
     upsertHistory(currentEntry);
     if (window.setTTSText) window.setTTSText(currentDirection === 'en-lg' ? data.translated_text : inputText);
 
-    showSuccess(data.translated_text, {
-      confidence:         data.confidence,
-      match_type:         data.match_type,
-      matched_collection: data.matched_collection,
-    });
-    showExpected();
+    showSuccess(data.translated_text);
 
   } catch (err) {
     if (err.name === 'TimeoutError' || err.name === 'AbortError') {
@@ -756,9 +718,7 @@ async function runTranslation() {
   }
 }
 
-/* ─────────────────────────────────────────────────
-   BUILD HISTORY ENTRY
-───────────────────────────────────────────────── */
+/* ─── HISTORY ENTRY ─── */
 function buildEntry(input, output, data) {
   return {
     id:         Date.now(),
@@ -773,209 +733,187 @@ function buildEntry(input, output, data) {
     expected:   '',
   };
 }
-
-/* ─────────────────────────────────────────────────
-   HISTORY MANAGEMENT
-───────────────────────────────────────────────── */
 function upsertHistory(entry) {
   const idx = sessionHistory.findIndex(e => e.id === entry.id);
-  if (idx >= 0) {
-    sessionHistory[idx] = { ...entry };
-  } else {
-    sessionHistory.push({ ...entry });
-  }
+  if (idx >= 0) sessionHistory[idx] = { ...entry };
+  else sessionHistory.push({ ...entry });
   persistSession();
   renderSummary();
   renderHistory();
 }
 
-/* ─────────────────────────────────────────────────
-   RENDER SESSION SUMMARY
-───────────────────────────────────────────────── */
-function renderSummary() {
-  const card = qs('summaryCard');
-
-  if (sessionHistory.length === 0) {
-    card.style.display = 'none';
-    return;
-  }
-
-  card.style.display = 'block';
-
-  const total     = sessionHistory.length;
-  const correct   = sessionHistory.filter(e => e.verdict === 'correct').length;
-  const wrong     = sessionHistory.filter(e => e.verdict === 'wrong').length;
-  const corrected = sessionHistory.filter(e =>
-    (e.verdict === 'wrong' || e.verdict === 'review') && e.expected && e.expected.trim() !== ''
-  ).length;
-
-  qs('statTotal').textContent     = total;
-  qs('statCorrect').textContent   = correct;
-  qs('statWrong').textContent     = wrong;
-  qs('statCorrected').textContent = corrected;
-}
-
-/* ─────────────────────────────────────────────────
-   RENDER HISTORY LIST
-───────────────────────────────────────────────── */
-function renderHistory() {
-  const panel = qs('historyPanel');
-  const list  = qs('historyList');
-  const count = qs('historyCount');
-
-  count.textContent = sessionHistory.length;
-
-  if (sessionHistory.length === 0) {
-    panel.style.display = 'none';
-    return;
-  }
-
-  panel.style.display = 'block';
-  list.innerHTML = '';
-
-  const verdictStyles = {
-    correct: { bg: 'var(--success-bg,#091a0f)', color: 'var(--success,#3daa60)', border: 'var(--success-border,#1a4a28)', label: '✓ Correct' },
-    wrong:   { bg: 'var(--red-bg,#1e0e0b)',     color: 'var(--danger,#c9503e)',   border: 'var(--red-border,#5c2318)',    label: '✗ Wrong'   },
-    review:  { bg: 'var(--review-bg,#1a1205)',  color: 'var(--warning,#c4922a)',  border: 'var(--review-border,#5a3e10)', label: '🔁 Review'  },
-  };
-
-  [...sessionHistory].reverse().forEach(entry => {
-    const vd     = verdictStyles[entry.verdict];
-    const dirLbl = entry.direction === 'en-lg' ? 'EN→LG' : 'LG→EN';
-
-    const el = document.createElement('div');
-    el.style.cssText = 'padding:16px 20px; border-bottom:1px solid var(--border-subtle);';
-    el.innerHTML = `
-      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px;">
-        <div style="font-size:12px;color:var(--text-secondary);flex:1;line-height:1.4;">${escapeHtml(entry.input)}</div>
-        ${vd
-          ? `<span style="font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;flex-shrink:0;background:${vd.bg};color:${vd.color};border:1px solid ${vd.border};">${vd.label}</span>`
-          : `<span style="font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;flex-shrink:0;background:var(--surface);color:var(--text-muted);border:1px solid var(--border-subtle);">Pending</span>`
-        }
-      </div>
-      <div style="font-size:16px;color:var(--text-primary);line-height:1.4;margin-bottom:4px;">${
-        entry.output
-          ? escapeHtml(entry.output)
-          : '<em style="color:var(--text-muted);font-size:13px;">Not found</em>'
-      }</div>
-      ${entry.expected ? `
-        <div style="font-size:11px;color:var(--warning,#c4922a);font-style:italic;margin-bottom:4px;">
-          <span style="font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-right:4px;">Expected:</span>${escapeHtml(entry.expected)}
-        </div>
-      ` : ''}
-      <div style="font-size:10px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap;">
-        <span>${dirLbl}</span>
-        ${entry.confidence !== null && entry.confidence !== undefined
-          ? `<span>· ${Math.round(entry.confidence * 100)}% conf.</span>` : ''}
-        ${entry.match_type ? `<span>· ${entry.match_type}</span>` : ''}
-        <span>· ${entry.timestamp}</span>
-      </div>
-    `;
-    list.appendChild(el);
-  });
-}
-
-/* ─────────────────────────────────────────────────
-   COPY RESULT
-───────────────────────────────────────────────── */
+/* ─── COPY (translation) ─── */
 function copyResult() {
   if (!lastResult) return;
   navigator.clipboard.writeText(lastResult).then(() => {
     const btn = qs('copyBtn');
     btn.textContent = 'Copied ✓';
     btn.classList.add('copied');
-    setTimeout(() => {
-      btn.textContent = 'Copy';
-      btn.classList.remove('copied');
-    }, 2200);
+    setTimeout(() => { btn.textContent = '⧉ Copy'; btn.classList.remove('copied'); }, 2200);
   });
 }
 
-/* ─────────────────────────────────────────────────
-   EXPORT SESSION
-───────────────────────────────────────────────── */
-function exportHistory() {
-  if (sessionHistory.length === 0) return;
+/* ─── SPEAK LUGANDA MODE ─── */
+function onSpeakChange() {
+  const st = qs('speakCopyStatus'); if (st) st.textContent = '';
+}
+function copyLuganda() {
+  const ta = qs('speakText');
+  const text = (ta && ta.value || '').trim();
+  if (!text) return;
+  navigator.clipboard.writeText(text).then(() => {
+    const st = qs('speakCopyStatus');
+    if (st) { st.textContent = '✓ Copied'; st.style.color = 'var(--success,#3daa60)'; setTimeout(() => { st.textContent = ''; }, 2000); }
+  });
+}
+function speakAgain() {
+  const mic = qs('micBig');
+  if (mic) mic.click();
+}
+function translateThis() {
+  const ta = qs('speakText');
+  const text = (ta && ta.value || '').trim();
+  if (!text) return;
+  qs('inputText').value = text;
+  if (window.onInputChange) onInputChange();
+  currentDirection = 'lg-en';
+  applyDirection();
+  setMode('translate');
+  showView('compose');
+}
 
+/* ─── SESSION SUMMARY / HISTORY (dev only, ?dev=1) ─── */
+function renderSummary() {
+  const card = qs('summaryCard');
+  if (!card) return;
+  if (sessionHistory.length === 0) { card.style.display = 'none'; return; }
+  card.style.display = 'block';
+  const total     = sessionHistory.length;
   const correct   = sessionHistory.filter(e => e.verdict === 'correct').length;
   const wrong     = sessionHistory.filter(e => e.verdict === 'wrong').length;
-  const corrected = sessionHistory.filter(e =>
-    (e.verdict === 'wrong' || e.verdict === 'review') && e.expected && e.expected.trim() !== ''
-  ).length;
+  const corrected = sessionHistory.filter(e => (e.verdict === 'wrong' || e.verdict === 'review') && e.expected && e.expected.trim() !== '').length;
+  qs('statTotal').textContent     = total;
+  qs('statCorrect').textContent   = correct;
+  qs('statWrong').textContent     = wrong;
+  qs('statCorrected').textContent = corrected;
+}
 
-  const payload = {
-    exported_at:   new Date().toISOString(),
-    session_count: sessionHistory.length,
-    summary: {
-      total:     sessionHistory.length,
-      correct,
-      wrong,
-      corrected,
-      pending:   sessionHistory.filter(e => !e.verdict).length,
-    },
-    entries: sessionHistory.map(e => ({
-      input:      e.input,
-      direction:  e.direction,
-      output:     e.output,
-      expected:   e.expected || null,
-      verdict:    e.verdict  || 'pending',
-      confidence: e.confidence,
-      match_type: e.match_type,
-      collection: e.collection,
-      timestamp:  e.timestamp,
-    })),
+function _mk(tag, css, text) {
+  const el = document.createElement(tag);
+  if (css)  el.style.cssText   = css;
+  if (text != null) el.textContent = text;
+  return el;
+}
+
+function renderHistory() {
+  const panel = qs('historyPanel');
+  const list  = qs('historyList');
+  const count = qs('historyCount');
+  if (!panel || !list || !count) return;
+  count.textContent = sessionHistory.length;
+  if (sessionHistory.length === 0) { panel.style.display = 'none'; return; }
+  panel.style.display = 'block';
+  list.replaceChildren();
+
+  const verdictStyles = {
+    correct: { color: 'var(--success,#3daa60)', label: '✓ Correct' },
+    wrong:   { color: 'var(--danger,#c9503e)',  label: '✗ Wrong'   },
+    review:  { color: 'var(--warning,#c4922a)', label: '🔁 Review'  },
   };
 
+  [...sessionHistory].reverse().forEach(entry => {
+    const vd     = verdictStyles[entry.verdict];
+    const dirLbl = entry.direction === 'en-lg' ? 'EN→LG' : 'LG→EN';
+
+    const row = _mk('div', 'padding:16px 20px;border-bottom:1px solid var(--border-subtle);');
+    const top = _mk('div', 'display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:4px;');
+    top.appendChild(_mk('div', 'font-size:12px;color:var(--text-secondary);flex:1;line-height:1.4;', entry.input));
+    top.appendChild(_mk('span', 'font-size:9px;font-weight:700;letter-spacing:0.06em;text-transform:uppercase;padding:2px 8px;border-radius:20px;flex-shrink:0;border:1px solid var(--border-subtle);' + (vd ? 'color:' + vd.color + ';' : 'color:var(--text-muted);'), vd ? vd.label : 'Pending'));
+    row.appendChild(top);
+
+    if (entry.output) row.appendChild(_mk('div', 'font-size:16px;color:var(--text-primary);line-height:1.4;margin-bottom:4px;', entry.output));
+    else row.appendChild(_mk('div', 'font-size:13px;color:var(--text-muted);font-style:italic;margin-bottom:4px;', 'Not found'));
+
+    if (entry.expected) {
+      const exp = _mk('div', 'font-size:11px;color:var(--warning,#c4922a);font-style:italic;margin-bottom:4px;');
+      exp.appendChild(_mk('span', 'font-size:9px;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-muted);margin-right:4px;', 'Expected:'));
+      exp.appendChild(document.createTextNode(entry.expected));
+      row.appendChild(exp);
+    }
+
+    const meta = _mk('div', 'font-size:10px;color:var(--text-muted);display:flex;gap:8px;flex-wrap:wrap;');
+    const bits = [dirLbl];
+    if (entry.confidence != null) bits.push('· ' + Math.round(entry.confidence * 100) + '% conf.');
+    if (entry.match_type) bits.push('· ' + entry.match_type);
+    bits.push('· ' + entry.timestamp);
+    bits.forEach(b => meta.appendChild(_mk('span', '', b)));
+    row.appendChild(meta);
+
+    list.appendChild(row);
+  });
+}
+
+function exportHistory() {
+  if (sessionHistory.length === 0) return;
+  const correct   = sessionHistory.filter(e => e.verdict === 'correct').length;
+  const wrong     = sessionHistory.filter(e => e.verdict === 'wrong').length;
+  const corrected = sessionHistory.filter(e => (e.verdict === 'wrong' || e.verdict === 'review') && e.expected && e.expected.trim() !== '').length;
+  const payload = {
+    exported_at: new Date().toISOString(),
+    session_count: sessionHistory.length,
+    summary: { total: sessionHistory.length, correct, wrong, corrected, pending: sessionHistory.filter(e => !e.verdict).length },
+    entries: sessionHistory.map(e => ({
+      input: e.input, direction: e.direction, output: e.output, expected: e.expected || null,
+      verdict: e.verdict || 'pending', confidence: e.confidence, match_type: e.match_type, collection: e.collection, timestamp: e.timestamp,
+    })),
+  };
   const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
   const url  = URL.createObjectURL(blob);
-  const a    = Object.assign(document.createElement('a'), {
-    href:     url,
-    download: `luganda-session-${Date.now()}.json`,
-  });
+  const a    = Object.assign(document.createElement('a'), { href: url, download: `luganda-session-${Date.now()}.json` });
   a.click();
   URL.revokeObjectURL(url);
 }
-
-/* ─────────────────────────────────────────────────
-   BOOT
-───────────────────────────────────────────────── */
-(function boot() {
-  restoreSession();
+function clearSession() {
+  if (!confirm('Clear the full session? This deletes all translations and verdicts from this browser. Export first if you want to keep the data.')) return;
+  sessionHistory = [];
+  currentEntry   = null;
+  try { localStorage.removeItem(STORAGE_KEY); } catch (e) { /* ignore */ }
+  clearAll();
   renderSummary();
   renderHistory();
+}
+
+/* ─── BOOT ─── */
+let _correctionStartedSent = false;
+(function boot() {
+  restoreSession();
+  applyDirection();
+  setMode('translate');
+  showView('compose');
+  if (location.search.indexOf('dev=1') !== -1) {
+    const d = qs('devPanels'); if (d) d.style.display = 'block';
+    renderSummary();
+    renderHistory();
+  }
 })();
 
-/* Service worker is registered once from the shared theme.js. */
+/* Anonymous pilot signal — tool opened. Service worker is registered once from theme.js. */
+if (window.sendEvent) sendEvent('tool_opened', 'translate');
 
-/* ─────────────────────────────────────────────────
-   ANONYMOUS PILOT SIGNALS — identifiers only
-───────────────────────────────────────────────── */
-sendEvent('tool_opened', 'translate');
-let _correctionStartedSent = false;
-document.addEventListener('focusin', (e) => {
-  if (!_correctionStartedSent && e.target && e.target.id === 'expectedInput') {
-    _correctionStartedSent = true;
-    sendEvent('correction_started');
-  }
-});
-
-/* ─────────────────────────────────────────────────
-   TTS — SPEAKER BUTTON
-───────────────────────────────────────────────── */
+/* ─── TTS — LISTEN BUTTON ─── */
 (function () {
   const btn = document.getElementById('ttsBtnTranslate');
   if (!btn) return;
-
   let _ttsLugandaText = '';
 
   window.setTTSText = function (text) {
     _ttsLugandaText = text || '';
-    btn.style.display = _ttsLugandaText ? 'inline-block' : 'none';
+    btn.style.display = _ttsLugandaText ? 'inline-flex' : 'none';
   };
 
   btn.addEventListener('click', function () {
     if (!_ttsLugandaText) return;
-    sendEvent('tool_opened', 'listen');
+    if (window.sendEvent) sendEvent('tool_opened', 'listen');
     _playTTS(_ttsLugandaText, btn);
   });
 
@@ -986,29 +924,16 @@ document.addEventListener('focusin', (e) => {
     toast.className = 'tts-toast';
     toast.textContent = "Loading Luganda voice for the first time — this takes ~10 seconds. It'll be instant after that.";
     document.body.appendChild(toast);
-    setTimeout(function () {
-      toast.classList.add('hiding');
-      setTimeout(function () { toast.remove(); }, 350);
-    }, 6000);
+    setTimeout(function () { toast.classList.add('hiding'); setTimeout(function () { toast.remove(); }, 350); }, 6000);
   }
 
   function _playTTS(text, button) {
     button.disabled = true;
     button.textContent = '⏳ Loading…';
     _showFirstUseToast();
-
-    fetch('/api/v1/tts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text: text, lang: 'lug' }),
-    })
-      .then(function (res) {
-        if (!res.ok) throw new Error('TTS ' + res.status);
-        return res.arrayBuffer();
-      })
+    fetch('/api/v1/tts', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ text: text, lang: 'lug' }) })
+      .then(function (res) { if (!res.ok) throw new Error('TTS ' + res.status); return res.arrayBuffer(); })
       .then(function (buf) {
-        // Decode via Web Audio API — works cross-browser, bypasses autoplay policy
-        // because we resume a context created in direct response to user click
         var AudioCtx = window.AudioContext || window.webkitAudioContext;
         var ctx = new AudioCtx();
         ctx.decodeAudioData(buf, function (audioBuffer) {
@@ -1017,21 +942,10 @@ document.addEventListener('focusin', (e) => {
           source.connect(ctx.destination);
           source.start(0);
           button.textContent = '🔊 Listen';
-          source.onended = function () {
-            button.disabled = false;
-            ctx.close();
-          };
-        }, function (err) {
-          console.error('TTS decode error:', err);
-          button.textContent = '🔊 Listen';
-          button.disabled = false;
-        });
+          source.onended = function () { button.disabled = false; ctx.close(); };
+        }, function (err) { console.error('TTS decode error:', err); button.textContent = '🔊 Listen'; button.disabled = false; });
       })
-      .catch(function (err) {
-        console.error('TTS error:', err);
-        button.textContent = '🔊 Listen';
-        button.disabled = false;
-      });
+      .catch(function (err) { console.error('TTS error:', err); button.textContent = '🔊 Listen'; button.disabled = false; });
   }
 })();
 </script>
@@ -1040,159 +954,31 @@ document.addEventListener('focusin', (e) => {
 updateThemeUI();
 </script>
 
+<!-- ─── MIC / STT — shared recorder for inline mic + big mic ─── -->
 <script>
-/* ─────────────────────────────────────────────────
-   MIC / STT — translate page
-───────────────────────────────────────────────── */
 (function () {
-  var micBtn       = document.getElementById('micBtn');
-  var statusEl     = document.getElementById('micStatus');
-  var mediaRecorder = null;
-  var audioChunks  = [];
-  var isRecording  = false;
+  var AudioCtx = window.AudioContext || window.webkitAudioContext;
 
-  // Show a plain-language message to the user instead of only logging to console.
-  // tone: 'info' | 'error' | 'ok' — controls the colour.
-  function showStatus(msg, tone) {
-    if (!statusEl) return;
-    var colors = {
-      info:  { fg: 'var(--text-muted)', bg: 'var(--surface)',       bd: 'var(--border-subtle)' },
-      error: { fg: 'var(--red)',        bg: 'rgba(200,40,40,0.08)',  bd: 'var(--red)' },
-      ok:    { fg: 'var(--green, #2f6b3a)', bg: 'rgba(47,107,58,0.08)', bd: 'var(--green, #2f6b3a)' }
-    };
-    var c = colors[tone] || colors.info;
-    statusEl.textContent = msg;
-    statusEl.style.color = c.fg;
-    statusEl.style.background = c.bg;
-    statusEl.style.border = '1px solid ' + c.bd;
-    statusEl.style.display = 'block';
-  }
-  function hideStatus() { if (statusEl) statusEl.style.display = 'none'; }
-
-  if (!navigator.mediaDevices || !window.MediaRecorder) {
-    if (micBtn) micBtn.style.display = 'none';
-    return;
-  }
-
-  // Mic requires a secure context (https or localhost). If it isn't, say so
-  // instead of failing silently when getUserMedia is undefined.
-  if (!window.isSecureContext) {
-    showStatus('Voice input needs a secure (https) connection. Open the site over https and try again.', 'error');
-  }
-
-  micBtn.addEventListener('click', function () {
-    if (isRecording) {
-      stopRecording();
-    } else {
-      startRecording();
-    }
-  });
-
-  function startRecording() {
-    hideStatus();
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then(function (stream) {
-        audioChunks = [];
-        mediaRecorder = new MediaRecorder(stream);
-        mediaRecorder.ondataavailable = function (e) {
-          if (e.data && e.data.size > 0) audioChunks.push(e.data);
-        };
-        mediaRecorder.onstop = function () {
-          stream.getTracks().forEach(function (t) { t.stop(); });
-
-          // Guard: nothing captured (button tapped too fast, or mic muted).
-          var totalBytes = audioChunks.reduce(function (n, b) { return n + b.size; }, 0);
-          if (audioChunks.length === 0 || totalBytes < 1024) {
-            showStatus('Didn’t catch any sound. Hold Speak, say the word clearly, then tap again to stop.', 'error');
-            resetMicBtn();
-            return;
-          }
-
-          // Browser records in WebM/OGG — decode via Web Audio API then re-encode as WAV
-          var rawBlob = new Blob(audioChunks);
-          rawBlob.arrayBuffer().then(function (arrayBuf) {
-            var ctx = new (window.AudioContext || window.webkitAudioContext)({ sampleRate: 16000 });
-            ctx.decodeAudioData(arrayBuf, function (audioBuffer) {
-              ctx.close();
-              if (!audioBuffer || audioBuffer.length < 1600) { // < ~0.1s of audio
-                showStatus('That was too short to hear. Try holding Speak a little longer.', 'error');
-                resetMicBtn();
-                return;
-              }
-              var wavBytes = audioBufferToWav(audioBuffer);
-              sendAudio(wavBytes);
-            }, function (err) {
-              console.error('Audio decode failed:', err);
-              showStatus('Couldn’t read the recording. Please try again.', 'error');
-              resetMicBtn();
-            });
-          }).catch(function (err) {
-            console.error('Audio read failed:', err);
-            showStatus('Couldn’t read the recording. Please try again.', 'error');
-            resetMicBtn();
-          });
-        };
-        mediaRecorder.start();
-        isRecording = true;
-        micBtn.textContent = '🔴 Recording…';
-        micBtn.style.borderColor = 'var(--red)';
-        micBtn.style.color = 'var(--red)';
-        showStatus('Listening… tap Speak again when you’re done.', 'info');
-      })
-      .catch(function (err) {
-        console.error('Mic access denied:', err);
-        var msg = 'Microphone blocked. Allow mic access for this site, then try again.';
-        if (err && err.name === 'NotFoundError') {
-          msg = 'No microphone found on this device.';
-        } else if (err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')) {
-          msg = 'Microphone permission was denied. Tap the 🔒 in the address bar, allow the mic, then try again. (Incognito often blocks it.)';
-        }
-        showStatus(msg, 'error');
-        resetMicBtn();
-      });
-  }
-
-  function stopRecording() {
-    if (mediaRecorder && mediaRecorder.state !== 'inactive') {
-      mediaRecorder.stop();
-    }
-    isRecording = false;
-    micBtn.textContent = '⏳ Transcribing…';
-    micBtn.style.borderColor = '';
-    micBtn.style.color = '';
-    micBtn.disabled = true;
-    showStatus('Transcribing…', 'info');
-  }
-
-  // Encode an AudioBuffer as a 16kHz mono 16-bit WAV ArrayBuffer
+  // Encode an AudioBuffer as 16kHz mono 16-bit WAV
   function audioBufferToWav(buffer) {
     var numChannels = 1;
     var sampleRate  = buffer.sampleRate;
-    var samples     = buffer.getChannelData(0); // mono: use channel 0
-    // If stereo, average both channels
+    var samples     = buffer.getChannelData(0);
     if (buffer.numberOfChannels > 1) {
       var ch1 = buffer.getChannelData(1);
       var mixed = new Float32Array(samples.length);
       for (var i = 0; i < samples.length; i++) mixed[i] = (samples[i] + ch1[i]) / 2;
       samples = mixed;
     }
-    var dataLen   = samples.length * 2; // 16-bit = 2 bytes per sample
-    var wavBuf    = new ArrayBuffer(44 + dataLen);
-    var view      = new DataView(wavBuf);
+    var dataLen = samples.length * 2;
+    var wavBuf  = new ArrayBuffer(44 + dataLen);
+    var view    = new DataView(wavBuf);
     function writeStr(off, str) { for (var i = 0; i < str.length; i++) view.setUint8(off + i, str.charCodeAt(i)); }
-    writeStr(0,  'RIFF');
-    view.setUint32(4,  36 + dataLen, true);
-    writeStr(8,  'WAVE');
-    writeStr(12, 'fmt ');
-    view.setUint32(16, 16, true);          // PCM chunk size
-    view.setUint16(20, 1,  true);          // PCM format
-    view.setUint16(22, numChannels, true);
-    view.setUint32(24, sampleRate, true);
-    view.setUint32(28, sampleRate * 2, true); // byte rate
-    view.setUint16(32, 2,  true);          // block align
-    view.setUint16(34, 16, true);          // bits per sample
-    writeStr(36, 'data');
-    view.setUint32(40, dataLen, true);
+    writeStr(0, 'RIFF'); view.setUint32(4, 36 + dataLen, true); writeStr(8, 'WAVE');
+    writeStr(12, 'fmt '); view.setUint32(16, 16, true); view.setUint16(20, 1, true);
+    view.setUint16(22, numChannels, true); view.setUint32(24, sampleRate, true);
+    view.setUint32(28, sampleRate * 2, true); view.setUint16(32, 2, true); view.setUint16(34, 16, true);
+    writeStr(36, 'data'); view.setUint32(40, dataLen, true);
     var offset = 44;
     for (var j = 0; j < samples.length; j++) {
       var s = Math.max(-1, Math.min(1, samples[j]));
@@ -1202,50 +988,134 @@ updateThemeUI();
     return wavBuf;
   }
 
-  function sendAudio(wavArrayBuffer) {
-    // Convert ArrayBuffer → base64
-    var bytes = new Uint8Array(wavArrayBuffer);
-    var binary = '';
-    for (var i = 0; i < bytes.byteLength; i++) binary += String.fromCharCode(bytes[i]);
-    var base64 = btoa(binary);
+  // A recorder bound to a button + UI callbacks. Preserves rich pilot mic UX.
+  function makeMic(cfg) {
+    var btn = cfg.btn;
+    if (!btn) return;
+    if (!navigator.mediaDevices || !window.MediaRecorder) { btn.style.display = 'none'; return; }
 
-    fetch('/api/v1/stt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ audio: base64, source: 'translate' }),
-    })
-      .then(function (res) {
-        return res.json().then(function (data) { return { ok: res.ok, data: data }; });
-      })
-      .then(function (r) {
-        var data = r.data || {};
-        if (r.ok && data.text) {
-          document.getElementById('inputText').value = data.text;
-          onInputChange();
-          showStatus('Heard: “' + data.text + '”', 'ok');
-        } else if (r.ok) {
-          console.error('STT returned no text:', data);
-          showStatus('Couldn’t make out any words. Speak clearly and try again.', 'error');
-        } else {
-          console.error('STT error response:', data);
-          showStatus(data.detail || 'Transcription failed. Please try again.', 'error');
-        }
-        resetMicBtn();
-      })
-      .catch(function (err) {
-        console.error('STT error:', err);
-        showStatus('Couldn’t reach the transcription service. Check your connection and try again.', 'error');
-        resetMicBtn();
+    var mediaRecorder = null, chunks = [], recording = false;
+
+    if (!window.isSecureContext) {
+      cfg.onStatus('Voice input needs a secure (https) connection. Open the site over https and try again.', 'error');
+    }
+
+    btn.addEventListener('click', function () { if (recording) stop(); else start(); });
+
+    function start() {
+      cfg.onStatus('', 'hide');
+      navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+        chunks = [];
+        mediaRecorder = new MediaRecorder(stream);
+        mediaRecorder.ondataavailable = function (e) { if (e.data && e.data.size > 0) chunks.push(e.data); };
+        mediaRecorder.onstop = function () {
+          stream.getTracks().forEach(function (t) { t.stop(); });
+          var total = chunks.reduce(function (n, b) { return n + b.size; }, 0);
+          if (chunks.length === 0 || total < 1024) {
+            cfg.onStatus('Didn’t catch any sound. Tap the mic, speak clearly, then tap again to stop.', 'error');
+            reset();
+            return;
+          }
+          var raw = new Blob(chunks);
+          raw.arrayBuffer().then(function (ab) {
+            var ctx = new AudioCtx({ sampleRate: 16000 });
+            ctx.decodeAudioData(ab, function (audioBuffer) {
+              ctx.close();
+              if (!audioBuffer || audioBuffer.length < 1600) {
+                cfg.onStatus('That was too short to hear. Hold on a little longer.', 'error');
+                reset();
+                return;
+              }
+              sendAudio(audioBufferToWav(audioBuffer));
+            }, function (err) { console.error('decode failed:', err); cfg.onStatus('Couldn’t read the recording. Please try again.', 'error'); reset(); });
+          }).catch(function (err) { console.error('read failed:', err); cfg.onStatus('Couldn’t read the recording. Please try again.', 'error'); reset(); });
+        };
+        mediaRecorder.start();
+        recording = true;
+        cfg.onStart();
+      }).catch(function (err) {
+        console.error('Mic access denied:', err);
+        var msg = 'Microphone blocked. Allow mic access for this site, then try again.';
+        if (err && err.name === 'NotFoundError') msg = 'No microphone found on this device.';
+        else if (err && (err.name === 'NotAllowedError' || err.name === 'SecurityError')) msg = 'Microphone permission was denied. Tap the 🔒 in the address bar, allow the mic, then try again. (Incognito often blocks it.)';
+        cfg.onStatus(msg, 'error');
+        reset();
       });
+    }
+
+    function stop() {
+      if (mediaRecorder && mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+      recording = false;
+      btn.disabled = true;
+      cfg.onStopUI();
+    }
+
+    function reset() { recording = false; btn.disabled = false; cfg.onReset(); }
+
+    function sendAudio(wavBuf) {
+      var bytes = new Uint8Array(wavBuf), bin = '';
+      for (var i = 0; i < bytes.byteLength; i++) bin += String.fromCharCode(bytes[i]);
+      fetch('/api/v1/stt', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ audio: btoa(bin), source: cfg.source || 'translate' }),
+      })
+        .then(function (res) { return res.json().then(function (d) { return { ok: res.ok, data: d }; }); })
+        .then(function (r) {
+          var d = r.data || {};
+          if (r.ok && d.text) { cfg.onText(d.text); cfg.onStatus('Heard: “' + d.text + '”', 'ok'); }
+          else if (r.ok) { cfg.onStatus('Couldn’t make out any words. Speak clearly and try again.', 'error'); }
+          else { cfg.onStatus(d.detail || 'Transcription failed. Please try again.', 'error'); }
+          reset();
+        })
+        .catch(function (err) { console.error('STT error:', err); cfg.onStatus('Couldn’t reach the transcription service. Check your connection and try again.', 'error'); reset(); });
+    }
   }
 
-  function resetMicBtn() {
-    micBtn.textContent = '🎙 Speak';
-    micBtn.disabled = false;
-    micBtn.style.borderColor = '';
-    micBtn.style.color = '';
-    isRecording = false;
+  /* Inline mic (compose) — fills #inputText, rich status in #micStatus */
+  var micStatusEl = document.getElementById('micStatus');
+  function inlineStatus(msg, tone) {
+    if (!micStatusEl) return;
+    if (tone === 'hide') { micStatusEl.style.display = 'none'; return; }
+    var colors = {
+      info:  { fg: 'var(--text-muted)',     bg: 'var(--surface)',        bd: 'var(--border-subtle)' },
+      error: { fg: 'var(--red)',            bg: 'rgba(200,40,40,0.08)',  bd: 'var(--red)' },
+      ok:    { fg: 'var(--green, #2f6b3a)', bg: 'rgba(47,107,58,0.08)',  bd: 'var(--green, #2f6b3a)' },
+    };
+    var c = colors[tone] || colors.info;
+    micStatusEl.textContent = msg;
+    micStatusEl.style.color = c.fg;
+    micStatusEl.style.background = c.bg;
+    micStatusEl.style.border = '1px solid ' + c.bd;
+    micStatusEl.style.display = 'block';
   }
+  var inlineLabel = document.getElementById('micInlineLabel');
+  makeMic({
+    btn: document.getElementById('micInline'), source: 'translate',
+    onStatus: inlineStatus,
+    onStart:  function () { document.getElementById('micInline').classList.add('recording'); if (inlineLabel) inlineLabel.textContent = 'Recording… tap to stop'; inlineStatus('Listening… tap the mic again when you’re done.', 'info'); },
+    onStopUI: function () { if (inlineLabel) inlineLabel.textContent = 'Writing…'; inlineStatus('Transcribing…', 'info'); },
+    onReset:  function () { document.getElementById('micInline').classList.remove('recording'); if (inlineLabel) inlineLabel.textContent = 'Speak Luganda'; },
+    onText:   function (text) { var t = document.getElementById('inputText'); t.value = text; if (window.onInputChange) window.onInputChange(); t.focus(); },
+  });
+
+  /* Big mic (Speak Luganda mode) — fills #speakText, status in #speakStatus */
+  var speakStatusEl = document.getElementById('speakStatus');
+  function speakStatus(msg, tone) {
+    if (!speakStatusEl) return;
+    if (tone === 'hide') { speakStatusEl.textContent = ''; return; }
+    speakStatusEl.textContent = msg;
+    speakStatusEl.style.color = tone === 'error' ? 'var(--red)' : (tone === 'ok' ? 'var(--green,#2f6b3a)' : 'var(--text-secondary)');
+  }
+  var bigBtn = document.getElementById('micBig');
+  makeMic({
+    btn: bigBtn, source: 'dictation',
+    onStatus: speakStatus,
+    onStart:  function () { bigBtn.classList.add('recording'); bigBtn.textContent = '⏹'; speakStatus('Listening… tap to stop', 'info'); },
+    onStopUI: function () { bigBtn.textContent = '⏳'; speakStatus('Writing down your Luganda…', 'info'); },
+    onReset:  function () { bigBtn.classList.remove('recording'); bigBtn.textContent = '🎙'; },
+    onText:   function (text) { var ta = document.getElementById('speakText'); ta.value = ta.value ? (ta.value + ' ' + text) : text; document.getElementById('speakResultCard').style.display = 'block'; if (window.onSpeakChange) window.onSpeakChange(); },
+  });
 })();
 </script>
 
