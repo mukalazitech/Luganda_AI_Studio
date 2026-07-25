@@ -21,8 +21,10 @@ test('Word Library paginates results instead of loading a whole corpus category'
   assert.match(library, /id="wordShowMore"/);
 });
 
-test('Proverbs limits Featured while keeping every proverb in All search', () => {
+test("Proverbs pins Patrick's selected mixed featured proverbs while keeping every proverb in All search", () => {
   assert.match(proverbs, /const FEATURED_LIMIT=10/);
-  assert.match(proverbs, /featuredProverbs=entries\.filter\(item=>item\.tier==='featured'\)\.slice\(0,FEATURED_LIMIT\)/);
+  assert.match(proverbs, /const FEATURED_IDS=\[/);
+  assert.match(proverbs, /'prov_009'.*'prov_005'.*'prov_002'.*'prov_001'.*'prov_004'/s);
+  assert.match(proverbs, /featuredProverbs=FEATURED_IDS\.map\(id=>entries\.find\(item=>item\.id===id\)\)\.filter\(Boolean\)/);
   assert.match(proverbs, /allProverbs=entries/);
 });

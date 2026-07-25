@@ -21,6 +21,10 @@ let searchQuery='';
 let visibleCount=60;
 const PAGE_SIZE=60;
 const FEATURED_LIMIT=10;
+const FEATURED_IDS=[
+ 'prov_009','prov_005','prov_002','prov_001','prov_004',
+ 'prov_003','prov_006','prov_007','prov_008','prov_010'
+];
 function valueText(value){return value==null?'':String(value)}
 function buildCard(item){
  const card=document.createElement('article');card.className='proverb';
@@ -77,7 +81,7 @@ async function loadProverbs(){
   if(!response.ok)throw new Error('unavailable');
   const data=await response.json();
   const entries=Array.isArray(data.entries)?data.entries:[];
-  featuredProverbs=entries.filter(item=>item.tier==='featured').slice(0,FEATURED_LIMIT);
+  featuredProverbs=FEATURED_IDS.map(id=>entries.find(item=>item.id===id)).filter(Boolean);
   allProverbs=entries;
   document.getElementById('total').textContent=String(entries.length);
   document.getElementById('state').hidden=true;
