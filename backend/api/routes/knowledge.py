@@ -20,8 +20,7 @@ import logging
 from fastapi import APIRouter, HTTPException, Query
 
 from backend.services.search_service import search_knowledge, ALL_COLLECTIONS
-from backend.db.chroma_client import get_chroma_client, get_or_create_collection_safe
-from backend.services.ingestion.embedder import get_chroma_embedding_fn
+from backend.db.chroma_client import get_chroma_client
 
 logger = logging.getLogger(__name__)
 
@@ -92,13 +91,14 @@ async def knowledge_status():
 
     for col_name in ALL_COLLECTIONS_WITH_DOCS:
         try:
-            col = get_or_create_collection_safe(client, col_name, embedding_function=get_chroma_embedding_fn())
+            # Counting never needs embeddings and must not create collections.
+            col = client.get_collection(col_name)
             status[col_name] = col.count()
         except Exception as e:
             logger.warning(f"Could not count '{col_name}': {e}")
-            status[col_name] = -1
+            status[col_name] = 0
 
-    total = sum(v for v in status.values() if v >= 0)
+    total = sum(status.values())
 
     return {
         "collections":     status,

@@ -18,6 +18,7 @@ Fixes applied:
 """
 
 import logging
+import re
 from typing import Optional
 
 from backend.db.chroma_client import chroma_client
@@ -37,12 +38,15 @@ COLLECTIONS_TO_SEARCH = ["vocabulary", "sentences", "proverbs"]
 
 # MiniLM cosine distance: 0 = identical, 2 = opposite.
 # similarity = 1 - distance
-# 0.50 means we accept matches where the vectors are reasonably close.
+# CHANGED: weak candidates remain visible, but are not authoritative.
 SEMANTIC_THRESHOLD = 0.50
+SEMANTIC_AUTHORITATIVE_THRESHOLD = 0.80
 
-# How many records to pull per collection scan.
-# Our full dataset is 492 records — 1000 is a safe ceiling.
-SCAN_LIMIT = 1000
+MATCH_PRIORITY = {
+    "partial": 1,
+    "normalized": 2,
+    "exact": 3,
+}
 
 
 # ---------------------------------------------------------------------- #
@@ -62,6 +66,58 @@ def _get_source_field(direction: str) -> str:
 def _get_target_field(direction: str) -> str:
     """Field we return AS the translation."""
     return "luganda" if direction == "en_to_lg" else "english"
+
+
+def _tokenize(text: str) -> list[str]:
+    """Return normalized word tokens without surrounding punctuation."""
+    return re.findall(r"[^\W_]+(?:'[^\W_]+)?", _normalize(text), flags=re.UNICODE)
+
+
+def _has_compatible_translation_length(
+    input_text: str,
+    translated_text: str,
+) -> bool:
+    """Keep one-word lookups from expanding into unrelated sentences."""
+    if len(_tokenize(input_text)) != 1:
+        return True
+    return 0 < len(_tokenize(translated_text)) <= 2
+
+
+def _source_priority(meta: dict) -> int:
+    """Prefer reviewed/curated records when match quality is tied."""
+    tier = str(meta.get("tier", "")).strip().lower()
+    if tier in {"featured", "curated"} or meta.get("verified") is True:
+        return 3
+
+    source_file = str(meta.get("source_file", "")).strip().lower()
+    if source_file.endswith(".json") and not source_file.startswith("all_"):
+        return 2
+    return 0
+
+
+def _match_result(
+    meta: dict,
+    target_field: str,
+    collection_name: str,
+    match_type: str,
+    confidence: float,
+    input_text: str,
+) -> Optional[dict]:
+    translation = meta.get(target_field)
+    if not translation or not _has_compatible_translation_length(
+        input_text,
+        str(translation),
+    ):
+        return None
+    return {
+        "translated_text": translation,
+        "match_type": match_type,
+        "confidence": confidence,
+        "matched_collection": collection_name,
+        "matched_source_file": meta.get("source_file"),
+        "trust_tier": "curated" if _source_priority(meta) > 0 else "corpus",
+        "_source_priority": _source_priority(meta),
+    }
 
 
 # ---------------------------------------------------------------------- #
@@ -113,6 +169,7 @@ def _scan_collection(
         # ---------------------------------------------------------- #
         # Pass A — Exact match (strip only, case preserved)
         # ---------------------------------------------------------- #
+        exact_matches = []
         for meta in metadatas:
             if not isinstance(meta, dict):
                 continue
@@ -120,23 +177,23 @@ def _scan_collection(
             if not stored:
                 continue
             if stored.strip() == input_stripped:
-                translation = meta.get(target_field)
-                if translation:
-                    logger.debug(
-                        f"[{collection_name}] EXACT: "
-                        f"'{stored}' → '{translation}'"
-                    )
-                    return {
-                        "translated_text": translation,
-                        "match_type": "exact",
-                        "confidence": 1.0,
-                        "matched_collection": collection_name,
-                        "matched_source_file": meta.get("source_file"),
-                    }
+                result = _match_result(
+                    meta,
+                    target_field,
+                    collection_name,
+                    "exact",
+                    1.0,
+                    input_text,
+                )
+                if result:
+                    exact_matches.append(result)
+        if exact_matches:
+            return max(exact_matches, key=lambda item: item["_source_priority"])
 
         # ---------------------------------------------------------- #
         # Pass B — Normalized match (lowercase both sides)
         # ---------------------------------------------------------- #
+        normalized_matches = []
         for meta in metadatas:
             if not isinstance(meta, dict):
                 continue
@@ -144,19 +201,21 @@ def _scan_collection(
             if not stored:
                 continue
             if _normalize(stored) == input_normalized:
-                translation = meta.get(target_field)
-                if translation:
-                    logger.debug(
-                        f"[{collection_name}] NORMALIZED: "
-                        f"'{stored}' → '{translation}'"
-                    )
-                    return {
-                        "translated_text": translation,
-                        "match_type": "normalized",
-                        "confidence": 0.98,
-                        "matched_collection": collection_name,
-                        "matched_source_file": meta.get("source_file"),
-                    }
+                result = _match_result(
+                    meta,
+                    target_field,
+                    collection_name,
+                    "normalized",
+                    0.98,
+                    input_text,
+                )
+                if result:
+                    normalized_matches.append(result)
+        if normalized_matches:
+            return max(
+                normalized_matches,
+                key=lambda item: item["_source_priority"],
+            )
 
         # ---------------------------------------------------------- #
         # Pass C — Partial match
@@ -170,36 +229,45 @@ def _scan_collection(
         # a stored entry (e.g. "market" in a sentence hitting transport.json). # CHANGED
         # ---------------------------------------------------------- #
         if len(input_normalized) >= 3 and len(input_normalized.split()) <= 2:  # CHANGED
-            input_words = input_normalized.split()  # Split input into words # IMPROVED
+            input_words = _tokenize(input_text)  # CHANGED
+            partial_matches = []
             for meta in metadatas:
                 if not isinstance(meta, dict):
                     continue
                 stored = meta.get(source_field, "")
                 if not stored:
                     continue
-                stored_normalized = _normalize(stored)
-                # Split on slash and hyphen to get individual words
-                stored_words = (
-                    stored_normalized
-                    .replace("/", " ")
-                    .replace("-", " ")
-                    .split()
+                stored_words = _tokenize(stored)  # CHANGED
+                exact_word_match = any(
+                    word in stored_words for word in input_words
                 )
-                # Check if ANY input word matches ANY stored word # IMPROVED
-                if any(word in stored_words for word in input_words):  # IMPROVED
-                    translation = meta.get(target_field)
-                    if translation:
-                        logger.debug(
-                            f"[{collection_name}] PARTIAL: "
-                            f"'{stored}' → '{translation}'"
-                        )
-                        return {
-                            "translated_text": translation,
-                            "match_type": "partial",
-                            "confidence": 0.85,
-                            "matched_collection": collection_name,
-                            "matched_source_file": meta.get("source_file"),
-                        }
+                vocabulary_variant_match = (
+                    collection_name == "vocabulary"
+                    and len(input_words) == 1
+                    and len(input_words[0]) >= 4
+                    and any(
+                        input_words[0] in stored_word
+                        or stored_word in input_words[0]
+                        for stored_word in stored_words
+                        if len(stored_word) >= 4
+                    )
+                )
+                if exact_word_match or vocabulary_variant_match:
+                    result = _match_result(
+                        meta,
+                        target_field,
+                        collection_name,
+                        "partial",
+                        0.85,
+                        input_text,
+                    )
+                    if result:
+                        partial_matches.append(result)
+            if partial_matches:
+                return max(
+                    partial_matches,
+                    key=lambda item: item["_source_priority"],
+                )
 
     except Exception as e:
         # Log the full error so we can diagnose future issues
@@ -263,13 +331,19 @@ def _try_semantic_match(
 
         if similarity >= SEMANTIC_THRESHOLD:
             translation = meta.get(target_field)
-            if translation:
+            if translation and _has_compatible_translation_length(
+                input_text,
+                str(translation),
+            ):
                 return {
                     "translated_text": translation,
                     "match_type": "semantic",
                     "confidence": similarity,
                     "matched_collection": collection_name,
                     "matched_source_file": meta.get("source_file"),
+                    "trust_tier": (
+                        "curated" if _source_priority(meta) > 0 else "corpus"
+                    ),
                 }
 
     except Exception as e:
@@ -309,6 +383,7 @@ def translate(request: TranslationRequest) -> TranslationResponse:
     # ------------------------------------------------------------------ #
     # Pass 1 — Scan-based match
     # ------------------------------------------------------------------ #
+    scan_matches = []
     for collection in COLLECTIONS_TO_SEARCH:
         result = _scan_collection(
             collection_name=collection,
@@ -317,18 +392,33 @@ def translate(request: TranslationRequest) -> TranslationResponse:
             input_text=input_text,
         )
         if result:
-            logger.info(
-                f"Match [{result['match_type']}] in "
-                f"'{result['matched_collection']}' → "
-                f"'{result['translated_text']}'"
-            )
-            return TranslationResponse(
-                input_text=input_text,
-                direction=direction,
-                status="success",
-                message=f"{result['match_type'].capitalize()} match found.",
-                **result,
-            )
+            scan_matches.append(result)
+
+    if scan_matches:
+        result = max(
+            scan_matches,
+            key=lambda item: (
+                MATCH_PRIORITY[item["match_type"]],
+                item.get("_source_priority", 0),
+            ),
+        )
+        logger.info(
+            f"Match [{result['match_type']}] in "
+            f"'{result['matched_collection']}' → "
+            f"'{result['translated_text']}'"
+        )
+        public_result = {
+            key: value
+            for key, value in result.items()
+            if not key.startswith("_")
+        }
+        return TranslationResponse(
+            input_text=input_text,
+            direction=direction,
+            status="success",
+            message=f"{result['match_type'].capitalize()} match found.",
+            **public_result,
+        )
 
     # ------------------------------------------------------------------ #
     # Pass 2 — Semantic match
@@ -349,6 +439,9 @@ def translate(request: TranslationRequest) -> TranslationResponse:
                 best_semantic = result
 
     if best_semantic:
+        is_authoritative = (
+            best_semantic["confidence"] >= SEMANTIC_AUTHORITATIVE_THRESHOLD
+        )
         logger.info(
             f"Semantic match in '{best_semantic['matched_collection']}' | "
             f"confidence={best_semantic['confidence']} | "
@@ -357,10 +450,11 @@ def translate(request: TranslationRequest) -> TranslationResponse:
         return TranslationResponse(
             input_text=input_text,
             direction=direction,
-            status="success",
+            status="success" if is_authoritative else "possible_match",
             message=(
-                f"Semantic match found "
-                f"(confidence: {best_semantic['confidence']})."
+                "Semantic match found."
+                if is_authoritative
+                else "Possible semantic match. Please confirm before relying on it."
             ),
             **best_semantic,
         )
@@ -373,7 +467,7 @@ def translate(request: TranslationRequest) -> TranslationResponse:
     if openrouter_translator.is_enabled():
         logger.info(f"[Pass 3] Attempting OpenRouter translation for '{input_text}'")
         api_text = openrouter_translator.translate(input_text, direction)
-        if api_text:
+        if api_text and _has_compatible_translation_length(input_text, api_text):
             logger.info(f"[OpenRouter] '{input_text}' → '{api_text}'")
             return TranslationResponse(
                 input_text=input_text,
@@ -383,6 +477,7 @@ def translate(request: TranslationRequest) -> TranslationResponse:
                 confidence=0.75,
                 matched_collection="openrouter",
                 matched_source_file=None,
+                trust_tier="ai_generated",
                 status="success",
                 message="AI-generated translation via OpenRouter. May need review.",
             )
@@ -395,7 +490,10 @@ def translate(request: TranslationRequest) -> TranslationResponse:
 
     neural_text = nllb_translator.translate(input_text, direction)
 
-    if neural_text:
+    if neural_text and _has_compatible_translation_length(
+        input_text,
+        neural_text,
+    ):
         logger.info(f"[NLLB] '{input_text}' → '{neural_text}'")
         return TranslationResponse(
             input_text=input_text,
@@ -405,6 +503,7 @@ def translate(request: TranslationRequest) -> TranslationResponse:
             confidence=0.70,
             matched_collection="nllb-200-local",
             matched_source_file=None,
+            trust_tier="ai_generated",
             status="success",
             message="AI-generated translation (local model). May need review.",
         )
@@ -417,11 +516,12 @@ def translate(request: TranslationRequest) -> TranslationResponse:
     return TranslationResponse(
         input_text=input_text,
         direction=direction,
-        translated_text=None,
+        translated_text="",
         match_type="not_found",
-        confidence=None,
+        confidence=0.0,
         matched_collection=None,
         matched_source_file=None,
+        trust_tier=None,
         status="not_found",
         message=(
             "We don't know this word yet — but you can teach us! "

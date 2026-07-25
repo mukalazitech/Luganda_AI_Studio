@@ -9,7 +9,9 @@ def test_proverbs_returns_normalized_entries(client):
     assert data["collection"] == "proverbs"
     assert data["entries"]
     assert data["count"] == len(data["entries"])
-    assert {"id", "luganda", "english", "meaning", "theme"} <= data["entries"][0].keys()
+    assert {"id", "tier", "luganda", "english", "meaning", "theme"} <= data["entries"][0].keys()
+    assert {entry["tier"] for entry in data["entries"]} == {"featured", "all"}
+    assert sum(entry["tier"] == "featured" for entry in data["entries"]) == 60
 
 
 def test_phrases_returns_normalized_entries(client):
@@ -37,6 +39,7 @@ def test_vocabulary_returns_entries_with_stable_keys(client):
         "luganda",
         "english",
         "category",
+        "tier",
         "part_of_speech",
         "example_luganda",
         "example_english",
@@ -46,6 +49,8 @@ def test_vocabulary_returns_entries_with_stable_keys(client):
     assert [entry["key"] for entry in data["entries"]] == [
         entry["key"] for entry in second_response.json()["entries"]
     ]
+    assert {entry["tier"] for entry in data["entries"]} == {"featured", "all"}
+    assert sum(entry["tier"] == "featured" for entry in data["entries"]) == 424
 
 
 def test_grammar_returns_all_seven_normalized_sections(client):
@@ -77,13 +82,21 @@ def test_grammar_returns_all_seven_normalized_sections(client):
     }
     titles = [section["title"] for section in data["sections"]]
     assert len(titles) == len(set(titles))
+    assert all(
+        {"verified", "verification_notes", "source_ids"} <= section.keys()
+        for section in data["sections"]
+    )
+    assert sections["consonants:rules"]["verified"] == "2026-03-23"
+    assert sections["consonants:rules"]["source_ids"] == ["ish_handbook"]
+    assert sections["vowels:rules"]["verified"] is None
+    assert sections["vowels:rules"]["verification_notes"] is None
 
 
 def test_proverbs_count_only_returns_no_entries(client):
     response = client.get("/api/v1/library/proverbs", params={"count_only": "true"})
 
     assert response.status_code == 200
-    assert response.json() == {"collection": "proverbs", "count": 60}
+    assert response.json() == {"collection": "proverbs", "count": 3605}
 
 
 def test_grammar_count_only_returns_no_sections(client):

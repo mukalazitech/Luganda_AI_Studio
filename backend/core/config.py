@@ -12,7 +12,8 @@ load_dotenv(dotenv_path=_ENV_FILE, override=False)  # CHANGED: wire up .env load
 
 # ─── Base Paths ───────────────────────────────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
-DATA_DIR = BASE_DIR / "data"
+# CHANGED: tests and maintenance tools can isolate mutable runtime data.
+DATA_DIR = Path(os.getenv("LUGANDA_DATA_DIR", str(BASE_DIR / "data"))).resolve()
 DATASETS_DIR = BASE_DIR / "datasets"
 RAW_DOWNLOADS_DIR = DATASETS_DIR / "raw_downloads"
 

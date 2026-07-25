@@ -8,12 +8,20 @@ from backend.core.config import DATASETS_DIR
 
 
 def _load_entries(subdir: str) -> list[dict[str, Any]]:
-    """Read every curated JSON file in a directory in deterministic order."""
+    """Read every curated JSON file in a directory in deterministic order.
+
+    An entry without its own "tier" inherits the file's metadata.tier, defaulting
+    to "featured" for files (like the original curated sets) that predate the
+    tier concept entirely.
+    """
     entries: list[dict[str, Any]] = []
     for path in sorted((DATASETS_DIR / subdir).glob("*.json")):
         with path.open(encoding="utf-8") as source:
             data = json.load(source)
-        entries.extend(data.get("entries", []))
+        file_tier = data.get("metadata", {}).get("tier", "featured")
+        for entry in data.get("entries", []):
+            entry.setdefault("tier", file_tier)
+            entries.append(entry)
     return entries
 
 
@@ -27,6 +35,7 @@ def proverbs() -> list[dict[str, Any]]:
     for index, entry in enumerate(_load_entries("proverbs"), start=1):
         item = {
             "id": entry.get("id") or f"proverbs:{index:04d}",
+            "tier": entry.get("tier", "featured"),
             **_selected(entry, ("luganda", "english", "meaning", "theme")),
         }
         item.update(_selected(entry, ("symbols", "cultural_note")))
@@ -55,8 +64,10 @@ def vocabulary() -> list[dict[str, Any]]:
         luganda = entry["luganda"]
         item = {
             "key": f"{category}:{luganda}",
+            "tier": entry.get("tier", "featured"),
             "luganda": luganda,
             **_selected(entry, ("english", "category")),
+            "part_of_speech": entry.get("part_of_speech"),
             "example_luganda": entry.get("example_sentence_luganda"),
             "example_english": entry.get("example_sentence_english"),
         }
@@ -65,7 +76,6 @@ def vocabulary() -> list[dict[str, Any]]:
                 entry,
                 (
                     "subcategory",
-                    "part_of_speech",
                 ),
             )
         )
@@ -93,6 +103,7 @@ def grammar_sections() -> list[dict[str, Any]]:
     for path in sorted((DATASETS_DIR / "grammar").glob("*.json")):
         with path.open(encoding="utf-8") as source:
             data = json.load(source)
+        metadata = data.get("metadata", {})
         file_introduction = data.get("introduction", "")
         content_fields = [
             (field, content)
@@ -118,6 +129,9 @@ def grammar_sections() -> list[dict[str, Any]]:
                     else file_introduction
                 ),
                 "items": _section_items(content),
+                "verified": metadata.get("verified"),
+                "verification_notes": metadata.get("verification_notes"),
+                "source_ids": metadata.get("source_ids", []),
             }
             if isinstance(content, dict) and "important_note" in content:
                 section["important_note"] = content["important_note"]

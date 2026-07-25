@@ -39,12 +39,25 @@ function buildChoices(answer, pool, rand = Math.random) {
   return choices;
 }
 
+function earnedXp(score) {
+  return (score.seen * 5) + (score.correct * 5);
+}
+
+function nextLesson(lessons, currentId) {
+  const index = lessons.findIndex(lesson => lesson.id === currentId);
+  return index >= 0 && index + 1 < lessons.length ? lessons[index + 1] : null;
+}
+
 // ── Browser-only glue ─────────────────────────────────────────
 if (typeof document !== 'undefined') {
   const SETUP_KEYS = { goal: 'pilot.goal', focus: 'pilot.focus', minutes: 'pilot.minutes' };
   const LESSON_STATE_KEY = 'pilot.lessons';
 
   const state = { lessons: [], phrases: new Map(), vocab: new Map(), current: null };
+  let currentAudio = null;
+  let currentObjectUrl = null;
+  let ttsController = null;
+  let ttsRequestId = 0;
 
   function readLessonState() {
     try { return JSON.parse(localStorage.getItem(LESSON_STATE_KEY)) || {}; } catch { return {}; }
@@ -69,6 +82,65 @@ if (typeof document !== 'undefined') {
       const el = document.getElementById(section);
       if (el) el.hidden = section !== id;
     });
+  }
+
+  function stopLessonAudio() {
+    if (currentAudio) {
+      currentAudio.pause();
+      currentAudio = null;
+    }
+    if (currentObjectUrl) {
+      URL.revokeObjectURL(currentObjectUrl);
+      currentObjectUrl = null;
+    }
+  }
+
+  async function playLessonAudio(text, button) {
+    const requestId = ++ttsRequestId;
+    if (ttsController) ttsController.abort();
+    stopLessonAudio();
+    const controller = new AbortController();
+    ttsController = controller;
+    button.disabled = true;
+    button.setAttribute('aria-busy', 'true');
+    let audioFailed = false;
+    try {
+      const response = await fetch('/api/v1/tts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ text, lang: 'lug' }),
+        signal: controller.signal,
+      });
+      if (requestId !== ttsRequestId) return;
+      if (!response.ok) throw new Error('Audio unavailable');
+      const blob = await response.blob();
+      if (requestId !== ttsRequestId) return;
+      currentObjectUrl = URL.createObjectURL(blob);
+      currentAudio = new Audio(currentObjectUrl);
+      currentAudio.addEventListener('ended', stopLessonAudio, { once: true });
+      await currentAudio.play();
+    } catch (error) {
+      if (requestId !== ttsRequestId || error.name === 'AbortError') return;
+      audioFailed = true;
+      button.textContent = 'Audio unavailable';
+      button.title = 'Audio unavailable';
+    } finally {
+      if (requestId === ttsRequestId) {
+        button.disabled = audioFailed;
+        button.removeAttribute('aria-busy');
+        if (ttsController === controller) ttsController = null;
+      }
+    }
+  }
+
+  function listenButton(text) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'btn-secondary step-listen';
+    button.textContent = '🔊 Listen';
+    button.setAttribute('aria-label', `Listen to ${text}`);
+    button.addEventListener('click', () => playLessonAudio(text, button));
+    return button;
   }
 
   // ── Setup card ──────────────────────────────────────────────
@@ -128,6 +200,10 @@ if (typeof document !== 'undefined') {
   }
 
   function renderStep() {
+    ttsRequestId++;
+    if (ttsController) ttsController.abort();
+    ttsController = null;
+    stopLessonAudio();
     const { lesson, index } = state.current;
     const step = lesson.steps[index];
     const entry = resolveStep(step);
@@ -151,6 +227,7 @@ if (typeof document !== 'undefined') {
     luganda.className = 'step-luganda';
     luganda.textContent = entry.luganda;
     stage.append(luganda);
+    stage.append(listenButton(entry.luganda));
 
     if (step.mode === 'show') {
       const english = document.createElement('p');
@@ -239,6 +316,19 @@ if (typeof document !== 'undefined') {
 
     const line = document.getElementById('summary-score');
     if (line) line.textContent = `${score.correct} of ${score.seen} right.`;
+    const title = document.getElementById('summary-title');
+    if (title) title.textContent = `${lesson.title} complete`;
+    const xp = document.getElementById('summary-xp');
+    if (xp) xp.textContent = `+${earnedXp(score)} XP`;
+    const following = nextLesson(state.lessons, lesson.id);
+    const nextButton = document.getElementById('summary-next');
+    if (nextButton) {
+      nextButton.hidden = !following;
+      nextButton.textContent = following ? `Next: ${following.title}` : '';
+      nextButton.onclick = following ? () => startLesson(following) : null;
+    }
+    const review = document.getElementById('summary-review');
+    if (review) review.onclick = () => startLesson(lesson);
     if (typeof recordSessionComplete === 'function') recordSessionComplete();
     if (typeof setMascot === 'function') setMascot('summary-mascot', 'kintu', 'celebrate');
 
@@ -264,6 +354,11 @@ if (typeof document !== 'undefined') {
     initSetup();
     const back = document.getElementById('summary-back');
     if (back) back.addEventListener('click', () => show('path'));
+    window.addEventListener('pagehide', () => {
+      ttsRequestId++;
+      if (ttsController) ttsController.abort();
+      stopLessonAudio();
+    });
 
     try {
       const [lessonsRes, phrasesRes, vocabRes] = await Promise.all([
@@ -302,5 +397,5 @@ if (typeof document !== 'undefined') {
 
 // Node-testability — no effect in the browser, where `module` is undefined.
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { nextStep, scoreSession, buildChoices };
+  module.exports = { nextStep, scoreSession, buildChoices, earnedXp, nextLesson };
 }

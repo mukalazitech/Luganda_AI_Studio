@@ -42,26 +42,20 @@
           <p class="chat-sub">Practice and ask questions in English or Luganda.</p>
         </div>
         <div class="status-badge">
-          <span class="status-dot" id="statusDot"></span>
-          <span id="statusText">Checking…</span>
+          <span class="status-dot offline" id="statusDot"></span>
+          <span id="statusText">Coming soon</span>
         </div>
       </div>
 
-      <div class="chat-offline" id="offlineBanner" hidden role="status">
-        The chat model is offline. Everything in Explore and Learn still works.
+      <div class="chat-offline" id="offlineBanner" role="status">
+        Chat is coming soon. Translate, Learn, Search, and Explore are ready to use now.
       </div>
 
       <div class="chat-scroll" id="chatArea">
         <div class="chat-empty" id="emptyState">
           <div class="chat-empty-icon" aria-hidden="true">🇺🇬</div>
-          <h2>Oli otya! I am your Luganda assistant.</h2>
-          <p>Ask me anything about Luganda: translations, vocabulary, grammar, or just practice chatting.</p>
-          <div class="chat-chips">
-            <div class="chat-chip" onclick="useSuggestion(this)">How do I say hello in Luganda?</div>
-            <div class="chat-chip" onclick="useSuggestion(this)">Teach me numbers in Luganda</div>
-            <div class="chat-chip" onclick="useSuggestion(this)">What does Webale nyo mean?</div>
-            <div class="chat-chip" onclick="useSuggestion(this)">How do I introduce myself?</div>
-          </div>
+          <h2>Luganda chat is coming soon.</h2>
+          <p>We are preparing a reliable practice assistant. For now, use Translate, Learn, Search, and Explore.</p>
         </div>
       </div>
 
@@ -72,10 +66,11 @@
             placeholder="Type in English or Luganda…"
             rows="1"
             aria-label="Message"
+            disabled
             onkeydown="handleKey(event)"
             oninput="autoResize(this)"
           ></textarea>
-          <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send" aria-label="Send message">➤</button>
+          <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send" aria-label="Send message" disabled>➤</button>
         </div>
         <div class="chat-input-meta">
           <span class="chat-hint">Enter to send · Shift+Enter for new line</span>
@@ -98,47 +93,14 @@
   const MAX_HISTORY = 10;
   let history = [];       // [{role, content}, ...]
   let isStreaming = false;
+  let chatAvailable = false;
 
-  // ── On load: prefill from Translate handoff, check chat status ──
+  // ── On load ──
   window.addEventListener('load', () => {
     sendEvent('tool_opened', 'chat');
-    const prefill = sessionStorage.getItem('chat.prefill');
-    if (prefill) {
-      const input = document.getElementById('messageInput');
-      input.value = prefill;
-      autoResize(input);
-      sessionStorage.removeItem('chat.prefill');
-    }
-    checkStatus();
+    sessionStorage.removeItem('chat.prefill');
+    setChatAvailable(false);
   });
-
-  async function checkStatus() {
-    try {
-      const res = await fetch('/api/v1/chat/status');
-      const data = await res.json();
-      const dot  = document.getElementById('statusDot');
-      const text = document.getElementById('statusText');
-      const banner = document.getElementById('offlineBanner');
-
-      if (data.ollama_running && data.default_model_available) {
-        dot.className  = 'status-dot online';
-        text.textContent = `${data.default_model} · ready`;
-        banner.hidden = true;
-      } else if (data.ollama_running) {
-        dot.className  = 'status-dot online';
-        text.textContent = 'Model loading';
-        banner.hidden = true;
-      } else {
-        dot.className  = 'status-dot offline';
-        text.textContent = 'Chat offline';
-        banner.hidden = false;
-        document.getElementById('messageInput').disabled = true;
-        document.getElementById('sendBtn').disabled = true;
-      }
-    } catch (e) {
-      document.getElementById('statusText').textContent = 'Status unknown';
-    }
-  }
 
   // ── Handle Enter key ───────────────────────────────────────
   function handleKey(e) {
@@ -156,13 +118,14 @@
 
   // ── Use a suggestion chip ──────────────────────────────────
   function useSuggestion(el) {
+    if (!chatAvailable) return;
     document.getElementById('messageInput').value = el.textContent;
     sendMessage();
   }
 
   // ── Send a message ─────────────────────────────────────────
   async function sendMessage() {
-    if (isStreaming) return;
+    if (isStreaming || !chatAvailable) return;
 
     const input = document.getElementById('messageInput');
     const message = input.value.trim();
@@ -275,8 +238,8 @@
       appendError('The local server is not reachable. Start Luganda Studio, then try again.');
     } finally {
       isStreaming = false;
-      setInputEnabled(true);
-      input.focus();
+      setInputEnabled(chatAvailable);
+      if (chatAvailable) input.focus();
     }
   }
 
@@ -361,6 +324,17 @@
   function setInputEnabled(enabled) {
     document.getElementById('messageInput').disabled = !enabled;
     document.getElementById('sendBtn').disabled = !enabled;
+  }
+
+  function setChatAvailable(available, message = 'Chat is coming soon. Translate, Learn, Search, and Explore are ready to use now.') {
+    chatAvailable = available;
+    const banner = document.getElementById('offlineBanner');
+    banner.hidden = available;
+    banner.textContent = message;
+    setInputEnabled(available);
+    document.querySelectorAll('.chat-chip').forEach(chip => {
+      chip.setAttribute('aria-disabled', String(!available));
+    });
   }
 
   function clearChat() {

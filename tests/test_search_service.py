@@ -1,5 +1,6 @@
 # tests/test_search_service.py
 
+from backend.services import search_service
 from backend.services.search_service import (
     normalize,
     lexical_score,
@@ -52,11 +53,11 @@ def test_lexical_score_normalized_match_returns_95():
 
 def test_lexical_score_prefix_match_returns_85():
     meta = {"luganda": "ssebo wa"}
-    assert lexical_score("ssebo", meta) == SCORE_PREFIX
+    assert lexical_score("sseb", meta) == SCORE_PREFIX
 
 def test_lexical_score_substring_match_returns_65():
     meta = {"english": "good morning friend"}
-    assert lexical_score("morning", meta) == SCORE_SUBSTRING
+    assert lexical_score("ornin", meta) == SCORE_SUBSTRING
 
 def test_lexical_score_no_match_returns_none():
     meta = {"luganda": "enjovu", "english": "elephant"}
@@ -91,6 +92,39 @@ def test_lexical_score_exact_beats_fuzzy_tier_ordering():
     # sanity check on score ordering used by ranking
     assert SCORE_SUBSTRING > SCORE_FUZZY
     assert SCORE_FUZZY > SCORE_SEMANTIC_MAX
+
+
+def test_whole_word_match_beats_shorter_prefix_noise():
+    greeting = lexical_score("hello", {"english": "Hello! / Welcome in."})
+    shorter_noise = lexical_score("hello", {"english": "hell"})
+
+    assert greeting == search_service.SCORE_WHOLE_WORD
+    assert shorter_noise < greeting
+
+
+def test_query_does_not_prefix_match_a_shorter_field():
+    assert lexical_score("hello", {"english": "he"}) != SCORE_PREFIX
+    assert lexical_score("hello", {"english": "hell"}) != SCORE_PREFIX
+
+
+def test_curated_result_wins_equal_score_tie():
+    imported = {
+        "text": "imported",
+        "score": search_service.SCORE_WHOLE_WORD,
+        "metadata": {"source_file": "groupB_dictionary.csv"},
+    }
+    curated = {
+        "text": "curated",
+        "score": search_service.SCORE_WHOLE_WORD,
+        "metadata": {
+            "source_file": "greetings.json",
+            "verified": True,
+        },
+    }
+
+    ranked = sorted([imported, curated], key=search_service.result_sort_key)
+
+    assert ranked[0]["text"] == "curated"
 
 
 # ── chroma_distance_to_score() ────────────────────────────────────────────────

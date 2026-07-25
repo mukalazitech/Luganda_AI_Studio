@@ -8,11 +8,12 @@ Provides layered search with this priority order:
 
   1. EXACT MATCH       → score 100   (query == field value)
   2. NORMALIZED MATCH  → score 95    (after lowercasing + stripping punctuation)
-  3. PREFIX MATCH      → score 85    (field starts with query)
-  4. SUBSTRING MATCH   → score 65    (query appears inside field)
-  5. FUZZY MATCH       → score 62    (single-word query within edit distance 2 of a field —
+  3. WHOLE-WORD MATCH  → score 90    (query is a complete token/phrase)
+  4. PREFIX MATCH      → score 85    (field starts with query)
+  5. SUBSTRING MATCH   → score 65    (query appears inside field)
+  6. FUZZY MATCH       → score 62    (single-word query within edit distance 2 of a field —
                                        catches typos like "Emesse" → "Emmese")
-  6. SEMANTIC MATCH    → score 0–60  (ChromaDB vector similarity)
+  7. SEMANTIC MATCH    → score 0–60  (ChromaDB vector similarity)
 
 Results below MIN_SCORE (25) are hidden from the user.
 
@@ -46,6 +47,7 @@ MIN_SCORE = 25
 # Score ceilings for each match tier (semantic is capped lower)
 SCORE_EXACT      = 100
 SCORE_NORMALIZED = 95
+SCORE_WHOLE_WORD = 90
 SCORE_PREFIX     = 85
 SCORE_SUBSTRING  = 65
 SCORE_FUZZY      = 62     # typo-tolerant match, just above semantic cap
@@ -194,17 +196,23 @@ def lexical_score(query: str, metadata: dict) -> int | None:
         if q_norm and f_norm and q_norm == f_norm:
             return SCORE_NORMALIZED
 
-        # Tier 3: Prefix match (field starts with query, or query starts with field)
+        # Tier 3: Whole-word or whole-phrase match. # CHANGED
         if q_norm and f_norm:
-            if f_norm.startswith(q_norm) or q_norm.startswith(f_norm):
+            boundary_pattern = rf"(?<!\w){re.escape(q_norm)}(?!\w)"
+            if re.search(boundary_pattern, f_norm):
+                return SCORE_WHOLE_WORD
+
+        # Tier 4: Prefix match (the stored field starts with the query)
+        if q_norm and f_norm:
+            if f_norm.startswith(q_norm):
                 return SCORE_PREFIX
 
-        # Tier 4: Substring match
+        # Tier 5: Substring match
         if q_norm and f_norm and len(q_norm) >= 2:
             if q_norm in f_norm or f_norm in q_norm:
                 return SCORE_SUBSTRING
 
-    # Tier 5: Fuzzy match (typo tolerance) — only against single-word fields,
+    # Tier 6: Fuzzy match (typo tolerance) — only against single-word fields,
     # since comparing a whole sentence by edit distance is meaningless.
     if q_norm and len(q_norm) >= FUZZY_MIN_QUERY_LEN and " " not in q_norm:
         for field in fields:
@@ -222,12 +230,39 @@ def _lexical_match_type(lex_score: int) -> str:
     if lex_score >= SCORE_EXACT:
         return "exact"
     if lex_score >= SCORE_NORMALIZED:
-        return "exact"
+        return "normalized_exact"
+    if lex_score >= SCORE_WHOLE_WORD:
+        return "whole_word"
     if lex_score >= SCORE_PREFIX:
         return "prefix"
     if lex_score >= SCORE_SUBSTRING:
         return "substring"
     return "fuzzy"
+
+
+def _source_quality(metadata: dict) -> int:
+    """Return a deterministic curated-first tie-break score."""
+    tier = str(metadata.get("tier", "")).strip().lower()
+    if tier in {"featured", "curated"} or metadata.get("verified") is True:
+        return 3
+
+    source_file = str(metadata.get("source_file", "")).strip().lower()
+    if source_file.endswith(".json") and not source_file.startswith("all_"):
+        return 2
+    return 0
+
+
+def result_sort_key(item: dict) -> tuple:
+    """Sort best score first, then curated sources, then stable text order."""
+    return (
+        -int(item.get("score", 0)),
+        -_source_quality(item.get("metadata") or {}),
+        normalize(item.get("text", "")),
+    )
+
+
+def _trust_tier(metadata: dict) -> str:
+    return "curated" if _source_quality(metadata) > 0 else "corpus"
 
 
 # ── Main Search Function ──────────────────────────────────────────────────────
@@ -329,6 +364,8 @@ def search_knowledge(
                 "score":       lex_score,
                 "score_label": score_label(lex_score),
                 "match_type":  mtype,
+                "match_reason": mtype,
+                "trust_tier":  _trust_tier(meta),
                 "collection":  col_name,
                 "distance":    None,
             })
@@ -375,6 +412,8 @@ def search_knowledge(
                     "score":       lex_score,
                     "score_label": score_label(lex_score),
                     "match_type":  mtype,
+                    "match_reason": mtype,
+                    "trust_tier":  _trust_tier(meta),
                     "collection":  col_name,
                     "distance":    round(dist, 4),
                 })
@@ -396,6 +435,8 @@ def search_knowledge(
                     "score":       sem_score,
                     "score_label": score_label(sem_score),
                     "match_type":  "semantic",
+                    "match_reason": "semantic",
+                    "trust_tier":  _trust_tier(meta),
                     "collection":  col_name,
                     "distance":    round(dist, 4),
                 })
@@ -406,13 +447,16 @@ def search_knowledge(
     seen_texts: dict[str, dict] = {}
     for item in raw_results:
         key = (item["text"], item["collection"])
-        if key not in seen_texts or item["score"] > seen_texts[key]["score"]:
+        if (
+            key not in seen_texts
+            or result_sort_key(item) < result_sort_key(seen_texts[key])
+        ):
             seen_texts[key] = item
 
     deduped = list(seen_texts.values())
 
     # ── Sort: highest score first ─────────────────────────────────────────────
-    deduped.sort(key=lambda x: x["score"], reverse=True)
+    deduped.sort(key=result_sort_key)
 
     # ── Return top_k ─────────────────────────────────────────────────────────
     return deduped[:top_k]

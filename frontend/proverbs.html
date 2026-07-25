@@ -5,25 +5,98 @@
 <meta name="apple-mobile-web-app-capable" content="yes"/><meta name="mobile-web-app-capable" content="yes"/><meta name="apple-mobile-web-app-status-bar-style" content="default"/><meta name="apple-mobile-web-app-title" content="Luganda AI"/><link rel="apple-touch-icon" href="/app/icons/icon-192.svg"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/><link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&amp;family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&amp;display=swap" rel="stylesheet"/><link rel="stylesheet" href="/app/styles.css"/>
 <style>
-.collection-wrap{max-width:980px;margin:auto;padding:40px 24px 52px}.collection-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:26px}.kicker{color:var(--lime);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em}.collection-head h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:8px 0 12px;letter-spacing:-.045em}.collection-head p{max-width:610px;color:var(--text-secondary);line-height:1.6;margin:0}.total{flex:none;width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:var(--card-medallion-bg);color:var(--lime);font-weight:800;font-size:1.25rem}.filters{display:flex;gap:8px;overflow-x:auto;padding:3px 3px 14px;scrollbar-width:thin}.filter{min-height:44px;padding:0 18px;border:1px solid var(--border);border-radius:999px;background:var(--bg-card);color:var(--text-primary);font:600 .94rem var(--font-body);white-space:nowrap;cursor:pointer}.filter.active{background:var(--lime);border-color:var(--lime);color:var(--text-on-lime)}.filter:focus-visible{outline:3px solid var(--lime-glow);outline-offset:2px}.proverb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.proverb{min-width:0;background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-card)}.theme{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--lime-bg);color:var(--lime);font-size:.76rem;font-weight:800;text-transform:capitalize}.luganda{font:800 1.25rem/1.35 var(--font-display);margin:16px 0 7px;overflow-wrap:anywhere}.english{color:var(--text-secondary);margin:0 0 16px;line-height:1.5}.meaning{border-top:1px solid var(--border);padding-top:14px;margin:0;color:var(--text-muted);font-size:.92rem;line-height:1.55}.state{padding:36px 22px;text-align:center;color:var(--text-secondary);background:var(--bg-card);border:1px dashed var(--border);border-radius:18px}.state[hidden]{display:none}@media(max-width:680px){.collection-wrap{padding:28px 16px 108px}.collection-head{align-items:start}.total{width:62px;height:62px}.proverb-grid{grid-template-columns:1fr}}@media(max-width:340px){.collection-head{display:block}.total{margin-top:16px}}
+.collection-wrap{max-width:980px;margin:auto;padding:40px 24px 52px}.collection-head{display:flex;justify-content:space-between;gap:24px;align-items:end;margin-bottom:26px}.kicker{color:var(--lime);font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em}.collection-head h1{font-size:clamp(2.2rem,6vw,4rem);line-height:1;margin:8px 0 12px;letter-spacing:-.045em}.collection-head p{max-width:610px;color:var(--text-secondary);line-height:1.6;margin:0}.total{flex:none;width:78px;height:78px;border-radius:50%;display:grid;place-items:center;background:var(--card-medallion-bg);color:var(--lime);font-weight:800;font-size:1.25rem}.section-title{font:800 1.4rem var(--font-display);margin:36px 0 14px;letter-spacing:-.02em}.section-title:first-of-type{margin-top:0}.search-wrap{margin-bottom:14px}.search-input{width:100%;min-height:44px;padding:0 16px;border:1px solid var(--border);border-radius:12px;background:var(--bg-card);color:var(--text-primary);font:500 .96rem var(--font-body)}.search-input:focus-visible{outline:3px solid var(--lime-glow);outline-offset:2px}.filters{display:flex;gap:8px;overflow-x:auto;padding:3px 3px 14px;scrollbar-width:thin}.filter{min-height:44px;padding:0 18px;border:1px solid var(--border);border-radius:999px;background:var(--bg-card);color:var(--text-primary);font:600 .94rem var(--font-body);white-space:nowrap;cursor:pointer}.filter.active{background:var(--lime);border-color:var(--lime);color:var(--text-on-lime)}.filter:focus-visible{outline:3px solid var(--lime-glow);outline-offset:2px}.proverb-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px}.proverb{min-width:0;background:var(--bg-card);border:1px solid var(--border);border-radius:18px;padding:22px;box-shadow:var(--shadow-card)}.theme{display:inline-flex;padding:5px 10px;border-radius:999px;background:var(--lime-bg);color:var(--lime);font-size:.76rem;font-weight:800;text-transform:capitalize}.luganda{font:800 1.25rem/1.35 var(--font-display);margin:16px 0 7px;overflow-wrap:anywhere}.english{color:var(--text-secondary);margin:0 0 16px;line-height:1.5}.meaning{border-top:1px solid var(--border);padding-top:14px;margin:0;color:var(--text-muted);font-size:.92rem;line-height:1.55}.state{padding:36px 22px;text-align:center;color:var(--text-secondary);background:var(--bg-card);border:1px dashed var(--border);border-radius:18px}.state[hidden]{display:none}.show-more-wrap{display:flex;justify-content:center;margin-top:20px}.show-more{min-height:44px;padding:0 24px;border:1px solid var(--border);border-radius:999px;background:var(--bg-card);color:var(--text-primary);font:700 .94rem var(--font-body);cursor:pointer}.show-more:focus-visible{outline:3px solid var(--lime-glow);outline-offset:2px}.show-more[hidden]{display:none}@media(max-width:680px){.collection-wrap{padding:28px 16px 108px}.collection-head{align-items:start}.total{width:62px;height:62px}.proverb-grid{grid-template-columns:1fr}}@media(max-width:340px){.collection-head{display:block}.total{margin-top:16px}}
 </style></head><body><div class="app-shell">
 <aside class="sidebar"><div class="sidebar-brand">Luganda <span>AI</span></div><nav class="sidebar-nav">
 <a href="index.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg>Home</a><a href="translate.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg>Translate</a><a href="learn.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg>Learn</a><a href="explore.html" class="sidebar-link active" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg>Explore</a><a href="search.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-search"></use></svg>Search</a><a href="chat.html" class="sidebar-link"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-chat"></use></svg>Chat</a>
 </nav><div class="sidebar-footer"><div class="theme-pill"><button class="theme-pill-btn" id="btnLight" onclick="setTheme('light')">☀ Light</button><button class="theme-pill-btn" id="btnDark" onclick="setTheme('dark')">🌙 Dark</button></div><div class="sidebar-version">v1.1 · Luganda AI Studio</div></div></aside>
 <header class="mobile-topbar"><span class="mobile-topbar-title">Proverbs</span><button class="theme-icon-btn" id="mobileThemeBtn" onclick="toggleTheme()" aria-label="Switch theme">☀</button></header>
-<main class="main-content"><div class="collection-wrap"><header class="collection-head"><div><div class="kicker"><a href="explore.html">Explore</a> · Engero</div><h1>Proverbs</h1><p>Short sayings, long memory. Browse Kiganda wisdom by themes found in the living collection.</p></div><div class="total" id="total" aria-label="Proverb count">—</div></header><div class="filters" id="filters" aria-label="Filter proverbs by theme"></div><div class="state" id="state" role="status">Loading proverbs…</div><div class="proverb-grid" id="proverbGrid"></div></div></main></div>
+<main class="main-content"><div class="collection-wrap"><header class="collection-head"><div><div class="kicker"><a href="explore.html">Explore</a> · Engero</div><h1>Proverbs</h1><p>Short sayings, long memory. Browse Kiganda wisdom by themes found in the living collection.</p></div><div class="total" id="total" aria-label="Proverb count">—</div></header><div class="state" id="state" role="status">Loading proverbs…</div><div id="collectionBody" hidden><h2 class="section-title">Featured</h2><div class="proverb-grid" id="featuredGrid"></div><h2 class="section-title">All proverbs</h2><div class="search-wrap"><input type="search" class="search-input" id="searchInput" placeholder="Search proverbs…" aria-label="Search all proverbs"/></div><div class="filters" id="filters" aria-label="Filter proverbs by theme"></div><div class="state" id="allState" role="status" hidden>No proverbs match.</div><div class="proverb-grid" id="allGrid"></div><div class="show-more-wrap"><button type="button" class="show-more" id="showMoreBtn" hidden>Show more</button></div></div></div></main></div>
 <nav class="bottom-nav"><div class="bottom-nav-inner"><a href="index.html" class="bnav-item" data-page="index"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-home"></use></svg><span class="bnav-label">Home</span></a><a href="translate.html" class="bnav-item" data-page="translate"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-translate"></use></svg><span class="bnav-label">Translate</span></a><a href="learn.html" class="bnav-item" data-page="learn"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-learn"></use></svg><span class="bnav-label">Learn</span></a><a href="explore.html" class="bnav-item active" data-page="explore" aria-current="page"><svg class="icon" aria-hidden="true"><use href="/app/assets/icons.svg#icon-explore"></use></svg><span class="bnav-label">Explore</span></a></div></nav>
 <script>
+let featuredProverbs=[];
 let allProverbs=[];
+let activeTheme='all';
+let searchQuery='';
+let visibleCount=60;
+const PAGE_SIZE=60;
+const FEATURED_LIMIT=10;
 function valueText(value){return value==null?'':String(value)}
-function renderProverbs(theme='all'){
- const grid=document.getElementById('proverbGrid');grid.replaceChildren();
- const selected=theme==='all'?allProverbs:allProverbs.filter(item=>valueText(item.theme).trim()===theme);
- selected.forEach(item=>{const card=document.createElement('article');card.className='proverb';const badge=document.createElement('span');badge.className='theme';badge.textContent=valueText(item.theme)||'General';const luganda=document.createElement('h2');luganda.className='luganda';luganda.textContent=valueText(item.luganda);const english=document.createElement('p');english.className='english';english.textContent=valueText(item.english);const meaning=document.createElement('p');meaning.className='meaning';meaning.textContent=valueText(item.meaning);card.append(badge,luganda,english,meaning);grid.append(card)});
- const state=document.getElementById('state');state.hidden=selected.length>0;if(!selected.length)state.textContent='No proverbs match this theme yet.';
+function buildCard(item){
+ const card=document.createElement('article');card.className='proverb';
+ const badge=document.createElement('span');badge.className='theme';badge.textContent=valueText(item.theme)||'General';
+ const luganda=document.createElement('h2');luganda.className='luganda';luganda.textContent=valueText(item.luganda);
+ const english=document.createElement('p');english.className='english';english.textContent=valueText(item.english);
+ card.append(badge,luganda,english);
+ if(item.meaning){const meaning=document.createElement('p');meaning.className='meaning';meaning.textContent=valueText(item.meaning);card.append(meaning)}
+ return card;
 }
-function renderFilters(){const filters=document.getElementById('filters');filters.replaceChildren();const themes=[...new Set(allProverbs.map(item=>valueText(item.theme).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));['all',...themes].forEach((theme,index)=>{const button=document.createElement('button');button.type='button';button.className=`filter${index===0?' active':''}`;button.textContent=theme==='all'?'All':theme;button.setAttribute('aria-pressed',String(index===0));button.addEventListener('click',()=>{filters.querySelectorAll('button').forEach(node=>{node.classList.remove('active');node.setAttribute('aria-pressed','false')});button.classList.add('active');button.setAttribute('aria-pressed','true');renderProverbs(theme)});filters.append(button)})}
-async function loadProverbs(){try{const response=await fetch('/api/v1/library/proverbs');if(!response.ok)throw new Error('unavailable');const data=await response.json();allProverbs=Array.isArray(data.entries)?data.entries:[];document.getElementById('total').textContent=String(allProverbs.length);renderFilters();renderProverbs()}catch(error){const state=document.getElementById('state');state.hidden=false;state.textContent='Cannot load proverbs. Check the app is running, then try again.'}}
+function renderFeatured(){
+ const grid=document.getElementById('featuredGrid');grid.replaceChildren();
+ featuredProverbs.forEach(item=>grid.append(buildCard(item)));
+}
+function filteredAll(){
+ const q=searchQuery.trim().toLowerCase();
+ return allProverbs.filter(item=>{
+  if(activeTheme!=='all'&&valueText(item.theme).trim()!==activeTheme)return false;
+  if(!q)return true;
+  return valueText(item.luganda).toLowerCase().includes(q)||valueText(item.english).toLowerCase().includes(q);
+ });
+}
+function renderAll(){
+ const grid=document.getElementById('allGrid');grid.replaceChildren();
+ const matches=filteredAll();
+ const slice=matches.slice(0,visibleCount);
+ slice.forEach(item=>grid.append(buildCard(item)));
+ const state=document.getElementById('allState');
+ state.hidden=matches.length>0;
+ if(!matches.length)state.textContent='No proverbs match this search.';
+ const showMore=document.getElementById('showMoreBtn');
+ showMore.hidden=matches.length<=visibleCount;
+}
+function renderFilters(){
+ const filters=document.getElementById('filters');filters.replaceChildren();
+ const themes=[...new Set(allProverbs.map(item=>valueText(item.theme).trim()).filter(Boolean))].sort((a,b)=>a.localeCompare(b));
+ ['all',...themes].forEach(theme=>{
+  const button=document.createElement('button');button.type='button';
+  button.className=`filter${theme===activeTheme?' active':''}`;
+  button.textContent=theme==='all'?'All':theme;
+  button.setAttribute('aria-pressed',String(theme===activeTheme));
+  button.addEventListener('click',()=>{
+   activeTheme=theme;visibleCount=PAGE_SIZE;
+   filters.querySelectorAll('button').forEach(node=>{node.classList.remove('active');node.setAttribute('aria-pressed','false')});
+   button.classList.add('active');button.setAttribute('aria-pressed','true');
+   renderAll();
+  });
+  filters.append(button);
+ });
+}
+async function loadProverbs(){
+ try{
+  const response=await fetch('/api/v1/library/proverbs');
+  if(!response.ok)throw new Error('unavailable');
+  const data=await response.json();
+  const entries=Array.isArray(data.entries)?data.entries:[];
+  featuredProverbs=entries.filter(item=>item.tier==='featured').slice(0,FEATURED_LIMIT);
+  allProverbs=entries;
+  document.getElementById('total').textContent=String(entries.length);
+  document.getElementById('state').hidden=true;
+  document.getElementById('collectionBody').hidden=false;
+  renderFeatured();
+  renderFilters();
+  renderAll();
+ }catch(error){
+  const state=document.getElementById('state');
+  state.hidden=false;
+  state.textContent='Cannot load proverbs. Check the app is running, then try again.';
+ }
+}
+document.getElementById('searchInput').addEventListener('input',event=>{
+ searchQuery=event.target.value;visibleCount=PAGE_SIZE;renderAll();
+});
+document.getElementById('showMoreBtn').addEventListener('click',()=>{
+ visibleCount+=PAGE_SIZE;renderAll();
+});
 loadProverbs();
 sendEvent('collection_opened','proverbs');
 </script></body></html>

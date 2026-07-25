@@ -218,6 +218,19 @@
     return 'chip chip-neutral';
   }
 
+  function matchReasonLabel(reason) {
+    const labels = {
+      exact: 'Exact text match',
+      normalized_exact: 'Normalized text match',
+      whole_word: 'Whole-word match',
+      prefix: 'Starts with your query',
+      substring: 'Contains your query',
+      fuzzy: 'Close spelling',
+      semantic: 'Related by meaning',
+    };
+    return labels[reason] || 'Related result';
+  }
+
   // ── Highlight query in text ──────────────────────────────────────────────
   function highlight(text, query) {
     if (!text || !query) return text || '';
@@ -270,7 +283,8 @@
         ? rawTags.split(',').map(t => t.trim()).filter(Boolean)
         : (Array.isArray(rawTags) ? rawTags : []);
 
-      const matchType  = item.match_type  || 'semantic';
+      const matchType  = item.match_reason || item.match_type || 'semantic';
+      const trustTier  = item.trust_tier || 'corpus';
 
       const typeChipClass = getTypeClass(type);
 
@@ -279,9 +293,9 @@
         : '';
 
       // Card border class based on match type
-      const borderStyle = matchType === 'exact'
+      const borderStyle = matchType === 'exact' || matchType === 'normalized_exact'
         ? 'border-left: 3px solid var(--success);'
-        : (matchType === 'prefix' || matchType === 'substring')
+        : (matchType === 'whole_word' || matchType === 'prefix' || matchType === 'substring')
           ? 'border-left: 3px solid var(--amber);'
           : '';
 
@@ -295,11 +309,11 @@
         </div>
         ${english ? `<div class="result-english">${highlight(english, query)}</div>` : ''}
         ${notes   ? `<div class="result-notes">${notes}</div>` : ''}
-        ${tagsHtml ? `
-          <div class="result-item-footer">
-            ${tagsHtml}
-          </div>
-        ` : ''}
+        <div class="result-item-footer">
+          <span class="chip chip-neutral">${matchReasonLabel(matchType)}</span>
+          <span class="chip ${trustTier === 'curated' ? 'chip-success' : 'chip-neutral'}">${trustTier === 'curated' ? 'Curated source' : 'Full corpus'}</span>
+          ${tagsHtml}
+        </div>
       `;
       list.appendChild(el);
     });

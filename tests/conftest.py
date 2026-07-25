@@ -1,4 +1,17 @@
+import os
+import tempfile
+
 import pytest
+
+# CHANGED: never let tests open or mutate the pilot's live runtime data.
+_RUNTIME_DATA = tempfile.TemporaryDirectory(
+    prefix="luganda-tests-",
+    ignore_cleanup_errors=True,
+)
+os.environ.setdefault("LUGANDA_DATA_DIR", _RUNTIME_DATA.name)
+os.environ.setdefault("HARVEST_SCHEDULER_ENABLED", "false")
+os.environ.setdefault("CORRECTION_AUTO_INGEST", "false")
+
 from fastapi.testclient import TestClient
 from backend.main import app
 

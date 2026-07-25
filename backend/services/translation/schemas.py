@@ -62,9 +62,9 @@ class TranslationResponse(BaseModel):
     direction: str = Field(description="The direction that was requested.")
 
     # --- Result ---
-    translated_text: Optional[str] = Field(
-        default=None,
-        description="The translated text, if found.",
+    translated_text: str = Field(
+        default="",
+        description="The translated text, or an empty string when no match is found.",
     )
 
     # --- Match quality ---
@@ -72,15 +72,15 @@ class TranslationResponse(BaseModel):
         default=None,
         description=(
             "How the match was found. "
-            "One of: 'exact', 'normalized', 'semantic', 'not_found'."
+            "One of: 'exact', 'normalized', 'partial', 'semantic', "
+            "'neural_api', 'neural_local', 'not_found'."
         ),
     )
 
     confidence: Optional[float] = Field(
         default=None,
         description=(
-            "Similarity score for semantic matches. "
-            "Between 0.0 and 1.0. Only present for semantic matches."
+            "Trust score between 0.0 and 1.0. Not-found responses use 0.0."
         ),
     )
 
@@ -95,11 +95,16 @@ class TranslationResponse(BaseModel):
         description="Which dataset source file the match came from, if recorded.",
     )
 
+    trust_tier: Optional[str] = Field(
+        default=None,
+        description="Learner-facing source tier: curated, corpus, or ai_generated.",
+    )
+
     # --- Status ---
     status: str = Field(
         description=(
             "Overall result. "
-            "One of: 'success', 'not_found'."
+            "One of: 'success', 'possible_match', 'not_found'."
         ),
     )
 
